@@ -1,0 +1,500 @@
+  <BugPattern type="BC_IMPOSSIBLE_CAST">
+    <ShortDescription>不可能なキャスト</ShortDescription>
+    <LongDescription>{2} から {3} への不可能なキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このキャストは、常に ClassCastException をスローします。
+FindBugs は、instanceof チェックから型情報を調査して、メソッドからの戻り値とフィールドからロードされた値の型について、より多くの正確な情報を使用します。
+したがって、宣言された変数の型にはより多くの正確な情報があるかもしれないしれません。
+そして、キャストが常に実行時例外をスローするのか判定するために使用する可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_IMPOSSIBLE_DOWNCAST">
+    <ShortDescription>不可能なダウンキャスト</ShortDescription>
+    <LongDescription>{2} から {3} への不可能なダウンキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このキャストは、常に ClassCastException をスローします。
+解析は、キャストしている値の正確な型がわかっていると信じています。
+そして、サブタイプへダウンキャストしようとする試みは、ClassCastException のスローによって常に失敗します。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY">
+    <ShortDescription>toArray メソッドの結果の不可能なダウンキャスト</ShortDescription>
+    <LongDescription>{3} への toArray メソッドの結果の不可能なダウンキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、以下のように、<code>Object[]</code> より特定の型のコレクションで <code>toArray</code> メソッドを呼び出す結果をキャストしています。
+</p>
+<blockquote><pre>
+String[] getAsArray(Collection&lt;String&gt; c) {
+  return (String[]) c.toArray();
+}
+</pre></blockquote>
+<p>
+これは通常、ClassCastException をスローして失敗します。
+ほとんどすべてのコレクションの <code>toArray</code> メソッドは、<code>Object[]</code> を返します。
+Collection オブジェクトは宣言された総称型コレクションの参照がないので、本当に何もできません。
+コレクションから特定の型の配列を得る正しい方法は、<code>c.toArray(new String[]);</code> または <code>c.toArray(new String[c.size()]);</code> (後者はわずかにより効率的です) を使うことです。
+これに対する1つの共通の知られている例外があります。
+<code>Arrays.asList(...)</code>によって返されるリストの <code>toArray()</code> メソッドは、共変な配列を返します。
+たとえば、<code>Arrays.asArray(new String[] { "a" }).toArray()</code> は <code>String []</code> を返します。
+FindBugs はそのようなケースを検出して抑止しようとしますが、いくつか見落とすかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_INSTANCEOF">
+    <ShortDescription>null とわかっている値をその型のインスタンスなのか確かめている</ShortDescription>
+    <LongDescription>null とわかっている値を {2} のインスタンスなのか確かめています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+チェックされている値が null であることが保証されているので、instanceof は常に faluse を返します。
+これは安全で、誤解や論理エラーを指摘していないことを確認してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_NULL_INSTANCEOF" deprecated="true"> <!-- deprecated in favor of NP_NULL_INSTANCEOF -->
+    <ShortDescription>A known null value is checked to see if it is an instance of a type</ShortDescription>
+    <LongDescription>A known null value is checked to see if it is an instance of {2} in {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+This instanceof test will always return false, since the value being checked is guaranteed to be null.
+Although this is safe, make sure it isn't
+an indication of some misunderstanding or some other logic error.
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_IMPOSSIBLE_INSTANCEOF">
+    <ShortDescription>常に false を返す instanceof</ShortDescription>
+    <LongDescription>{2} が {3} である可能性がないので、instanceof は常に false を返します。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この instanceof は常に false を返します。これは安全で、誤解や論理エラーを指摘していないことを確認してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_VACUOUS_INSTANCEOF">
+    <ShortDescription>常に true を返す instanceof</ShortDescription>
+    <LongDescription>{2} は {3} のインスタンスなので instanceof は常にすべての非 null 値に対して true を返します。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この instanceof は常に true を返します (テストしている値が null でない限り)。
+これは安全で、誤解や論理エラーを指摘していないことを確認してください。
+本当に null なのか値をテストしたいなら、たぶん、instanceof ではなく null テストをした方が良く、より明確になります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_UNCONFIRMED_CAST">
+    <ShortDescription>未チェック/未確認のキャスト</ShortDescription>
+    <LongDescription>{2} から {3} への未チェック/未確認のキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このキャストはチェックされていません。
+すべての型のインスタンスがキャストした型にキャストできるというわけではありません。
+プログラムのロジックがこのキャストが失敗しないことを確実に確認してください。  
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+   <BugPattern type="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE">
+    <ShortDescription>メソッドからの戻り値の未チェック/未確認のキャスト</ShortDescription>
+    <LongDescription>{2} からの {3} 戻り値への未チェック/未確認のキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、メソッドの戻り値の未確認のキャストを実行しています。
+コードは、キャストが安全であることが保証されるようにメソッドを呼び出しているかもしれませんが、FindBugs はキャストが安全であることを検証できません。
+プログラムのロジックがこのキャストが失敗しないことを確実に確認してください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_BAD_CAST_TO_CONCRETE_COLLECTION">
+    <ShortDescription>具象コレクションへの疑わしいキャスト</ShortDescription>
+    <LongDescription>{2} から {3} への疑わしいキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは抽象コレクション (たとえば、Collection、List、Set) を特定の具象実装 (たとえば、ArrayList、HashSet) にキャストしています。
+これは正しくないかもしれません。
+そして、将来の時点で他の具象実装への切り替えをとても困難にするので、脆弱なコードになるかもしれません。
+そうするために特別な理由がない限り抽象コレクションクラスを使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RE_POSSIBLE_UNINTENDED_PATTERN">
+    <ShortDescription>正規表現のために使われている "."</ShortDescription>
+    <LongDescription>正規表現で "." を使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+String メソッドが呼び出されていて、"." が引数として正規表現を取るパラメータに渡されています。
+これは、意図したことですか?
+たとえば、<code>s.replaceAll(".", "/")</code> はあらゆる文字が "/" 文字に置き換えられた文字列を返します。
+また、<code>s.split(".")</code> は常に長さが0の String の配列を返します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RE_BAD_SYNTAX_FOR_REGULAR_EXPRESSION">
+    <ShortDescription>正規表現のための無効な構文</ShortDescription>
+    <LongDescription>正規表現のための無効な構文です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、正規表現の構文によると無効である正規表現を使用しています。
+この文が実行されるとき PatternSyntaxException をスローします。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RE_CANT_USE_FILE_SEPARATOR_AS_REGULAR_EXPRESSION">
+    <ShortDescription>正規表現のために使われている File.separator</ShortDescription>
+    <LongDescription>File.separator が正規表現のために使われています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、正規表現が必要である <code>File.separator</code> を使用しています。
+これは <code>File.separator</code> がバックスラッシュである Windows プラットホームでは失敗します。
+バックスラッシュは正規表現ではエスケープ文字として解釈されます。
+その他の選択肢としては、<code>File.separator</code> の代わりに <code>File.separatorChar=='\\' ? "\\\\" : File.separator</code> を使用できます。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DLS_OVERWRITTEN_INCREMENT">
+    <ShortDescription>上書きされたインクリメント</ShortDescription>
+    <LongDescription>上書きされたインクリメントです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、インクリメント演算 (たとえば、<code>i++</code>) を実行してすぐに上書きしています。
+たとえば、<code>i = i++</code> は元の値をインクリメントした値で上書きします。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="ICAST_QUESTIONABLE_UNSIGNED_RIGHT_SHIFT">
+    <ShortDescription>符号なし右シフトを short/byte にキャストしている</ShortDescription>
+    <LongDescription>符号なし右シフトを short/byte にキャストしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、符号なしキャストの実行結果を short または byte にキャストしています。結果の上位ビットは捨てられます。
+上位ビットが捨てられるので、符号付き、符号なし右シフトの (シフトのサイズによって) 違いがないかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ICAST_BAD_SHIFT_AMOUNT">
+    <ShortDescription>32ビット int の0から31の範囲を超えた量によるシフト</ShortDescription>
+    <LongDescription>32ビット int を {2} ビットでシフトしました。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、32ビット int の0から31の範囲を超えた量でシフトを実行しています。
+これの効果は、どのくらいシフトするのかを決めるために整数値の下位5ビット (32で割った余り) を使うことです (たとえば、40ビットでシフトすることは8ビットでシフトすることと同じで、32ビットでシフトすることは0ビットでシフトすることと同じです)。
+これはおそらく、期待されたことではありません、それは少なくとも紛らわしいです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IM_MULTIPLYING_RESULT_OF_IREM">
+    <ShortDescription>整数剰余の結果の整数乗算</ShortDescription>
+    <LongDescription>整数剰余の結果の整数乗算。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、整数剰余の結果に整数定数を乗算しています。
+紛らわしい演算子の優先順位がないことを確実にしてください。
+たとえば、i % 60 * 1000 は、i % (60 * 1000) ではなく (i % 60) * 1000 となります。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_INVOKING_HASHCODE_ON_ARRAY">
+    <ShortDescription>配列で hashCode メソッドを呼び出している</ShortDescription>
+    <LongDescription>配列で hashCode メソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、配列で <code>hashCode</code> メソッドを呼び出しています。
+配列で <code>hashCode</code> メソッドを呼び出すことは、System.identityHashCode と同じ値を返すので、コンテンツと配列の長さを無視します。
+配列 <code>a</code> のコンテンツによるハッシュコードを必要とするなら、<code>java.util.Arrays.hashCode(a)</code> を使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_INVOKING_TOSTRING_ON_ARRAY">
+    <ShortDescription>配列で toString メソッドを呼び出している</ShortDescription>
+    <LongDescription>{2.givenClass} で toString メソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、配列で <code>toString</code> メソッドを呼び出しています。「[C@16f0472」のようなかなり役に立たない結果を生成します。
+配列のコンテンツを与え、読める文字列に変換するために、<code>Arrays.toString()</code> を使うことを検討してください。<br>
+『Programming Puzzlers』の第3章、パズル12を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_INVOKING_TOSTRING_ON_ANONYMOUS_ARRAY">
+    <ShortDescription>名前のない配列で toString メソッドを呼び出している</ShortDescription>
+    <LongDescription>名前のない配列で toString メソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、無名の配列で <code>toString</code> メソッドを呼び出しています。「[C@16f0472」のようなかなり役に立たない結果を生成します。
+配列のコンテンツを与え、読める文字列に変換するために、<code>Arrays.toString()</code> を使うことを検討してください。<br>
+『Programming Puzzlers』の第3章、パズル12を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="IM_AVERAGE_COMPUTATION_COULD_OVERFLOW">
+    <ShortDescription>平均の計算はオーバーフローする可能性がある</ShortDescription>
+    <LongDescription>平均の計算は、オーバーフローする可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、除算か符号付き右シフトを使用して2つの整数の平均を計算して、その結果を配列の添字として使用しています。
+平均値が非常に大きいならオーバーフローする可能性があります (結果として負の平均の計算になる)。
+結果が負でないことを意図していたなら、その代わりに符号なし右シフトを使用できます。
+つまり、<code>(low+high)/2</code> ではなく <code>(low+high) &gt;&gt;&gt; 1</code> を使用してください。
+</p>
+<p>
+このバグは、二分探索とマージソートの多くの以前の実装で存在します。
+Martin Buchholz が <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6412541">JDK ライブラリでバグを発見し修正しています</a>。
+Joshua Bloch が <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html">バグパターンとして公表しました</a>。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IM_BAD_CHECK_FOR_ODD">
+    <ShortDescription>負数で機能しない奇数チェック</ShortDescription>
+    <LongDescription>負数で機能しない奇数チェックです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、<code>x % 2 == 1</code> を使用して値が負数なのか確かめていますが、負数 (たとえば、<code>(-5) % 2 == -1</code>) なので機能しません。
+奇数チェックを意図しているなら、<code>x &amp; 1 == 1</code> または <code>x % 2 != 0</code> を使うことを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_HARDCODED_ABSOLUTE_FILENAME">
+    <ShortDescription>ハードコードされた絶対パス名への参照がある</ShortDescription>
+    <LongDescription>ハードコードされた絶対パス名への参照があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、ハードコードされた絶対パス名を使用して File オブジェクトを構築しています (たとえば、<code>new File("/home/dannyc/workspace/j2ee/src/share/com/sun/enterprise/deployment");</code>)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_BAD_MONTH">
+    <ShortDescription>月のための間違った定数値</ShortDescription>
+    <LongDescription>間違った月の値 {2} を {3} に渡しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、メソッドに0から11の範囲外の月定数値を渡しています。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_USELESS_SUBSTRING">
+    <ShortDescription>substring(0) の呼び出しは元の値を返す</ShortDescription>
+    <LongDescription>{1} は、元の値を返す substring(0) を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、文字列で <code>substring(0)</code> を呼び出していますが、元の値を返します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_CALLING_NEXT_FROM_HASNEXT">
+    <ShortDescription>hasNext メソッドで next メソッドを呼び出している</ShortDescription>
+    <LongDescription>{1} は、{2.givenClass} を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>hasNext</code> メソッドは、<code>next</code> メソッドを呼び出しています。
+<code>hasNext</code> メソッドは、イテレータの状態を変更することになっていないので、ほぼ確実に間違っています。
+<code>next</code> メソッドがイテレータの状態を変更することになっています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SWL_SLEEP_WITH_LOCK_HELD">
+    <ShortDescription>ロックを保持して Thread.sleep() を呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、ロックを保持して Thread.sleep() を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ロックを保持して、<code>Thread.sleep()</code> を呼び出しています。
+他のスレッドがロックを獲得するために待機しているかもしれないので、ひどい性能とスケーラビリティ、またはデッドロックになるかもしれません。
+ロックで <code>wait</code> メソッドを呼び出すことはかなり良い考えで、ロックを解除して他のスレッドが実行するのを許可します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DB_DUPLICATE_BRANCHES">
+    <ShortDescription>2つの分岐のために同じコードを使用しているメソッド</ShortDescription>
+    <LongDescription>{1} は、2つの分岐のために同じコードを使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、条件分岐の2つの分岐を実装するために同じコードを使用しています。
+これがコーディングミスではないことを確認してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DB_DUPLICATE_SWITCH_CLAUSES">
+    <ShortDescription>switch 文の2つの case のために同じコードを使用しているメソッド</ShortDescription>
+    <LongDescription>{1} は、switch 文の2つの case のために同じコードを使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、switch 文の2つの case を実装するために同じコードを使用しています。
+重複コードの case かもしれないし、コーディングミスかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IMA_INEFFICIENT_MEMBER_ACCESS">
+    <ShortDescription>所有クラスの private メンバー変数にアクセスしているメソッド</ShortDescription>
+    <LongDescription>{1} は、所有クラスの private メンバー変数にアクセスしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この内部クラスのメソッドは、所有クラスの private メンバー変数への読み書きか、所有クラスの private メソッドを呼び出しています。
+コンパイラはこの private メンバーにアクセスするために特別なメソッドを生成しなければなりないので、効率を悪化させる原因になります。
+メンバー変数またはメソッドの保護を緩和することは、コンパイラが通常のアクセスとして扱うのを許可します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="XFB_XML_FACTORY_BYPASS">
+    <ShortDescription>XMLインタフェースの特定の実装のインスタンスを作成しているメソッド</ShortDescription>
+    <LongDescription>{1} は、XMLインタフェースの特定の実装のインスタンスを作成しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、XMLインタフェースの特定の実装のインスタンスを作成しています。
+実装が実行時に変更できるように、これらのオブジェクトを作成するために提供されたファクトリクラスを使うことが望ましいです。<br>
+詳細は、以下を参照してください。
+</p>
+<ul>
+  <li>javax.xml.parsers.DocumentBuilderFactory</li>
+  <li>javax.xml.parsers.SAXParserFactory</li>
+  <li>javax.xml.transform.TransformerFactory</li>
+  <li>org.w3c.dom.Document.create<i>XXXX</i></li>
+</ul>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="USM_USELESS_SUBCLASS_METHOD">
+    <ShortDescription>親クラスのメソッドに過剰に委譲しているメソッド</ShortDescription>
+    <LongDescription>{1} は、親クラスのメソッドに過剰に委譲しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この派生メソッドは、単に受け取られる正確なパラメータを渡している同じスーパークラスのメソッドを呼び出すだけです。
+このメソッドは、付加価値が与えられないので除去できます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="USM_USELESS_ABSTRACT_METHOD">
+    <ShortDescription>実装されたインタフェースですでに定義された抽象メソッド</ShortDescription>
+    <LongDescription>抽象メソッド {1} は、実装されたインタフェースですでに定義されています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この抽象メソッドは、この抽象クラスによって実装されるインタフェースですでに定義されています。
+このメソッドは、付加価値が与えられないので除去できます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CI_CONFUSED_INHERITANCE">
+    <ShortDescription>final なクラスが protected フィールドを宣言している</ShortDescription>
+    <LongDescription>クラス {0} は、final なのに protected フィールド {1} が宣言されています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、final と宣言されていますが、フィールドは protected と宣言されています。
+クラスは fainal なので派生できません。、protected の使用は紛らわしいです。 
+フィールドのためのアクセス修飾子は、フィールドの真の用途を表すため、 private か public に変更するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="QBA_QUESTIONABLE_BOOLEAN_ASSIGNMENT">
+    <ShortDescription>論理式で boolean リテラル値を代入しているメソッド</ShortDescription>
+    <LongDescription>{1} は、論理式で boolean リテラル値を代入しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、if または while の式の中の boolean 変数に boolean リテラル値 (true または false) を代入しています。
+おそらく、これは = による代入ではなく、== を使用して論理比較をすることになっていました。
+</p>
+]]>
+    </Details>
+  </BugPattern>

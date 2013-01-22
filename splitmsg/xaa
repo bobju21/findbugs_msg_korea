@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MessageCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="messagecollection.xsd">
+
+  <!--
+  ************************************************f**********************
+  Plugin information
+  **********************************************************************
+  -->
+  <Plugin>
+    <ShortDescription>コア FindBugs プラグイン</ShortDescription>
+    <Details>
+<![CDATA[
+<p>
+このプラグインにはすべての標準的な FindBugs ディテクタがあります。
+</p>
+]]>
+    </Details>
+  </Plugin>
+
+  <FindBugsMain cmd="addMessages" class="edu.umd.cs.findbugs.AddMessages">
+    <Description>add msgs (e.g., textual descriptions of bugs) to analysis results</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="analyze" class="edu.umd.cs.findbugs.FindBugs2">
+    <Description>Perform FindBugs Analysis</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="gui" class="edu.umd.cs.findbugs.gui2.Driver">
+    <Description>Launch FindBugs GUI</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="list" class="edu.umd.cs.findbugs.PrintingBugReporter">
+    <Description>Convert analysis results to textual form</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="help" class="edu.umd.cs.findbugs.ShowHelp">
+    <Description>Provide help for commands</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="version" class="edu.umd.cs.findbugs.Version">
+    <Description>List FindBugs version</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="filter" class="edu.umd.cs.findbugs.workflow.Filter">
+    <Description>Filter analysis results</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="set" class="edu.umd.cs.findbugs.workflow.SetBugDatabaseInfo">
+    <Description>Set project configuration/options</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="history" class="edu.umd.cs.findbugs.workflow.MineBugHistory">
+    <Description>List details from  multi-version analysis results</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="union" class="edu.umd.cs.findbugs.workflow.UnionResults">
+    <Description>Merge analysis results from disjoint components</Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="merge" class="edu.umd.cs.findbugs.workflow.Update">
+    <Description>Combine analysis results from different versions of software to produce multi-version analysis results </Description>
+  </FindBugsMain>
+  <FindBugsMain cmd="dis" class="edu.umd.cs.findbugs.workflow.PrintClass">
+    <Description>Disassemble a class file</Description>
+  </FindBugsMain>
+  
+  <!-- これを変えたら FindbugsPlugin のデフォルト ID も更新して下さい -->
+  <Cloud id="edu.umd.cs.findbugs.cloud.doNothingCloud">
+    <Description>(クラウド無効)</Description>
+    <Details>このプラグインを使用すると、バグレビューは無効になります。</Details>
+  </Cloud>
+
+  <PluginComponent
+    id="edu.umd.cs.findbugs.bugReporter.SuppressMultithreaded">
+    <Description>マルチスレッドの正確性問題を抑止する</Description>
+    <Details>すべてのマルチスレッドの正確性問題を抑止します</Details>
+    </PluginComponent>
+
+  <PluginComponent
+    id="edu.umd.cs.findbugs.bugReporter.SuppressI18N">
+    <Description>国際化問題を抑止する</Description>
+    <Details>すべての国際化問題を抑止します</Details>
+    </PluginComponent>
+  
+  <PluginComponent
+    id="edu.umd.cs.findbugs.bugReporter.SelectivelySuppressI18N">
+    <Description>選択したパッケージ以外のすべての国際化問題を抑止する</Description>
+    <Details>i18n.properties リソースで指定した以外のすべての国際化問題を抑止します</Details>
+  </PluginComponent>
+
+  <PluginComponent
+    id="edu.umd.cs.findbugs.bugReporter.MaxRank14">
+    <Description>ランク14を越えるすべての問題を抑止する</Description>
+    <Details>ランク14を越えるすべての問題を抑止します</Details>
+  </PluginComponent>
+
+  <PluginComponent
+    id="edu.umd.cs.findbugs.bugReporter.SuppressMalicious">
+    <Description>悪質なコード脆弱性について警告を抑止する</Description>
+    <Details>悪質なコード脆弱性について警告を抑止します</Details>
+    </PluginComponent>
+    
+  <!--
+  **********************************************************************
+  Categories (replacing the BugCategoryDescriptions.properties file)
+  **********************************************************************
+  -->
+
+  <BugCategory category="CORRECTNESS">
+    <Description>正確性</Description>
+    <Abbreviation>C</Abbreviation>
+    <Details>バグの可能性 - おそらく、開発者が意図していなかったコードになっている明らかなコーディング間違い。
+      我々は、低い誤検出率のために努力します。
+    </Details>
+  </BugCategory>
+
+  <BugCategory category="NOISE">
+    <Description>偽のランダムノイズ</Description>
+    <Abbreviation>N</Abbreviation>
+    <Details>偽のランダムノイズ: ソフトウェアで実際のバグを発見するのではなく、データマイニング実験のコントロールとして役に立つことを意図しました。
+    </Details>
+  </BugCategory>
+
+  <BugCategory category="SECURITY">
+    <Description>セキュリティ</Description>
+    <Abbreviation>S</Abbreviation>
+    <Details>リモートから利用可能なセキュリティ脆弱性を作成できる信頼できない入力を使用しています。
+    </Details>
+  </BugCategory>
+
+  <BugCategory category="BAD_PRACTICE">
+    <Description>バッドプラクティス</Description>
+    <Abbreviation>B</Abbreviation>
+    <Details>推奨または必須のコーディングプラクティスの違反です。たとえば、hashCode と equals の問題、cloneable イディオム、捨てられた例外、Serializable の問題、finalize の誤用など。
+      いくつかのグループは、バッドプラクティスを気にしないかもしれないが、我々は正確な解析をしようと努力します。
+    </Details>
+  </BugCategory>
+
+  <BugCategory category="STYLE">
+    <Description>危ないコード</Description>
+    <Abbreviation>D</Abbreviation>
+    <Details>紛らわしいコード、変則的なコード、それ自身をエラーに導く方法で書かれたコード。
+      たとえば、ローカル変数への無効な代入、switch 文のフォールスルー、未確認のキャスト、null とわかっている値の冗長な null チェックなどです。
+      より多くの誤検出を受け入れました。
+  FindBugs の以前のバージョンでは、このカテゴリは Style として知られていました。
+　　　　</Details>
+  </BugCategory>
+
+  <BugCategory category="PERFORMANCE">
+    <Description>性能</Description>
+    <Abbreviation>P</Abbreviation>
+    <Details>必ずしも間違っているというわけではなくて、効率が悪いかもしれないコード</Details>
+  </BugCategory>
+
+  <BugCategory category="MALICIOUS_CODE">
+    <Description>悪質なコード脆弱性</Description>
+    <Abbreviation>V</Abbreviation>
+    <Details>信頼できないコードからの攻撃に脆弱であるコード</Details>
+  </BugCategory>
+
+  <BugCategory category="MT_CORRECTNESS">
+    <Description>マルチスレッドの正確性</Description>
+    <Abbreviation>M</Abbreviation>
+    <Details>スレッド、ロック、volatile に関係があるコードの欠陥</Details>
+  </BugCategory>
+
+  <BugCategory category="I18N">
+    <Description>国際化</Description>
+    <Abbreviation>I</Abbreviation>
+    <Details>国際化とロケールに関係があるコードの欠陥</Details>
+    <!-- DM_CONVERT_CASE is the only core bug pattern in this category -->
+  </BugCategory>
+
+  <BugCategory category="EXPERIMENTAL">
+    <Description>実験用</Description>
+    <Abbreviation>X</Abbreviation>
+    <Details>実験用で完全に精査されていないバグパターン</Details>
+    <!-- DM_CONVERT_CASE is the only core bug pattern in this category -->
+  </BugCategory>
+
+
+  <!--
+  **********************************************************************
+  Detectors
+  **********************************************************************
+   -->
+  <Detector class="edu.umd.cs.findbugs.detect.InitializeNonnullFieldsInConstructor">
+    <Details>
+<![CDATA[
+<p> Finds nonnull fields that are not written to in constructors.
+このディテクタは、コンストラクタで書き込まれない非 null フィールドを発券します。
+</p>
+]]>
+     </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.IntCast2LongAsInstant">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、エポックからミリ秒を記述する32ビット値の使い方を発見します。
+</p>
+]]>
+     </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TrainLongInstantfParams">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、エポックからミリ秒を記述している64ビット値を取るパラメータのデータベースを構築します。
+</p>
+]]>
+     </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.InconsistentAnnotations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、型修飾子が直接適用されるメソッドパラメータとそれらのメソッドパラメータの使い方との間で矛盾を発見します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.AtomicityProblem">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、原子的に実行されない並行抽象化に関して、演算（たとえば、get/put）のシーケンスを発見します。
+</p>
+]]>
+     </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SynchronizationOnSharedBuiltinConstant">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、共有された組込み定数 (たとえば、String) の同期化を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SynchronizeAndNullCheckField">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、同期化されたフィールドを  null チェックしているコード探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+
+  <Detector class="edu.umd.cs.findbugs.detect.CheckImmutableAnnotation">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、net.jcip.annotations.Immutable としてアノテートされたクラスのルール違反を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.VarArgsProblems">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、J2SE 5.0の可変長引数に起因する問題を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.NoteJCIPAnnotation">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、net.jcip.annotations パッケージからアノテーションを記録します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッドを解析することに関連する型修飾子に注意します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BuildInterproceduralCallGraph">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、プロシージャー間の呼び出しグラフを構築します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、FindUnsatisfiedObligation ディテクタによって使われる責務の種類とメソッドのデータベースを構築します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.NoteSuppressedWarnings">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、edu.umd.cs.findbugs.annotations.NoteSuppressWarnings アノテーションの使い方に基づく警告を抑止します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.NoteAnnotationRetention">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Retention アノテーションを記録します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.NoteSyntheticElements">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、合成クラス、メソッド、フィールドなどを記録します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.Methods">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、他のディテクタが使用するために、解析されたクラスで定義されているすべてのメソッドのデータベースを構築します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.ReflectiveClasses">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、どのクラスが .class オブジェクトへの定数参照を持っているのか決定しようと試みます。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.CalledMethods">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、他のディテクタが使用するために、解析されたクラスで呼び出されるすべてのメソッドのデータベースを構築します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、クラスの新しいインスタンスを返すメソッドがある不変クラスを探します。
+それらのメソッドが呼び出されるところでインスタンスを変化させると事故が起きるかもしれません。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.ConfusionBetweenInheritedAndOuterMethod">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、継承されたメソッドと外部のメソッドとの潜在的混同を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.NoteCheckReturnValueAnnotations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッドの戻り値をチェックするためにアノテーションを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.SynchronizeOnClassLiteralNotGetClass">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、クラスリテラルではなく、getClass の結果で同期化するコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FieldItemSummary">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、何がフィールドに格納されたのかについて、サマリー情報を作り出します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.NoteNonNullAnnotations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッド、フィールド、パラメータで @NonNull アノテーションを探します。
+null かもしれない値が null でない値だけが使われるべき文脈で使われたときに FindNullDeref ディテクタが警告を生成するために使われます。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.NoteUnconditionalParamDerefs">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、無条件でパラメータの  null 値が利用されるのか判定するためにアプリケーションのすべてのメソッドを解析します。
+この情報は、null 値がメソッドに渡されるかもしれない呼び出し場所を発見するために後の解析パスで使われます。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.NoteNonnullReturnValues">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、どのメソッドが常に非 null 値を返すのか判定するためにアプリケーションで、すべてのメソッドを解析します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+
+  <Detector class="edu.umd.cs.findbugs.detect.BooleanReturnNull">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、明示的に null 値を返す戻り型が Boolean のメソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BadUseOfReturnValue">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッドの戻り値が null でないのかチェックされた後に捨てられるケースを探します。
+</p>
+
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.InheritanceUnsafeGetResource">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、クラスが別のパッケージのクラスによって拡張されるなら、予想外の結果をもたらす可能性がある <code>this.getClass().getResource(...)</code> の使用を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.InfiniteRecursiveLoop">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、無限再帰ループを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.InfiniteLoop">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、無限ループを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.VolatileUsage">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、volatile フィールドの使い方でバグパターンを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.EmptyZipFileEntry">

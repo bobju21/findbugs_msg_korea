@@ -1,0 +1,500 @@
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.MutableLock">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、変更されたフィールドから読み込まれるオブジェクトで同期化を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SynchronizingOnContentsOfFieldToProtectField">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、フィールドの更新をガードするためにフィールドを同期化しているように思われるコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.MutableStaticFields">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、悪質なコードによって変更されるかもしれない static フィールドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.Naming">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、疑わしげに命名されたメソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.ReadReturnShouldBeChecked">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、戻り値が無視される <code>InputStream.read()</code> または <code>InputStream.skip()</code> の呼び出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SerializableIdiom">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Serializable クラスの実装で潜在的な問題を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.StartInConstructor">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、スレッドを開始するコンストラクタを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindBadForLoop">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、間違った for ループを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.ExplicitSerialization" >
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、このクラスが本当に直列化されるという証拠として readObject と writeObject を通して明示的な直列化を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.UnreadFields">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、値が決して読み出されないフィールドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.WaitInLoop">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ループの中にない <code>wait</code> メソッドの呼び出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BCPMethodReturnCheck">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、戻り値が疑わしげに無視されるメソッドの呼び出しを探します。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindNullDeref">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、NullPointerException が発生するかもしれない場所を探します。
+また、null に対する参照値の冗長な比較を探します。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindNullDerefsInvolvingNonShortCircuitEvaluation">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、NullPointerException が発生するかもしれない場所を探します。
+非短絡評価の使用はありふれたテクニックで失敗の原因になります。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindOpenStream">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッドから脱出しないで、メソッドからのすべての経路でクローズされるように見えない IO ストリームオブジェクトを探します。
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.PreferZeroLengthArrays">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、配列か明示的に null 参照を返すメソッドを探します。
+長さが0の配列を返すことは、この文脈において null 参照を返すより好ましいです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUselessControlFlow">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、効果がない制御フロー文を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUnreleasedLock">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、JSR-166(<code>java.util.concurrent</code>) のロックを獲得したのにメソッドからのすべての経路で解除されないロックを探します。
+</p>
+<p>
+中速ディテクタです。
+</p>
+<p>
+このディテクタを使用するために、補助クラスパスに <code>java.util.concurrent</code> パッケージ  (またはパッケージ自体を解析している) が必要であることに注意してください。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindRefComparison">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、2つの参照値を == や != 演算子で比較している場所を探します。
+<code>java.lang.String</code> のような型のクラスで参照値を比較することは、通常誤りです。
+</p>
+</p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindMismatchedWaitOrNotify">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、現在ロックされているオブジェクトで作成されるように見えない <code>wait</code> メソッド、<code>notify</code> メソッド、<code>notifyAll</code> メソッドの呼び出しを探します。
+</p>
+</p>
+中速ディテクタです。
+<p>
+このディテクタは、まだ開発中で、あまりに多くの誤検出が発生するので、無効にされています。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindEmptySynchronizedBlock">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、空の synchronized ブロックを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindInconsistentSync2">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ロックに関して一貫性のない方法でアクセスされるフィールドを探します。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindLocalSelfAssignment2">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ローカル変数の自己代入を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.IncompatMask">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、疑わしいビット論理式を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.LazyInit">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、フィールドが volatile でない怠惰なフィールドの初期化を探します。
+</p>
+<p>
+中速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindJSR166LockMonitorenter">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、JSR-166のロックで実行される通常の同期化を探します。
+</p>
+<p>
+中速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUncalledPrivateMethods">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、決して呼び出されない private メソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.StringConcatenation">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、+を使ったループによる文字列の連結を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.InefficientToArray">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>toArray(T[] a)</code> メソッドに長さが0の配列を渡してコレクションを配列に変換するコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.InvalidJUnitTest">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、不正な形式の JUnit テストを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BadlyOverriddenAdapter">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>Adapter</code> クラスを拡張して、間違ったシグネチャで <code>Listener</code> メソッドをオーバーライドするコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BadResultSetAccess">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、列インデックス番号が0の <code>ResultSet</code>の getXXX または setXXX メソッドの呼び出しを探します。
+<code>ResultSet</code> の列インデックス番号は1で始まるので、これは常に間違いです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SuperfluousInstanceOf">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、判定が静的に行われる可能性がある instanceof 演算子を使用している型チェックを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BadAppletConstructor">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Applet スタブに依存する親 Applet でメソッドを呼び出す Applet コンストラクタを探します。
+このスタブは <code>init</code> メソッドの前まで初期化されないので、これらのメソッドはコンストラクタで失敗します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SuspiciousThreadInterrupted">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、非スタティックな文脈から <code>Thread.interrupted()</code> の呼び出しを探します。
+それが <code>Thread.currentThread().interrupted()</code> から呼び出されるなら、役に立たない行為なので <code>Thread.interrupted()</code> を使用します。
+しかしながら、<code>interrupted</code> メソッドは常にカレントスレッドで呼び出されるので、任意のスレッドオブジェクトで呼び出すのはほぼ間違いなく誤りです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindSqlInjection">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、switch 文で定数文字列以外の何かが引数として渡される SQL 文の <code>execute</code> メソッドの呼び出しを探すためにデータフロー解析を使います。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindDeadLocalStores">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、その後、決して読み出されないローカル変数への代入を探します。
+</p>
+<p>
+中速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindMaskedFields">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッドで定義されたローカル変数によって隠されるフィールドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.WrongMapIterator">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>keySet</code> イテレータから取り出されたキーを使用して <code>Map</code> エントリの値にアクセスするコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.InstantiateStaticClass">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、static メソッドしか定義していないクラスのオブジェクトを作成しているコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.RuntimeExceptionCapture">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ブロックの中のコードが例外をスローしないのに例外をキャッチする catch 節を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindFloatEquality">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、浮動小数点の等価式を探します。
+</p>
+<p>
+高速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUnsatisfiedObligation">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッドからのすべての経路でクリーンアップされない入出力ストリームとデータベースリソースを探します。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.UnnecessaryMath">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、計算結果が静的に知られている値を計算するために <code>java.lang.Math</code> の static メソッドを呼び出すコードを探します。
+その代わりに定数を使用する方がより高速で、ときにはより正確です。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindCircularDependencies">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、クラス間の循環依存関係を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+

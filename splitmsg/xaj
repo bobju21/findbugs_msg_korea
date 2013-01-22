@@ -1,0 +1,500 @@
+
+  <BugPattern type="SE_READ_RESOLVE_IS_STATIC">
+    <ShortDescription>readResolve メソッドが static メソッドとして宣言されている</ShortDescription>
+    <LongDescription>{1} は、static メソッドではなく インスタンスメソッドとして宣言するべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>readResolve</code> メソッドが直列化機構で認識されるためにはstatic メソッドとして宣言してはいけません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="SE_PRIVATE_READ_RESOLVE_NOT_INHERITED">
+    <ShortDescription>サブクラスで継承できない private な readResolve メソッド</ShortDescription>
+    <LongDescription>サブクラスで継承できない {0} の private な readResolve メソッドです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、private な <code>readResolve</code> メソッドを定義しています。
+そのため、このメソッドはサブクラスで継承できません。
+これが意図したことなら間違っていないかもしれませんが、確認するためにレビューするべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_READ_RESOLVE_MUST_RETURN_OBJECT">
+    <ShortDescription>readResolve メソッドの戻り値の型が Object で宣言されていない</ShortDescription>
+    <LongDescription>メソッド {1} の戻り値の型は {1.returnType} ではなく Object で宣言されなければなりません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>readResolve</code> メソッドが直列化機構で認識されるためには戻り値の型が <code>Object</code> で宣言されなければなりません。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="SE_TRANSIENT_FIELD_OF_NONSERIALIZABLE_CLASS">
+    <ShortDescription>Serializable でないクラスの transient フィールド</ShortDescription>
+    <LongDescription>{1.givenClass} は、transient ですが、{0} は Serializable ではありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+フィールドは、transient と宣言していますが、クラスは直列化可能ではないので、まったく効果がありません。
+これはクラスが transient だったときの名残かもしれません、あるいは直列化機構を誤解しているのかもしれません。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_TRANSIENT_FIELD_NOT_RESTORED">
+    <ShortDescription>直列化復元によって設定されない transient フィールド </ShortDescription>
+    <LongDescription>フィールド {1} は、transient なので直列化復元によって設定されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスには複数の場所で更新されるフィールドがあります。したがって、このクラスの状態の一部であると思われます。
+しかしながら、フィールドは transient と宣言しているので、 readObject/readResolve で設定されません。
+クラスの直列化復元されたインスタンスにはデフォルト値が設定されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_METHOD_MUST_BE_PRIVATE">
+    <ShortDescription>直列化機構のために private にしなければならないメソッド</ShortDescription>
+    <LongDescription>メソッド {1.givenClass} は、{0} の直列化/直列化復元で呼び出されるために private にしなければなりません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>Serializable</code> インタフェースを実装して、カスタム直列化/直列化復元のためのメソッドを定義しています。
+しかし、そのメソッドが private として宣言されていないので、直列化/直列化復元 API によって無視されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_NO_SUITABLE_CONSTRUCTOR_FOR_EXTERNALIZATION">
+    <ShortDescription>Externalizable なクラスが引数なしコンストラクタを定義していない</ShortDescription>
+    <LongDescription>{0} は、Externalizable を実装しているのに引数なしコンストラクタを定義していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>Externalizable</code> インタフェースを実装しているのに、引数なしコンストラクタは定義していません。
+Externalizable オブジェクトが直列化復元されるときは、最初に引数なしコンストラクタを呼び出すことによって構築される必要があります。
+このクラスには引数なしコンストラクタがないので、直列化と直列化復元は実行時に失敗します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_NO_SUITABLE_CONSTRUCTOR">
+    <ShortDescription>Serializable なクラスのスーパークラスで、引数なしコンストラクタを定義していない</ShortDescription>
+    <LongDescription>{0} は、Serializable を実装していますが、そのスーパークラスはアクセス可能な引数なしコンストラクタを定義していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは <code>Serializable</code> インタフェースを実装していますが、そのスーパークラスは実装していません。
+そのようなオブジェクトが直列化復元されるとき、スーパークラスのフィールドはスーパークラスの引数なしコンストラクタを呼び出すことによって初期化される必要があります。
+スーパークラスには引数なしコンストラクタがないので、直列化と直列化復元は実行時に失敗します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_NO_SERIALVERSIONID">
+    <ShortDescription>Serializable なクラスが serialVersionUID を定義していない</ShortDescription>
+    <LongDescription>{0} は、Serializable を実装しているのに serialVersionUID は定義していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは <code>Serializable</code> インタフェースを実装しているのに <code>serialVersionUID</code> フィールドを定義していません。
+.class オブジェクトへの参照を追加するのと同じくらい簡単な変更でクラスに合成フィールドを追加します。
+それは、残念ながら暗黙の serialVersionUID を変えます (たとえば、<code>String.class</code> への参照を追加すると、<code>class$java$lang$String</code> という static フィールドを生成します)。
+また、バイトコードコンパイラへの異なるソースコードは、クラスオブジェクトまたは内部クラスに参照のために生成される合成変数のために、異なる命名規則を使用するかもしれません。
+バージョンを横断する Serializable の相互運用性を保証するために、明示的に、serialVersionUID を追加することを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE">
+    <ShortDescription>Comparator は Serializable を実装していない</ShortDescription>
+    <LongDescription>{0} は、Comparator を実装しているのに Serializable を実装していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは <code>Comparator</code> インタフェースを実装しています。
+<code>Serializable</code> インタフェースも実装するべきかどうか検討するべきです。
+コンパレータが <code>TreeMap</code> のような順序付きコレクションを構築するために使われるなら、コンパレータが直列化可能な場合だけ、<code>TreeMap</code> は直列化可能です。
+大部分のコンパレータがほとんど状態を持たないとしても、直列化可能にすることは簡単で良い防衛的なプログラミングです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="SF_SWITCH_FALLTHROUGH">
+    <ShortDescription>1つの case が次の case へと通り抜ける switch 文を発見した</ShortDescription>
+    <LongDescription>1つの case が次の case へと通り抜ける switch 文を発見しました。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには1つの case が次の case へと通り抜ける switch 文があります。
+通常、break か return でこの case を終わらせる必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="SF_SWITCH_NO_DEFAULT">
+    <ShortDescription>default がない switch 文を発見した</ShortDescription>
+    <LongDescription>default がない switch 文を発見しました。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはdefault がない switch 文があります。
+通常、default を用意する必要があります。
+</p>
+<p>
+解析は生成されたバイトコードを見るだけなので、default が  switch 文の終わりにあって、break 文で終わらないならば、誤警告のトリガーとなります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="SF_DEAD_STORE_DUE_TO_SWITCH_FALLTHROUGH">
+    <ShortDescription>switch 文のフォールスルーのために格納が無効になっている</ShortDescription>
+    <LongDescription>前の case からの値 {2.givenClass} が switch 文のフォールスルーのためにここで上書きされています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+前の case で格納された値が switch 文のフォールスルーのためにここで上書きされています。
+前の case の終わりに break または return を置くのを忘れた可能性があります。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SF_DEAD_STORE_DUE_TO_SWITCH_FALLTHROUGH_TO_THROW">
+    <ShortDescription>スローする switch 文のフォールスルーのために格納が無効になっている</ShortDescription>
+    <LongDescription>前の case からの値 {2.givenClass} が、スローする switch 文のフォールスルーのためにここで失われています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+前の case で格納された値が例外がスローされる場所で、switch 文のフォールスルーのためにここで失われています。
+前の case の終わりに break または return を置くのを忘れた可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="WS_WRITEOBJECT_SYNC">
+    <ShortDescription>writeObject メソッドは同期化しているがその他のメソッドは同期化していないクラス</ShortDescription>
+    <LongDescription>{0} の writeObject メソッドは同期化していますが、その他のメソッドは同期化していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスには同期化している <code>writeObject</code> メソッドがあります。
+しかしながら、クラスのその他のメソッドは同期化していません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RS_READOBJECT_SYNC">
+    <ShortDescription>readObject メソッドを同期化しているクラス</ShortDescription>
+    <LongDescription>{0} の readObject メソッドを同期化しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この直列化可能クラスは同期化する <code>readObject</code> メソッド を定義しています。
+定義によって、直列化復元によって作成されるオブジェクトは1つのスレッドによってだけ到達可能です。
+したがって、<code>readObject</code> メソッドは同期化する必要がありません。
+<code>readObject</code> メソッドそのものが別のスレッドに見えるようになるオブジェクトの原因になっているなら非常に疑わしいコーディングスタイルの例です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_NONSTATIC_SERIALVERSIONID">
+    <ShortDescription>serialVersionUID が static ではない</ShortDescription>
+    <LongDescription>{1} は、static ではありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、static でない <code>serialVersionUID</code> フィールドを定義しています。
+直列化を目的としてバージョン UID を指定することを意図しているならフィールドは static とすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_NONFINAL_SERIALVERSIONID">
+    <ShortDescription>serialVersionUID が final ではない</ShortDescription>
+    <LongDescription>{1} は、 final ではありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、final でない <code>serialVersionUID</code> フィールドを定義しています。
+直列化を目的としてバージョン UID を指定することを意図しているならフィールドは final とすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_NONLONG_SERIALVERSIONID">
+    <ShortDescription>serialVersionUID が long ではない</ShortDescription>
+    <LongDescription>{1} は、long ではありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、long でない <code>serialVersionUID</code> フィールドを定義しています。
+直列化を目的としてバージョン UID を指定することを意図しているならフィールドは long とすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_BAD_FIELD">
+    <ShortDescription>直列化可能クラスの非 transient で非直列化可能なインスタンスフィールド</ShortDescription>
+    <LongDescription>クラス {0} は、非 transient で非直列化可能なインスタンスフィールド {1.name} を定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この直列化可能クラスは、transient、Serializable、<code>java.lang.Object</code> でもない非プリミティブ型のインスタンスフィールドを定義して、
+<code>Externalizable</code> インタフェースまたは <code>readObject</code> メソッドと <code>writeObject</code> メソッドを実装するように見えません。
+また、<code>Externalizable</code> インタフェースも実装していないし、<code>readObject</code> メソッドも <code>writeObject</code> メソッドも定義していません。
+非直列化可能オブジェクトがこのフィールドに格納されるならこのクラスのオブジェクトは正しく直列化復元されません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_BAD_FIELD_INNER_CLASS">
+    <ShortDescription>非直列化可能クラスに直列化可能な内部クラスがある</ShortDescription>
+    <LongDescription>{0} は、直列化可能ですが、非直列化可能クラスの内部クラスです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この直列化可能クラスは、非直列化可能クラスの内部クラスです。
+内部クラスを直列化しようとすると関連する外部クラスのインスタンスを結びつけようとするので、実行時エラーの原因になります。
+</p>
+<p>
+できれば、内部クラスを static にして問題を解決するべきです。
+外部クラスを直列化可能にすることで動作するかもしれないが、内部クラスのインスタンスを直列化することは外部クラスも常に直列化することを意味します。
+本当に望むことですか。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_INNER_CLASS">
+    <ShortDescription>直列化可能な内部クラス</ShortDescription>
+    <LongDescription>{0} は直列化可能な内部クラスです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この直列化可能なクラスは、内部クラスです。
+内部クラスを直列化しようとすると関連した外部クラスのインスタンスも直列化します。
+外部クラスのインスタンスは直列化可能なので失敗しませんが、意図したことよりもっとずっと多くのデータを直列化するかもしれません。
+できれば、内部クラスを static にして問題を解決するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SE_BAD_FIELD_STORE">
+    <ShortDescription>非直列化可能な値を直列化可能クラスのインスタンスフィールドに格納している</ShortDescription>
+    <LongDescription>非 transient フィールド {1.givenClass} に {2} を格納しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+非直列化可能な値を直列化可能クラスの 非 transient フィールドに格納しています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SC_START_IN_CTOR">
+    <ShortDescription>Thread.start() を呼び出しているコンストラクタ</ShortDescription>
+    <LongDescription>{1} は、{2} を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+コンストラクタがスレッドを開始しています。クラスが拡張され、サブクラスが作られるなら間違っていそうです。
+なぜなら、サブクラスのコンストラクタでスレッドが開始される前に、スーパークラスのスレッドが開始してしまうためです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SS_SHOULD_BE_STATIC">
+    <ShortDescription>読み出されないフィールド</ShortDescription>
+    <LongDescription>読み出されないフィールド: {1}; このフィールドは static にすべきですか?</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスにはコンパイル時に静的な値に初期化されるインスタンス final フィールドがあります。
+static フィールドにすることを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UUF_UNUSED_FIELD">
+    <ShortDescription>未使用のフィールド</ShortDescription>
+    <LongDescription>未使用のフィールド: {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは決して使われません。クラスから除去することを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="URF_UNREAD_FIELD">
+    <ShortDescription>読み出されないフィールド</ShortDescription>
+    <LongDescription>読み出されないフィールド: {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは決して読み出されません。クラスから除去することを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">
+    <ShortDescription>未使用の public または protected フィールド</ShortDescription>
+    <LongDescription>未使用の public または protected フィールド: {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは決して使用されません。
+フィールドは、public か protected なので、たぶん、それは解析の一部として見えないクラスで使用されることを意図しています。
+そうでなければ、クラスから除去することを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD">
+    <ShortDescription>読み出されない public または protected フィールド</ShortDescription>
+    <LongDescription>読み出されない public または protected フィールド: {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは決して読み出されません。
+フィールドは、public か protected なので、たぶん、それは解析の一部として見えないクラスで使用されることを意図しています。
+そうでなければ、クラスから除去することを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="QF_QUESTIONABLE_FOR_LOOP">
+    <ShortDescription>複雑か巧妙か間違ったインクリメントの for ループ</ShortDescription>
+    <LongDescription>複雑か巧妙か間違ったインクリメントの for ループです。{1} </LongDescription>
+    <Details>
+<![CDATA[
+<p>
+本当にこの for ループが正しい変数をインクリメントしていますか？
+別の変数が for ループによって初期化されて、チェックされるように見えます。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UWF_NULL_FIELD">
+    <ShortDescription>null に設定されるだけのフィールド</ShortDescription>
+    <LongDescription>null に設定されるだけのフィールド:{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドに定数値 null を書き込みます。したがって、フィールドの読み出しは null を返します。
+誤りをチェックしてください。使わないなら除去してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">
+    <ShortDescription>書き込まてれいない public または protected フィールド</ShortDescription>
+    <LongDescription>書き込まれていない public または protected フィールド: {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この public または protected フィールドは書き込まれていません。このフィールドからの読み出しはデフォルト値を返します。
+誤りをチェックしてください (フィールドは初期化するべきでしたか？)。使わないなら除去してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UWF_UNWRITTEN_FIELD">
+    <ShortDescription>書き込まれていないフィールド</ShortDescription>
+    <LongDescription>書き込まれていないフィールド: {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは決して書き込まれません。このフィールドからの読み出しはデフォルト値を返します。
+誤りをチェックしてください (フィールドは初期化するべきでしたか？)。使わないなら除去してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">
+    <ShortDescription>インスタンスメソッドから static フィールドへの書き込み</ShortDescription>
+    <LongDescription>インスタンスメソッド {1} から static フィールド {2} に書き込みをしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このインスタンスメソッドは、static フィールドに書き込みをしています。
+複数のインスタンスが操作されているなら、正しくさせるのは難しいです。通常、間違ったプラクティスです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_LOAD_OF_KNOWN_NULL_VALUE">
+    <ShortDescription>null とわかっている値のロード</ShortDescription>
+    <LongDescription>null とわかっている値をロードしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ここで参照されている変数は、以前に null なのかチェックしているため  null であることがわかっています。
+これは有効かもしれないし、間違いかもしれません (たぶん、異なる変数を参照することを意図してました、あるいは以前の null チェックで  null でないのか確かめるべきでした)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_DEREFERENCE_OF_READLINE_VALUE">
+    <ShortDescription>readLine メソッドの結果が null なのか確かめないで値を利用している</ShortDescription>
+    <LongDescription>readLine メソッドの結果が null なのか確かめないで値を利用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>readLine</code> メソッドの結果が null なのか確かめないで値を利用しています。
+<code>readLine</code> メソッドは、それ以上読み出すテキスト行がなければ null を返すので、NullPointerException が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_IMMEDIATE_DEREFERENCE_OF_READLINE">
+    <ShortDescription>readLine メソッドの結果をすぐに利用している</ShortDescription>
+    <LongDescription>readLine メソッドの結果をすぐに利用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>readLine</code> メソッドの結果をすぐに利用しています。
+<code>readLine</code> メソッドは、それ以上読み出すテキスト行がなければ null を返すので、NullPointerException が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_UNWRITTEN_FIELD">

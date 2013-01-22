@@ -1,0 +1,500 @@
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DL_SYNCHRONIZATION_ON_BOXED_PRIMITIVE">
+    <ShortDescription>デッドロックの原因になる可能性があるボクシングされたプリミティブ型の同期化</ShortDescription>
+    <LongDescription>{2} の同期化はデッドロックの原因になる可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、Integer のようなボクシングされたプリミティブ型の定数で同期化しています。
+</p>
+<blockquote><pre>
+private static Integer count = 0;
+
+synchronized(count) { 
+    count++;
+}
+</pre></blockquote>
+<p>
+<code>Integer</code> オブジェクトはキャッシュして共有される可能性があります。
+他の無関係なコードと同じオブジェクトで同期化している可能性があるので、無応答やデッドロックの原因になります。
+</p>
+<p>
+CERT の <a href="https://www.securecoding.cert.org/confluence/display/java/CON08-J.+Do+not+synchronize+on+objects+that+may+be+reused">CON08-J. Do not synchronize on objects that may be reused</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ESync_EMPTY_SYNC">
+    <ShortDescription>空の synchronized ブロック</ShortDescription>
+    <LongDescription>空のsynchronizedブロックです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードには空の synchronized ブロックがあります。
+</p>
+<blockquote><pre>
+synchronized() {
+}
+</pre></blockquote>
+<p>
+空の synchronized ブロックは巧妙で正しく使用するのは困難です。
+空の synchronized ブロックはわざとらしくて決して良い解決策ではありません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IS_INCONSISTENT_SYNC">
+    <ShortDescription>一貫性のない同期化</ShortDescription>
+    <LongDescription>{1} の同期化には一貫性がありません。{2}% の時間をロック</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスのフィールドは、同期化に関して一貫性のないアクセスをしているように見えます。
+このバグレポートは、バグパターンディテクタが以下のように判断したことをを示します。 
+</p>
+<ul>
+  <li>クラスにはロックされたアクセスとアンロックされたアクセスが混在していて、</li>
+  <li>少なくとも1つのロックされたアクセスがクラス自身のメソッドの1つによって実行され、</li>
+  <li>読み出しの2倍の重み付けをした書き込みで、非同期フィールドのアクセス (読み出しと書き込み) 数がすべてのアクセスのわずか1/3</li>
+</ul>
+<p>
+このバグパターンに合致する典型的なバグは、スレッドセーフを意図したクラスでメソッドを同期化するのを忘れていることです。
+</p>
+<p>
+不正確のいろいろなソースがこのディテクタにあることに注意してください。
+たとえば、ディテクタはロックを保持されるすべての状況を静的に検出できるという訳ではありません。
+また、ディテクタがロックされたアクセスとアンロックされたアクセスの区別が正確なときでも、問題のコードは依然として正しいかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ML_SYNC_ON_FIELD_TO_GUARD_CHANGING_THAT_FIELD">
+    <ShortDescription>フィールドを同期化でガードしようとする無駄な試み</ShortDescription>
+    <LongDescription>{2.givenClass} を同期化でガードしようとする無駄な試みです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、フィールドの同時更新に対して同期化でガードしようとしていますが、フィールドをガードするとフィールドではなく、参照されたオブジェクトのロックを獲得します。
+これはあなたが必要とする相互排除を提供しないかもしれません。
+そして、他のスレッドは (他の目的のための) 参照されたオブジェクトのロックを獲得するかもしれません。<br>
+このパターンの例は以下のようになります。
+</p>
+<blockquote><pre>
+private Long myNtfSeqNbrCounter = new Long(0);
+private Long getNotificationSequenceNumber() {
+     Long result = null;
+     synchronized(myNtfSeqNbrCounter) {
+         result = new Long(myNtfSeqNbrCounter.longValue() + 1);
+         myNtfSeqNbrCounter = new Long(result.longValue());
+     }
+     return result;
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ML_SYNC_ON_UPDATED_FIELD">
+    <ShortDescription>更新されるフィールドで同期化しているメソッド</ShortDescription>
+    <LongDescription>{1} は、更新されるフィールド {2.givenClass} で同期化しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、可変フィールドから参照されているオブジェクトで同期化しています。
+異なるスレッドが異なるオブジェクトで同期化しているかもしれないので、これは有用な意味がある可能性が低いです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_OOI_PKGPROTECT">
+    <ShortDescription>インタフェースから移動してパッケージプロテクテッドにすべきフィールド</ShortDescription>
+    <LongDescription>{1} は、インタフェースから移動してパッケージプロテクテッドにすべきです</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+インタフェースに定義された final static フィールドは、配列や Hashtable などの可変オブジェクトを参照しています。
+この可変オブジェクトは、悪質なコードや偶然別のパッケージによって変更される可能性があります。
+これを解決するために、フィールドはクラスへ移動する必要があり、脆弱性を回避するためにパッケージプロテクテッドにします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_FINAL_PKGPROTECT">
+    <ShortDescription>final かつパッケージプロテクテッドにすべきフィールド</ShortDescription>
+    <LongDescription>{1} は、final かつパッケージプロテクテッドにすべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この可変 static フィールドは、悪質なコードや偶然別のパッケージによって変更される可能性があります。
+フィールドは、脆弱性を回避するために final またはパッケージプロテクテッドにできます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL">
+    <ShortDescription>final でないフィールドはリファクタリングするべき</ShortDescription>
+    <LongDescription>{1} は、final でないのでリファクタリングするべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+final でない public static フィールドは、悪質なコードや偶然別のパッケージによって変更される可能性があります。
+フィールドは、脆弱性を回避するために final にできます。
+しかしながら、スタティックイニシャライザには複数のフィールドへの書き込みがあるので、何らかのリファクタリングを必要とするでしょう。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="MS_SHOULD_BE_FINAL">
+    <ShortDescription>final にすべきフィールド</ShortDescription>
+    <LongDescription>{1} は、final ではありませんが、final にすべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+final でない public static フィールドは、悪質なコードや偶然別のパッケージによって変更される可能性があります。
+フィールドは、脆弱性を回避するために final にできます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_PKGPROTECT">
+    <ShortDescription>パッケージプロテクテッドにすべきフィールド</ShortDescription>
+    <LongDescription>{1} は、パッケージプロテクテッドにすべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この可変 static フィールドは、悪質なコードや偶然別のパッケージによって変更される可能性があります。
+フィールドは、脆弱性を回避するためにパッケージプロテクテッドにできます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_MUTABLE_HASHTABLE">
+    <ShortDescription>可変 Hashtable のフィールド</ShortDescription>
+    <LongDescription>{1} は、可変 Hashtable です。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この final static フィールドは、Hashtable を参照しているので、悪質なコードや偶然別のパッケージによってアクセスされる可能性があります。
+このコードは、Hashtable のコンテンツを自由に変更できます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_MUTABLE_ARRAY">
+    <ShortDescription>可変配列のフィールド</ShortDescription>
+    <LongDescription>{1} は、可変配列です。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この final static フィールドは、配列を参照しているので、悪質なコードや偶然別のパッケージによってアクセスされる可能性があります。
+このコードは、配列のコンテンツを自由に変更できます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_CANNOT_BE_FINAL">
+    <ShortDescription>final でないフィールドは悪質なコードから保護できない</ShortDescription>
+    <LongDescription>{1} は、final でないので、悪質なコードから保護できません。 </LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この可変 static フィールドは、悪質なコードや偶然別のパッケージによって変更される可能性があります。
+残念ながらこのような使い方は簡単に解決できません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IA_AMBIGUOUS_INVOCATION_OF_INHERITED_OR_OUTER_METHOD">
+    <ShortDescription>継承されたメソッドなのか外部のメソッドなのかあいまいなメソッドの呼び出し</ShortDescription>
+    <LongDescription>継承されたメソッドなのか外部のメソッドなのかあいまいなメソッド {2} を呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+内部クラスは、継承されたメソッドか外部クラスで定義されたメソッドなのかどちらとも解釈できるメソッドを呼び出しています。
+Java の仕様上は継承したメソッドを呼び出しますが、これは意図したことではないかもしれません。
+本当に継承されたメソッドを呼び出すつもりなら super を付けて (例：super.foo(17)) 呼び出してください。
+そうすれば、外部クラスのメソッドではなく継承されたメソッドを呼び出したいことがこのコードを読む人と FindBugs に明確になります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">
+    <ShortDescription>クラス名はスーパークラスの単純名を遮るべきではない</ShortDescription>
+    <LongDescription>クラス名 {0} は、スーパークラス {1} の単純名を遮ります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスにはそのスーパークラスと同一の単純名がありますが、スーパークラスは異なるパッケージです (たとえば、<code>alpha.Foo</code> が <code>beta.Foo</code> を拡張します)。
+これは非常に紛らわしく、参照関係を解決するために import 文を見なければならなかったり、スーパークラスに存在するメソッドを誤ってオーバーライドしてしまったりする状況を作り出します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_SAME_SIMPLE_NAME_AS_INTERFACE">
+    <ShortDescription>クラス名は実装されたインタフェースの単純名を遮るべきではない</ShortDescription>
+    <LongDescription>クラス名 {0} は、実装されたインタフェース {1} の単純名を遮ります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスまたはインタフェースには実装された/拡張されたインタフェースと同一の単純名がありますが、インタフェースは異なるパッケージです (たとえば、<code>alpha.Foo</code> が <code>beta.Foo</code> を継承しているような状況です)。
+これは非常に紛らわしく、参照関係を解決するために import 文を見なければならなかったり、スーパークラスに存在するメソッドを誤ってオーバーライドしてしまったりする状況を作り出します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_CLASS_NAMING_CONVENTION">
+    <ShortDescription>クラス名は大文字から始めるべき</ShortDescription>
+    <LongDescription>クラス名 {0} は、大文字から始まっていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+クラス名は、最初の文字とそれに続く各単語の最初の文字を大文字にした名詞にすべきです。
+クラス名は単純でわかりやすいようにしてください。
+頭文字や略語 (URLやHTMLなどのように略語がロング形式よりもはるかに広く使われている場合を除く) の使用は避けてください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_METHOD_NAMING_CONVENTION">
+    <ShortDescription>メソッド名は小文字から始めるべきです</ShortDescription>
+    <LongDescription>メソッド名 {1} は、小文字から始まっていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+メソッド名は、最初の文字は小文字にし、それに続く各単語の最初の文字を大文字にした動詞にすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_FIELD_NAMING_CONVENTION">
+    <ShortDescription>フィールド名は小文字から始めるべき</ShortDescription>
+    <LongDescription>フィールド名 {1} は、小文字から始まっていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+final でないフィールドの名前は、最初の文字は小文字にし、それに続く各単語の最初の文字を大文字にすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_VERY_CONFUSING">
+    <ShortDescription>非常に紛らわしい名前のメソッド</ShortDescription>
+    <LongDescription>{1} と {3} は、非常に紛らわしいです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+参照されたメソッドは、大文字の使い方だけによって異なる名前があります。
+大文字の使い方が同一ならメソッドの1つが他のメソッドをオーバーライドするので、非常に紛らわしいです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_VERY_CONFUSING_INTENTIONAL">
+    <ShortDescription>非常に紛らわしい名前のメソッド (たぶん意図的)</ShortDescription>
+    <LongDescription>{1} と {3} のメソッドは、非常に紛らわしいです (たぶん意図的)。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+参照されたメソッドは、大文字の使い方だけによって異なる名前があります。
+大文字の使い方が同一ならメソッドの1つが他のメソッドをオーバーライドするので、非常に紛らわしいです。
+他のメソッドの存在から、これらのメソッドの両方の存在が意図的で、確実に混乱させていると思われます。
+APIの凍結によって両方とも持たざるを得ない場合を除き、それらのうちの1つを削除しようと努力するべきです。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_WRONG_PACKAGE">
+    <ShortDescription>パラメータの間違ったパッケージのために、スーパークラスのメソッドをオーバーライドしていないメソッド</ShortDescription>
+    <LongDescription>パラメータの型 {4} がスーパークラスのパラメータの型 {5} と合致していないので、{1} はスーパークラスのメソッドをオーバーライドしていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+パラメータの型がスーパークラスで対応するパラメータの型と正確に合致していないので、サブクラスのメソッドはスーパークラスの類似したメソッドをオーバーライドしていません。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+import alpha.Foo;
+
+public class A {
+    public int f(Foo x) { return 17; }
+}
+----
+import beta.Foo;
+
+public class B extends A {
+    public int f(Foo x) { return 42; }
+}
+</pre></blockquote>
+<p>
+クラス <code>B</code> で定義された <code>f(Foo)</code> メソッドは、クラス <code>A</code> の <code>f(Foo)</code> メソッドをオーバーライドしていません。
+これは引数の型 <code>Foo</code> が違うパッケージだからです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="NM_WRONG_PACKAGE_INTENTIONAL">
+    <ShortDescription>パラメータの間違ったパッケージのためにスーパークラスのメソッドをオーバーライドしていないメソッド</ShortDescription>
+    <LongDescription>パラメータの型 {4} がスーパークラスのパラメータの型 {5} と合致しないので、{1} はスーパークラスのメソッドをオーバーライドしていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+パラメータの型がスーパークラスで対応するパラメータの型と正確に合致していないので、サブクラスのメソッドはスーパークラスの類似したメソッドをオーバーライドしません。<br>
+たとえば、以下のようなコードです。
+<blockquote><pre>
+import alpha.Foo;
+
+public class A {
+    public int f(Foo x) { return 17; }
+}
+----
+import beta.Foo;
+
+public class B extends A {
+    public int f(Foo x) { return 42; }
+    public int f(alpha.Foo x) { return 27; }
+}
+</pre></blockquote>
+<p>
+クラス <code>B</code> で定義された <code>f(Foo)</code> メソッドは、クラス <code>A</code> の <code>f(Foo)</code> メソッドをオーバーライドしません。
+これは引数の型 <code>Foo</code> が違うパッケージだからです。
+</p>
+<p>
+この場合、サブクラスがスーパークラスのメソッドと同一のシグネチャでメソッドを定義するので、おそらく理解されます。
+しかしながら、そのようなメソッドは非常に紛らわしいです。
+類似しているが同一ではないシグネチャのメソッドを除去するか、非推奨にすることを強く検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_CONFUSING">
+    <ShortDescription>紛らわしい名前のメソッド</ShortDescription>
+    <LongDescription>{1} と {3} は、紛らわしいです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+参照されたメソッドは、大文字の使い方だけによって異なる名前があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="NM_METHOD_CONSTRUCTOR_CONFUSION">
+    <ShortDescription>明らかなメソッドとコンストラクタの混乱</ShortDescription>
+    <LongDescription>{1} は、おそらくコンストラクタにすることを意図していました。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この正規のメソッドは、定義しているクラスと同じ名前です。
+これはコンストラクタを意図していた可能性が高いです。もしそうなら void 戻り値の宣言を除去してください。
+このメソッドを定義したことが偶然間違っているとわかり、正しいコンストラクタを定義したが、下位互換性のためにこのメソッドを取り除くことができないなら、メソッドを非推奨にしてください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="NM_LCASE_HASHCODE">
+    <ShortDescription>クラスは hashcode() を定義しています。hashCode() にすべきですか?</ShortDescription>
+    <LongDescription>クラス {0} は、hashcode() を定義しています。hashCode() にすべきですか?</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>hashcode()</code> という名前のメソッドを定義しています。
+このメソッドは、<code>java.lang.Object</code> の <code>hashCode</code> メソッドを (おそらく意図的に) オーバーライドしていません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="NM_LCASE_TOSTRING">
+    <ShortDescription>クラスは tostring() を定義しています。toString() にすべきですか?</ShortDescription>
+    <LongDescription>クラス {0} は、tostring() を定義しています。toString() にすべきですか?</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>tostring()</code> という名前のメソッドを定義しています。
+このメソッドは、<code>java.lang.Object</code> の <code>toString</code> メソッドを (おそらく意図的に) オーバーライドしていません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_BAD_EQUAL">
+    <ShortDescription>クラスは equal(Object) を定義しています。equals(Object) にすべきですか?</ShortDescription>
+    <LongDescription>クラス {0} は equal(Object) を定義しています。equals(Object) にすべきですか?</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equal(Object)</code> という名前のメソッドを定義しています。
+このメソッドは、<code>java.lang.Object</code> の <code>equals(Object)</code> を (おそらく意図的に) オーバーライドしていません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_CLASS_NOT_EXCEPTION">
+    <ShortDescription>例外クラスのように命名されているが、クラスは Exception から派生されていない</ShortDescription>
+    <LongDescription>例外クラスのように命名されていますが、クラス {0} は、Exception から派生されていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、例外クラスから派生されていないのにクラス名が「Exception」で終わっています。
+これは、このクラスのユーザに紛らわしいです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RR_NOT_CHECKED">
+    <ShortDescription>InputStream.read() の戻り値を無視しているメソッド</ShortDescription>
+    <LongDescription>{1} は、 {2} の戻り値を無視しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、複数バイトを返す可能性がある <code>java.io.InputStream.read()</code> (またはそのバリエーション) の戻り値を無視しています。
+戻り値がチェックされないと呼び出し元は要求したバイト数よりも少ないバイト数を読み出した場合、正しく処理できません。
+これは潜在的なバグです。
+多くのプログラムで、入力ストリームからの読み出しは、要求した完全なデータ量を読み出しますが、散発的に失敗することがあります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SR_NOT_CHECKED">
+    <ShortDescription>InputStream.skip() の戻り値を無視しているメソッド</ShortDescription>
+    <LongDescription>{1} は、 {2} の戻り値を無視しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、複数バイトをスキップする可能性がある <code>java.io.InputStream.skip()</code> の戻り値を無視しています。
+戻り値がチェックされないと呼び出し元は要求したバイト数よりも少ないバイト数しかスキップしなかった場合、正しく処理できません。 
+これは潜在的なバグです。
+多くのプログラムで、入力ストリームからのスキップは、要求した完全なデータ量をスキップをしますが、散発的に失敗することがあります。 
+しかしながら、バッファードストリーム での <code>skip</code> メソッドはバッファのデータをスキップするので、要求されたバイト数のスキップは常に失敗します。
+</p>
+]]>
+    </Details>
+  </BugPattern>

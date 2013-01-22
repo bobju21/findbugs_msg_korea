@@ -1,0 +1,500 @@
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_GUARANTEED_DEREF_ON_EXCEPTION_PATH">
+    <ShortDescription>null 値を例外経路で利用することが保証されている</ShortDescription>
+    <LongDescription>{2.name} は、例外経路で null 値を利用することが保証されています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+例外経路上の文または分岐が実行されるなら、この時点で値は null であり、null 値を利用する (フォワードパスで実行時例外を伴うこと以外は) ことが保証されています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SI_INSTANCE_BEFORE_FINALS_ASSIGNED">
+    <ShortDescription>スタティックイニシャライザは、すべての static final フィールドが代入される前にインスタンスを作成する</ShortDescription>
+    <LongDescription>{0} のためのスタティックイニシャライザは、すべての static final フィールドが代入される前にインスタンスを作成します。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+すべての static finalフィールドが初期化される前に、スタティックイニシャライザはクラスのインスタンスを作成します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="OS_OPEN_STREAM">
+    <ShortDescription>ストリームのクローズに失敗するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、ストリームのクローズに失敗するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、入出力ストリームオブジェクトを作成しているのにどんなフィールドにも代入していないし、クローズするかもしれない別のメソッドにも渡していないし、戻り値にしてもいません。そして、メソッドからのすべての経路でクローズするように見えません。
+これは、ファイルディスクリプタリークになるかもしれません。
+ストリームがクローズされることを確実にするために <code>finally</code> ブロックを使うことは、通常良い考えです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="OS_OPEN_STREAM_EXCEPTION_PATH">
+    <ShortDescription>例外経路でストリームのクローズに失敗するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、例外経路でストリームのクローズに失敗するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、入出力ストリームオブジェクトを作成しているのにどんなフィールドにも代入していないし、クローズするかもしれない別のメソッドにも渡していないし、戻り値にしてもいません。そして、メソッドからのすべての可能性がある例外経路でクローズするように見えません。
+これはファイルディスクリプターリークになるかもしれません。
+ストリームがクローズされることを確実にするために <code>finally</code> ブロックを使うことは、通常良い考えです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="PZLA_PREFER_ZERO_LENGTH_ARRAYS">
+    <ShortDescription>null ではなく長さが0の配列を返すことを検討する</ShortDescription>
+    <LongDescription>{1} は、null ではなく長さが0の配列を返すべきではありませんか？</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+結果がないこと  (すなわち、結果の空のリスト) を示すために null 参照ではなく長さが0の配列 を返すことは、多くの場合より良い設計です。
+</p>
+<p>
+他方では、「この質問に対する答えがない」ことを示すために、null を使うことはおそらく適切です。
+たとえば、<code>File.listFiles()</code> は、ファイルがないディレクトリを与えられた場合は空のリストを返し、ファイルがディレクトリでないなら null を返します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UCF_USELESS_CONTROL_FLOW">
+    <ShortDescription>役に立たない制御フロー</ShortDescription>
+    <LongDescription>役に立たない制御フローです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには分岐するのかどうかに関係なく、制御フローが同じ場所へと続く、役に立たない制御フロー文があります。<br>
+たとえば、これは 空の <code>if</code> 文が原因になります。
+<blockquote><pre>
+if (argv.length == 0) {
+    // TODO: handle this case
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UCF_USELESS_CONTROL_FLOW_NEXT_LINE">
+    <ShortDescription>次の行へ続くだけの役に立たない制御フロー</ShortDescription>
+    <LongDescription>次の行に続くだけの役に立たない制御フローです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには分岐するのかどうかに関係なく、制御フローが同じか次の行へと続く、役に立たない制御フロー文があります。<br>
+多くの場合、不注意に <code>if</code> 文の本体を空文を使用したことが原因になります。
+</p>
+<blockquote><pre>
+if (argv.length == 1);
+    System.out.println("Hello, " + argv[0]);
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE">
+    <ShortDescription>すでに利用していた値の null チェック</ShortDescription>
+    <LongDescription>すでに利用していた {2.givenClass} の値を {4.lineNumber} で null チェックしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ここで値が null なのかチェックしていますが、すでに値を利用していたので null である可能性はありません。
+値が null なら以前の利用で NullPointerException が発生していたでしょう。
+基本的に、この値が null であることを許すのかどうかに関係なく、このコードと以前の値の利用は一致しません。
+チェックは冗長か、または以前の値の利用は誤りです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE">
+    <ShortDescription>null とわかっている値の冗長な null チェック</ShortDescription>
+    <LongDescription>null とわかっている値 {2} の冗長な null チェックがあります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはnull とわかっている値の冗長な null チェックがあります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE">
+    <ShortDescription>null でないことがわかっている値の冗長な null チェック</ShortDescription>
+    <LongDescription>null でないことがわかっている値 {2} の冗長な null チェックがあります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには null でないことがわかっている値の冗長な null チェックがあります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RCN_REDUNDANT_COMPARISON_TWO_NULL_VALUES">
+    <ShortDescription>2つの null 値の冗長な比較</ShortDescription>
+    <LongDescription>2つの null 値の冗長な比較があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには両方とも明らかに null とわかっている2つの参照の冗長な比較があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RCN_REDUNDANT_COMPARISON_OF_NULL_AND_NONNULL_VALUE">
+    <ShortDescription>null でない値と null 値との冗長な比較</ShortDescription>
+    <LongDescription>null でない値と null 値との冗長な比較があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはnull でないことがわかっている参照と null とわかっている別の参照との比較があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RCN_REDUNDANT_CHECKED_NULL_COMPARISON" deprecated="true">   <!-- deprecated in favor of two separate RCN_ patterns -->
+    <ShortDescription>Redundant comparison to null of previously checked value</ShortDescription>
+    <LongDescription>Redundant comparison to null of previously checked {2} in {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p> This method contains a redundant comparison of a reference value
+to null. Two types of redundant comparison are reported:
+</p>
+<ul>
+<li> Both values compared are definitely null</li>
+<li> One value is definitely null and the other is definitely not null</li>
+</ul>
+
+<p> This particular warning generally indicates that a
+value known not to be null was checked against null.
+While the check is not necessary, it may simply be a case
+of defensive programming.</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UL_UNRELEASED_LOCK">
+    <ShortDescription>すべての経路でロックが解除されないメソッド</ShortDescription>
+    <LongDescription>{1} は、すべての経路でロックが解除されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、JSR-166(<code>java.util.concurrent</code>) のロックを獲得しているのにメソッドからのすべての経路で解除していません。
+通常、JSR-166のロックを使用するための正しいイディオムは以下のようになります。
+</p>
+<blockquote><pre>
+Lock l = ...;
+l.lock();
+try {
+    // do something
+} finally {
+    l.unlock();
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UL_UNRELEASED_LOCK_EXCEPTION_PATH">
+    <ShortDescription>すべての例外経路でロックが解除されないメソッド</ShortDescription>
+    <LongDescription>{1} は、すべての例外経路でロックが解除されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、JSR-166(<code>java.util.concurrent</code>) のロックを獲得しているのにメソッドからのすべての例外経路で解除していません。
+通常、JSR-166のロックを使用するための正しいイディオムは以下のようになります。
+</p>
+<blockquote><pre>
+Lock l = ...;
+l.lock();
+try {
+    // do something
+} finally {
+    l.unlock();
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RC_REF_COMPARISON">
+    <ShortDescription>疑わしい参照比較</ShortDescription>
+    <LongDescription>{2} の参照比較は疑わしいです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、 == または != 演算子を使用して2つの参照値を比較しています。
+この型のインスタンスを比較する正しい方法は、通常 <code>equals</code> メソッドです。
+等価で識別可能なインスタンスを作成する可能性がありますが、異なるオブジェクトなので == で比較しないでください。
+参照によって通常比較されるべきでないクラスの例は、<code>java.lang.Integer</code> 、<code>java.lang.Float</code> などです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RC_REF_COMPARISON_BAD_PRACTICE">
+    <ShortDescription>定数への疑わしい参照比較</ShortDescription>
+    <LongDescription>{2} 定数の参照比較は疑わしいです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、 == または != 演算子を使用して定数と比較しています。
+この型のインスタンスを比較する正しい方法は、通常 <code>equals</code> メソッドです。
+等価で識別可能なインスタンスを作成する可能性がありますが、異なるオブジェクトなので == で比較しないでください。
+参照によって通常比較されるべきではないクラスの例は、<code>java.lang.Integer</code> 、<code>java.lang.Float</code> などです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN">
+    <ShortDescription>Boolean 値の疑わしい参照比較</ShortDescription>
+    <LongDescription>Boolean 値の疑わしい参照比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、== または != 演算子を使用して2つの Boolean 値を比較しています。
+通常は2つの Boolean 値 (<code>Boolean.TRUE</code> と <code>Boolean.FALSE</code>) だけですが、
+<code>new Boolean(b)</code> コンストラクタを使用して他の Boolean オブジェクトを作成する可能性があります。
+そのようなオブジェクトを回避することは最高です。
+しかし、それらが存在するなら、Boolean オブジェクトの等価性をチェックするために <code>.equals(...)</code> ではなく == または != を使用しているなら異なる結果をもたらします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_UNRELATED_TYPES_USING_POINTER_EQUALITY">
+    <ShortDescription>参照等価性を使用して異なる型を比較している</ShortDescription>
+    <LongDescription>{2.givenClass} を {3.givenClass} と比較するために参照等価性を使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、異なる型と思われる2つの参照を比較するために参照等価性を使用しています。
+この比較の結果は、常に false です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_UNRELATED_TYPES">
+    <ShortDescription>equals メソッドを呼び出して異なる型を比較している</ShortDescription>
+    <LongDescription>{3.simpleClass}.equals({2.simpleClass}) を呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、共通のサブクラスがない異なるクラス型の2つのオブジェクト参照で <code>equals(Object)</code> メソッドを呼び出しています。
+したがって、比較されている2つのオブジェクトは実行時に同じクラスのメンバである可能性が低いです (いくつかのアプリケーションクラスが解析できなかったか、動的クラスローディングが実行時に起こることができた場合を除く)。
+<code>equals</code> メソッドの規約によると、異なるクラスのオブジェクトは常に等しくないとして比較するべきです。
+したがって、<code>java.lang.Object.equals(Object)</code> によって定義される規約によれば、この比較の結果は実行時に常に false になります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_UNRELATED_INTERFACES">
+    <ShortDescription>equals メソッドを呼び出して異なる型のインタフェースを比較している</ShortDescription>
+    <LongDescription>{3.simpleClass}.equals({2.simpleClass}) を呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、どちらも他方のサブタイプでない無関係なインタフェース型の2つの参照で <code>equals(Object)</code> メソッドを呼び出しています。
+そして、両方のインタフェースを実装する既知の非抽象クラスがありません。
+したがって、比較されている2つのオブジェクトは実行時に同じクラスのメンバである可能性が低いです (いくつかのアプリケーションクラスが解析できなかったか、動的クラスローディングが実行時に起こることができた場合を除く)。
+<code>equals</code> メソッドの規約によると、異なるクラスのオブジェクトは常に等しくないとして比較するべきです。
+したがって、<code>java.lang.Object.equals(Object)</code> によって定義される規約によれば、この比較の結果は実行時に常に false になります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_UNRELATED_CLASS_AND_INTERFACE">
+    <ShortDescription>equals メソッドを呼び出して無関係のクラスとインタフェースを比較している</ShortDescription>
+    <LongDescription>{3.simpleClass}.equals({2.simpleClass}) を呼び出しています。{1}</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+このメソッドは、一方がクラスで他方がインタフェースである2つの参照で <code>equals(Object)</code> メソッドを呼び出しています。
+クラスは、そのクラスの非抽象サブクラスも含めてインタフェースを実装していません。
+したがって、比較されている2つのオブジェクトは実行時に同じクラスのメンバである可能性が低いです (いくつかのアプリケーションクラスが解析できなかったか、動的クラスローディングが実行時に起こることができた場合を除く)。
+<code>equals</code> メソッドの規約によると、異なるクラスのオブジェクトは常に等しくないとして比較するべきです。
+したがって、<code>java.lang.Object.equals(Object)</code> によって定義される規約によれば、この比較の結果は実行時に常に false になります。
+</p>
+      ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_NULL_ARG">
+    <ShortDescription>equals(null) の呼び出し</ShortDescription>
+    <LongDescription>equals(null) の呼び出し。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、 null 値の引数を渡して <code>equals(Object)</code> を呼び出しています。
+<code>equals</code> メソッドの規約によると、この呼び出しは常に false を返すはずです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MWN_MISMATCHED_WAIT">
+    <ShortDescription>不整合な wait メソッド</ShortDescription>
+    <LongDescription>不整合な wait メソッドです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、オブジェクトで明らかにロックを保持することなく、<code>Object.wait()</code> を呼び出しています。
+保持されるロックがない状態で、<code>wait</code> メソッドを呼び出すことは、<code>IllegalMonitorStateException</code> をスローすることになります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MWN_MISMATCHED_NOTIFY">
+    <ShortDescription>不整合な notify メソッド</ShortDescription>
+    <LongDescription>不整合な notify メソッドです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、オブジェクトで明らかにロックを保持することなく <code>Object.notify()</code> や <code>Object.notifyAll()</code> を呼び出しています。
+保持されるロックがない状態で、<code>notify</code> メソッドや <code>notifyAll</code> メソッドを呼び出すことは、<code>IllegalMonitorStateException</code> をスローすることになります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_LOCAL_SELF_ASSIGNMENT_INSTEAD_OF_FIELD">
+    <ShortDescription>フィールドへの代入ではなくローカル変数への自己代入</ShortDescription>
+    <LongDescription>フィールドへの代入ではなく、{2} の自己代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはローカル変数の自己代入があり、ローカル変数とフィールドが同じ名前です。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+    int foo;
+    public void setFoo(int foo) {
+        foo = foo;
+    }
+</pre></blockquote>
+<p>
+そのような代入は役に立ちません。そうではなく、フィールドに代入するつもりでしたか？
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_LOCAL_SELF_ASSIGNMENT">
+    <ShortDescription>ローカル変数の自己代入</ShortDescription>
+    <LongDescription>{2} の自己代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはローカル変数の自己代入があります。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+public void foo() {
+    int x = 3;
+    x = x;
+}
+</pre></blockquote>
+<p>
+そのような代入は役に立たないので、論理エラーかタイプミスかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_FIELD_SELF_ASSIGNMENT">
+    <ShortDescription>フィールドの自己代入</ShortDescription>
+    <LongDescription>フィールド {2.givenClass} の自己代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはフィールドの自己代入があります。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+int x;
+public void foo() {
+    x = x;
+}
+</pre></blockquote>
+<p>
+そのような代入は役に立たないので、論理エラーかタイプミスかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_FIELD_DOUBLE_ASSIGNMENT">
+    <ShortDescription>フィールドの二重代入</ShortDescription>
+    <LongDescription>フィールド {2.givenClass} の二重代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはフィールドの二重代入があります。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+int x,y;
+public void foo() {
+    x = x = 17;
+}
+</pre></blockquote>
+<p>
+フィールドに2回代入することは役に立たないので、論理エラーかタイプミスかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_LOCAL_DOUBLE_ASSIGNMENT">
+    <ShortDescription>ローカル変数の二重代入</ShortDescription>
+    <LongDescription>ローカル変数 {2} の二重代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはローカル変数の二重代入があります。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+public void foo() {
+    int x,y;
+    x = x = 17;
+}
+</pre></blockquote>
+<p>
+変数に同じ値を2回代入することは役に立たないので、論理エラーかタイプミスかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_FIELD_SELF_COMPUTATION">
+    <ShortDescription>フィールドの無意味な自己演算 (たとえば、 x &amp; x)</ShortDescription>
+    <LongDescription>{2.givenClass} とそれ自身との無意味な自己演算です。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、フィールドと同じフィールドへの別の参照との無意味な計算を実行しています (たとえば、x &amp; x または x - x)。
+この計算の性質のため、演算は意味をなすとは思われないので、論理エラーかタイプミスかもしれません。
+計算をチェックしてください。
+</p>
+]]>

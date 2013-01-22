@@ -1,0 +1,500 @@
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_FUTILE_ATTEMPT_TO_CHANGE_MAXPOOL_SIZE_OF_SCHEDULED_THREAD_POOL_EXECUTOR">
+    <ShortDescription>ScheduledThreadPoolExecutor の最大プールサイズを変えようとする無駄な試み</ShortDescription>
+    <LongDescription>ScheduledThreadPoolExecutor の最大プールサイズを変えようとするのは無駄な試みです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>ScheduledThreadPoolExecutor</code> は <code>ThreadPoolExecutor</code> から継承されますが、継承されたチューニングメソッドの一部は有用ではありません。
+特に、corePoolSize スレッドとアンバウンド形式のキューを使用する固定サイズプールとして動作するので、maximumPoolSize の調整は有用な効果がありません。<br>
+(<a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/util/concurrent/ScheduledThreadPoolExecutor.html">Javadoc</a>)
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_UNSUPPORTED_METHOD">
+    <ShortDescription>サポートされていないメソッドの呼び出し</ShortDescription>
+    <LongDescription>サポートされていないメソッド {2} を呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッド呼び出しのすべてのターゲットが <code>UnsupportedOperationException</code> をスローします。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_EMPTY_DB_PASSWORD">
+    <ShortDescription>空のデータベースパスワード</ShortDescription>
+    <LongDescription>空のデータベースパスーワードです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、空白または空のパスワードを使用してデータベース接続を作成しています。
+これはデータベースがパスワードによって保護されていないことを示しています。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="DMI_CONSTANT_DB_PASSWORD">
+    <ShortDescription>ハードコードされた定数データベースパスワード</ShortDescription>
+    <LongDescription>ハードコードされた定数データベースパスワードです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、ハードコードされた定数パスワードを使用してデータベース接続を作成しています。
+ソースコードかコンパイルされたコードへアクセスできる人なら誰でも簡単にパスワードを知ることができてしまいます。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HRS_REQUEST_PARAMETER_TO_COOKIE">
+    <ShortDescription>信頼できない入力から形成された HTTP cookie</ShortDescription>
+    <LongDescription>HTTP cookie は信頼できない入力から形成されました。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、信頼できない HTTP パラメータを使用して HTTP クッキーを構築しています。
+このクッキーが HTTP レスポンスに追加されるなら、HRS(HTTP レスポンススプリッティング) 脆弱性を可能にします。<br>
+詳細は、<a href="http://en.wikipedia.org/wiki/HTTP_response_splitting">http://en.wikipedia.org/wiki/HTTP_response_splitting</a> を参照してください。
+</p>
+<p>
+FindBugs は、HRS の最も露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+HRS を心配するなら、商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER">
+    <ShortDescription>HTTP レスポンススプリッティング脆弱性</ShortDescription>
+    <LongDescription>HTTP ヘッダ出力に HTTP パラメータをそのまま書き込んでいます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、HTTP ヘッダに HTTP パラメータをそのまま書き込んでいます。これは HRS(HTTP レスポンススプリッティング) 脆弱性を可能にします。<br>
+詳細は、<a href="http://en.wikipedia.org/wiki/HTTP_response_splitting">http://en.wikipedia.org/wiki/HTTP_response_splitting</a> を参照してください。
+</p>
+<p>
+FindBugs は、HRS のもっとも露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+HRS を心配するなら、商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="PT_RELATIVE_PATH_TRAVERSAL">
+    <ShortDescription>サーブレットの相対パストラバーサル</ShortDescription>
+    <LongDescription>相対パストラバーサル。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ソフトウェアは、制限されたディレクトリ内にあるべきパス名を構築するためにHTTPリクエストのパラメータを使いますが、パラメータはそのディレクトリの外にある場所に解決できる「..」のようなシーケンスを適切に無効にしていません。
+詳細は、<a href="http://cwe.mitre.org/data/definitions/23.html">http://cwe.mitre.org/data/definitions/23.html</a> を参照してください。
+</p>
+<p>
+FindBugs は、相対パストラバーサルのもっとも露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+相対パストラバーサルを心配するなら、商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="PT_ABSOLUTE_PATH_TRAVERSAL">
+    <ShortDescription>サーブレットの絶対パストラバーサル</ShortDescription>
+    <LongDescription>絶対パストラバーサル。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ソフトウェアは、制限されたディレクトリ内にあるべきパス名を構築するためにHTTPリクエストのパラメータを使いますが、パラメータはそのディレクトリの外にある場所に解決できる「/abs/path」のような絶対パスシーケンスを適切に無効にしていません。
+詳細は、<a href="http://cwe.mitre.org/data/definitions/36.html">http://cwe.mitre.org/data/definitions/36.html</a> を参照してください。
+</p>
+<p>
+FindBugs は、相対パストラバーサルのもっとも露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+相対パストラバーサルを心配するなら、商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER">
+    <ShortDescription>反射型クロスサイトスクリプティング脆弱性があるサーブレット</ShortDescription>
+    <LongDescription>サーブレットの出力に HTTP パラメータをそのまま書き込んでいます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、サーブレットの出力に HTTP パラメータをそのまま書き込んでいます。これは反射型 XSS(クロスサイトスクリプティング) 脆弱性を可能にします。<br>
+詳細は、<a href="http://en.wikipedia.org/wiki/Cross-site_scripting">http://en.wikipedia.org/wiki/Cross-site_scripting</a> を参照してください。
+</p>
+<p>
+FindBugs は、XSS のもっとも露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+XSS を心配するなら、商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="XSS_REQUEST_PARAMETER_TO_SEND_ERROR">
+    <ShortDescription>反射型クロスサイトスクリプティング脆弱性がエラーページにあるサーブレット</ShortDescription>
+    <LongDescription>サーブレットのエラーページに HTTP パラメータをそのまま書き込んでいます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、サーブレットのエラーページに <code>HttpServletResponse.sendError</code> を使用して HTTP パラメータをそのまま書き込んでいます。
+信頼できない入力を返すことは反射型 XSS(クロスサイトスクリプティング) 脆弱性を可能にします。<br>
+詳細は、<a href="http://en.wikipedia.org/wiki/Cross-site_scripting">http://en.wikipedia.org/wiki/Cross-site_scripting</a> を参照してください。
+</p>
+<p>
+FindBugs は、XSS のもっとも露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+XSS を心配するなら、商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="XSS_REQUEST_PARAMETER_TO_JSP_WRITER">
+    <ShortDescription>反射型クロスサイトスクリプティング脆弱性がある JSP</ShortDescription>
+    <LongDescription>JSP の出力に HTTP パラメータをそのまま書き込んでいます。{1.class}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、JSP の出力に HTTP パラメータをそのまま書き込んでいます。これは XSS(クロスサイトスクリプティング) 脆弱性を可能にします。<br>
+詳細は、<a href="http://en.wikipedia.org/wiki/Cross-site_scripting">http://en.wikipedia.org/wiki/Cross-site_scripting</a> を参照してください。
+</p>
+<p>
+FindBugs は、XSS のもっとも露骨で自明なケースだけを探します。
+FindBugs が何かを発見したならほぼ間違いなく FindBugs が報告しないより多くの脆弱性があるでしょう。
+XSS に関して心配しているなら商用の静的解析ツールかペネトレーションテストツールの使用を真剣に検討するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SW_SWING_METHODS_INVOKED_IN_SWING_THREAD">
+    <ShortDescription>Swing メソッドは AWT イベントディスパッチスレッドから呼び出す必要がある</ShortDescription>
+    <LongDescription>Swing メソッドの呼び出しは AWT イベントディスパッチスレッドで実行される必要があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+(<a href="http://web.archive.org/web/20090526170426/http://java.sun.com/developer/JDCTechTips/2003/tt1208.html">From JDC Tech Tip</a>)<br>
+に解説されているとおり、Swing のメソッド、<code>show</code> メソッド、<code>setVisible</code> メソッド、<code>pack</code> メソッドは、フレームのために関連したピアを作成します。
+ピアの作成で、システムはイベントディスパッチスレッドを作成します。
+これが問題になることがあります。なぜなら <code>pack</code> メソッドと <code>validate</code> メソッドがまだ処理中でもイベントディスパッチスレッドがリスナに通知できるからです。
+この状況は、2つのスレッドが Swing コンポーネントにアクセスする可能性があり、デッドロックや、その他のスレッドに関する問題になる可能性がある重大な欠陥です。
+<code>pack</code> メソッドの呼び出しはコンポーネントを実体化させます。実体化しているときに、イベントディスパッチスレッドがリスナへの通知を開始する可能性があります。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IL_INFINITE_LOOP">
+    <ShortDescription>明らかな無限ループ</ShortDescription>
+    <LongDescription>明らかな無限ループです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このループは、例外をスローする以外の方法で終了させることができないように思われます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IL_INFINITE_RECURSIVE_LOOP">
+    <ShortDescription>明らかな無限再帰ループ</ShortDescription>
+    <LongDescription>明らかな無限再帰ループです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、無条件でそれ自身を呼び出します。これは、スタックオーバーフローになる無限再帰ループを示しています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="IL_CONTAINER_ADDED_TO_ITSELF">
+    <ShortDescription>コレクションは自分自身を追加している</ShortDescription>
+    <LongDescription>コレクションは、自分自身を追加しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+コレクションは自分自身を追加しています。その結果、hashCode を計算すると <code>StackOverflowException</code> をスローします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VO_VOLATILE_REFERENCE_TO_ARRAY">
+    <ShortDescription>配列への volatile 参照は、配列要素を volatile として扱わない</ShortDescription>
+    <LongDescription>{1} は、配列への volatile 参照です。配列要素は、 volatile として扱われません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+これは配列に volatile 参照を宣言しています。それはあなたが望むものではないかもしれません。
+配列への volatile 参照は、配列への参照の読み出し、書き込みは volatile として扱われますが、配列要素は volatile として扱われません。
+配列要素を volatile として扱いたいのであれば、J2SE 5.0で提供された <code>java.util.concurrent</code> パッケージのアトミック配列クラスを使用する必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VO_VOLATILE_INCREMENT">
+    <ShortDescription>volatile フィールドへのインクリメントはアトミックではない</ShortDescription>
+    <LongDescription>volatile フィールド {2} をインクリメントしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、volatile フィールドをインクリメントしています。
+volatile フィールドのインクリメントは、アトミックではありません。
+複数のスレッドが同時にフィールドをインクリメントすると、インクリメントが失われる可能性があります。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UI_INHERITANCE_UNSAFE_GETRESOURCE">
+    <ShortDescription>クラスが拡張されるなら getResource の使い方は安全ではないかもしれない</ShortDescription>
+    <LongDescription>クラスが拡張されるなら、getResource の使い方は安全ではないかもしれません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスが別のパッケージによって拡張されるなら、<code>this.getClass().getResource(...)</code> の呼び出しは予想外の結果をもたらす可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_BOOLEAN_RETURN_NULL">
+    <ShortDescription>戻り型が Boolean のメソッドが明示的に null を返している</ShortDescription>
+    <LongDescription>{1} は、戻り型が Boolean なのに明示的に null を返しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Boolean.TRUE、Boolean.FALSE、null を返すメソッドはいつ事故が起きてもおかしくないです。
+まるで論理型の値を返すかのように、このメソッドは呼び出される可能性があります。
+そして、コンパイラは Boolean 値のオートアンボクシングを挿入します。
+null 値が返されるなら NullPointerException が発生することになります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+　　<BugPattern type="NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR">
+    <ShortDescription>非 null フィールドは初期化されていない</ShortDescription>
+    <LongDescription>非 null フィールド {2.name} は {1} によって初期化されていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+フィールドは、非 null としてマークされているが、コンストラクタで書き込まれていません。
+フィールドは、コンストラクタの間、ほかの場所で初期化されるか、または使用する前に常に初期化されるかもしれません。
+</p>
+]]>
+       </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_SYNC_AND_NULL_CHECK_FIELD">
+    <ShortDescription>同じフィールドでの同期化と null チェック</ShortDescription>
+    <LongDescription>フィールド {2.givenClass} は、同期化して  null チェックしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+フィールドは同期化しているので、おそらく null ではないと思われます。
+null のフィールドを同期化すると NullPointerException がスローされるので、null チェックは無意味になります。
+別のフィールドで同期化した方がよいです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RpC_REPEATED_CONDITIONAL_TEST">
+    <ShortDescription>条件テストの繰り返し</ShortDescription>
+    <LongDescription>条件テストを繰り返しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードには条件テストが2回、つまり、1つめの条件テストが正しいとき、2つめの条件テストが実行されます (たとえば、<code>x == 0 || x == 0</code>)。
+たぶん、2つめの条件テストは何か他のことを意図しています (たとえば、<code>x == 0 || y == 0</code>)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TESTING">
+    <ShortDescription>テスト</ShortDescription>
+    <LongDescription>生成されたテスト警告です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このバグパターンは、新しい、不完全に実装されたバグディテクタによって生成されるだけです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="TESTING1">
+    <ShortDescription>テスト1</ShortDescription>
+    <LongDescription>生成されたテスト警告1です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このバグパターンは、新しい、不完全に実装されたバグディテクタによって生成されるだけです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="TESTING2">
+    <ShortDescription>テスト2</ShortDescription>
+    <LongDescription>生成されたテスト警告2です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このバグパターンは、新しい、不完全に実装されたバグディテクタによって生成されるだけです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TESTING3">
+    <ShortDescription>テスト3</ShortDescription>
+    <LongDescription>生成されたテスト警告3です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このバグパターンは、新しい、不完全に実装されたバグディテクタによって生成されるだけです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UNKNOWN">
+    <ShortDescription>不明なバグパターン</ShortDescription>
+    <LongDescription>不明なバグパターンです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+警告が記録されたのに FindBugs はこのバグパターンの説明を見つけることができなかったので警告について説明できません。
+これは FindBugs かその設定のバグの場合だけで発生させるべきです。
+または解析プラグインを使用して生成されるなら、プラグインは現在ロードされていません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="AM_CREATES_EMPTY_ZIP_FILE_ENTRY">
+    <ShortDescription>空の ZIP ファイルエントリの作成</ShortDescription>
+    <LongDescription>空の ZIP ファイルエントリを作成しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、<code>putNextEntry</code> メソッドを呼び出して、<code>closeEntry</code> メソッドをすぐにを呼び出しています。
+これは空の ZIP ファイルエントリになります。
+エントリデータは <code>putNextEntry</code> メソッドと <code>closeEntry</code> メソッドの呼び出しの間で ZIP ファイルに書き込むべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="AM_CREATES_EMPTY_JAR_FILE_ENTRY">
+    <ShortDescription>空の JAR ファイルエントリの作成</ShortDescription>
+    <LongDescription>空の JAR ファイルエントリを作成しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、<code>putNextEntry</code> メソッドを呼び出して、 <code>closeEntry</code> メソッドをすぐに呼び出しています。
+これは空の JAR ファイルエントリになります。
+エントリデータは <code>putNextEntry</code> メソッドと <code>closeEntry</code> メソッドの呼び出しの間で JAR ファイルに書き込むべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IMSE_DONT_CATCH_IMSE">
+    <ShortDescription>疑わしい IllegalMonitorStateException のキャッチ</ShortDescription>
+    <LongDescription>IllegalMonitorStateException のキャッチは疑わしいです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>IllegalMonitorStateException</code> は、通常設計上の欠陥 (ロックを保持していないオブジェクトで <code>wait</code> メソッドまたは <code>notify</code> メソッドを呼び出す) の場合にだけスローされます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="FL_MATH_USING_FLOAT_PRECISION">
+    <ShortDescription>浮動小数点精度を使用した計算をしている</ShortDescription>
+    <LongDescription>浮動小数点精度を使用して計算をしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、浮動小数点精度を使用して計算をしています。浮動小数点精度は非常に不正確です。
+たとえば、<code>16777216.0f + 1.0f = 16777216.0f</code>。
+その代わりに double の使用を検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CN_IDIOM">
+    <ShortDescription>Cloneable を実装したクラスが clone メソッドを定義していないか、使用していない</ShortDescription>
+    <LongDescription>クラス {0} は、Cloneable を実装しているのに clone メソッドを定義していないか使用していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは <code>Cloneable</code> を実装しているのに <code>clone</code> メソッドを定義していないか使用していません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CN_IMPLEMENTS_CLONE_BUT_NOT_CLONEABLE">
+    <ShortDescription>Cloneable を実装していないクラスが clone メソッドを定義している</ShortDescription>
+    <LongDescription>{0} は、Cloneable を実装していないのに clone メソッドを定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>Cloneable</code> を実装していないのに <code>clone</code> メソッドを定義しています。
+これが OK (たとえば、サブクラスのクローンの実装を自分自身で制御したい場合です) という状況もありますが、意図したことなのか確認してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CN_IDIOM_NO_SUPER_CALL">
+    <ShortDescription>clone メソッドが super.clone() を呼び出していない</ShortDescription>
+    <LongDescription>{1} は、super.clone() を呼び出していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この非 final クラスは、<code>super.clone()</code> を呼び出さない <code>clone</code> メソッドを定義しています。
+クラス <i>A</i> がサブクラス <i>B</i> によって拡張され、サブクラス <i>B</i> が <code>super.clone()</code> を呼び出すなら、クラス <i>B</i> の <code>clone</code> メソッドは、型 <i>A</i> のオブジェクトを返す可能性が高いです。
+これは <code>clone</code> のための汎用規約に違反します。
+</p>
+<p>
+すべての <code>clone</code> メソッドが <code>super.clone()</code> を呼び出すなら <code>Object.clone()</code> が呼び出されることが保証され、常に正しい型のオブジェクトが返されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_FUTURE_KEYWORD_USED_AS_IDENTIFIER">
+    <ShortDescription>Java の後のバージョンのキーワードである識別子を使用している</ShortDescription>
+    <LongDescription>{1} は、変数名に {2} を使用していますが、Java の後のバージョンのキーワードです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>

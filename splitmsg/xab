@@ -1,0 +1,500 @@
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、空の zip ファイルエントリの作成を探します。
+</p>
+<p>
+中速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.UncallableMethodOfAnonymousClass">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、無名内部クラスに定義されたメソッドで、スーパークラスのメソッドをオーバーライドすることを意図しているのに、実際はオーバーライドになっていないメソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DontUseEnum">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、フィールドとメソッドが J2SE 5.0のキーワードである assert や enum を名前として使用していないことをチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.URLProblems">
+    <Details>
+<![CDATA[
+<p>
+<code>java.net.URL</code> の equals と hashCode メソッドはドメイン名の解決をします。
+その結果、これらの演算は非常に高くつく可能性があります。このディテクタは、メソッドが呼び出されるかもしれない場所を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FinalizerNullsFields">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、クラスのフィールドを null にするファイナライザを探します。
+どんな方法でもフィールドを null にすることは効果がなく、ガベージコレクタの助けになりません。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.CrossSiteScripting">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは XSS 脆弱性の自明で露骨なケースを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.RepeatedConditionals">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>(x == 5 || x == 5)</code> のような繰り返される条件テストを含んでいるコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.CallToUnsupportedMethod">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、サポートされていないメソッドの呼び出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FormatStringChecker">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、間違った書式文字列をチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.EqualsOperandShouldHaveClassCompatibleWithThis">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>equals</code> メソッドを定義しているクラスと互換性がないクラスのインスタンスをオペランドにしてチェックする <code>equals</code> メソッドをチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TestingGround">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、新しいディテクタをテストするためのフックです。通常、このディテクタは何もしません。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TestingGround2">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、新しいディテクタをテストするためのフックです。通常、このディテクタは何もしません。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.LostLoggerDueToWeakReference">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、 OpenJDK 1.6の下で異なる振る舞いをするコードを探します。OpenJDK 1.6では、<code>Logger</code> を保持するのに弱参照が使われます。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TestingGround2">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、新しいディテクタをテストするためのフックです。通常、このディテクタは何もしません。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.Noise">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ランダムな信号を生成します。メソッドによって実行される演算のハッシュ値に基づく警告です。
+これらの警告はソフトウェアで実際のバグを発見するのではなく、データマイニング実験のコントロールとして役に立つことを目的とした偽のランダムノイズです。
+</p>
+<p>
+このディテクタは、新しいディテクタをテストするためのフックです。通常、このディテクタは何もしません。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.NoiseNullDeref">
+    <Details>
+<![CDATA[
+<p>
+null の参照解除のためのノイズが多いディテクタです。コードの問題を見つける方法として使用するのではく、警告の妥当性または予測能力の実験でコントロールとして役に立つことを意図しました。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+
+  <Detector class="edu.umd.cs.findbugs.detect.HugeSharedStringConstants">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、複数のクラスファイルにわたって複製されている文字列定数を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DoInsideDoPrivileged">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、doPrivileged ブロックの中で実行するべきコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.ResolveAllReferences">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、すべての参照呼び出しが解決されることをチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.SwitchFallthrough">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、フォールスルーがある switch 文を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindFieldSelfAssignment">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、フィールドが同じフィールドの値を読み出して代入される場所を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindSelfComparison">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、値がそれ自身と比較される場所を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindSelfComparison2">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、値がそれ自身と比較される場所を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindNonShortCircuit">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、非短絡論理演算子の疑わしい使用を探します（<code>||</code> と <code>&amp;&amp;</code> の代わりに <code>|</code> と <code>&amp;</code>)。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DontCatchIllegalMonitorStateException">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、IllegalMonitorStateException をキャッチする try-catch ブロックを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindFloatMath">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、浮動小数点演算の使用を探します。
+</p>
+<p>
+中速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.CloneIdiom">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Cloneable クラスを書くためのイディオムの違反を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.ComparatorIdiom">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>Comparator</code> を実装するクラスを書くためのイディオムの違反を探します。 
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.DroppedException">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、例外をキャッチしているのに何もしていないコードを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.LoadOfKnownNullValue">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、null とわかっている値の読み出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DumbMethodInvocations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、メソッド (例：<code>substring(0)</code>) に渡されている間違った引数を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.DumbMethods">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、引数のない String コンストラクタのような無意味なメソッドの呼び出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.NumberConstructor">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Number コンストラクタのプリミティブ型の引数による呼び出しを探します。
+</p>                      
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindDoubleCheck">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ダブルチェックロッキングのインスタンスを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindFinalizeInvocations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>finalize</code> メソッドの呼び出しと他のファイナライザ関連の問題を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindHEmismatch">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>hashCode</code> メソッドと <code>equals</code> メソッドの定義の問題を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、同値関係が対称的でないかもしれないスーパークラスの <code>equals</code> メソッドをオーバーライドする <code>equals</code> メソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindNakedNotify">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、可変オブジェクトの状態を変更するように思われない  <code>notify</code> メソッドの呼び出を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindReturnRef">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、可変静的データを返すメソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindRunInvocations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>Thread.run()</code> の呼び出しを探します。
+</p>
+<p>
+高速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindSpinLoop">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、条件式またはループ内で呼び出されない <code>wait</code> メソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindTwoLockWait">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、2つ以上のロックを保持している状態で、<code>wait</code> メソッドの呼び出しを探します。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUnconditionalWait">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、条件文、またはループの中にない <code>wait</code> メソッドの呼び出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUninitializedGet">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、コンストラクタで初期化されていないフィールドの読み出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUnsyncGet">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、set メソッドは同期化していて get メソッドは同期化していない get メソッドと set メソッドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.InitializationChain">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、潜在的循環クラス初期化依存関係を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.IteratorIdioms">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、イテレータクラスの定義方法の問題を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.LockedFields">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ロックに関して一貫性のない方法でアクセスされるフィールドを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.EqStringTest">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、== や != 演算子を使用している String オブジェクトの比較を探します。
+</p>
+]]>

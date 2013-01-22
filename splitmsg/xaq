@@ -1,0 +1,500 @@
+
+  <BugPattern type="VR_UNRESOLVABLE_REFERENCE">
+    <ShortDescription>解決できないクラス、メソッドへの参照</ShortDescription>
+    <LongDescription>{0} による {1} への解決できない参照。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、解析されているライブラリに対して解決されないクラスまたはメソッドを参照しています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="GC_UNCHECKED_TYPE_IN_GENERIC_CALL">
+    <ShortDescription>検査されない型への総称呼び出し</ShortDescription>
+    <LongDescription>型 {3.givenClass} が期待されているところに与えられた型 Object の検査されない引数。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+総称型パラメータからの特定の型が予想される Object 型をコンパイルするとき、総称型コレクションメソッドへの呼び出しは引数を渡します。
+したがって、標準の Java 型システムも静的解析もパラメータとして渡されているオブジェクトが適切な型かどうかに関する有用な情報を提供できません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="GC_UNRELATED_TYPES">
+    <ShortDescription>型パラメータとメソッド引数に関係がない</ShortDescription>
+    <LongDescription>{2.givenClass} は、期待された引数の型 {3.givenClass} と互換性がありません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+総称型コレクションメソッドへの呼び出しにコレクションのパラメータとは互換性のないクラスの引数があります (すなわち、引数の型は総称型引数に対応するスーパタイプでもサブタイプでもありません)。
+したがって、コレクションにはここで使用されたメソッド引数と等価であるどんなオブジェクトも含まれていません。
+たぶん、間違った値がメソッドに渡されています。
+通常、2つの無関係なクラスのインスタンスは等価ではありません。
+たとえば、<code>Foo</code> と <code>Bar</code> クラスがサブタイプによって関係がないなら、<code>Foo</code> のインスタンスは <code>Bar</code> のインスタンスと等価のはずがありません。
+その他の問題で、対称的ではない <code>equals</code> メソッドになる可能性が高いです。
+たとえば、<code>Foo</code> が <code>String</code> と等価であるように <code>Foo</code> クラスを定義するなら、<code>String</code> は <code>String</code> だけと等価であるので、<code>equals</code> メソッドは対称的ではありません。
+</p>
+<p>
+まれに、非対称 <code>equals</code> メソッドを定義して、まだ、何とかそれらのコードを機能させています。
+APIのどれも文書化していないし、保証もしていないが通常の場合は  <code>Collection&lt;String&gt;</code> に <code>Foo</code> があるかどうか調べたいなら、
+引数の <code>equals</code> メソッド (たとえば、<code>Foo</code>クラスの <code>equals</code> メソッド) を使用して等価性をチェックします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_COLLECTIONS_SHOULD_NOT_CONTAIN_THEMSELVES">
+    <ShortDescription>コレクションは自分自身を含めるべきではない</ShortDescription>
+    <LongDescription>コレクションは、{2.givenClass} への呼び出しで自分自身を含めるべきはない。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この総称型コレクションメソッドへの呼び出しはコレクションに自分自身が含まれている (たとえば、<code>s.contains(s)</code> が true だとして) 場合にだけ意味があります。
+これは true である可能性が低くて、もし true なら問題の原因になります (たとえば、無限再帰になっているハッシュコードの計算)。
+間違ったパラメータが渡されている可能性が高いです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_VACUOUS_SELF_COLLECTION_CALL">
+    <ShortDescription>コレクションへの無意味な呼び出し</ShortDescription>
+    <LongDescription>コレクション c に対して c.{2.name}(c) を呼び出すことは意味がありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この呼び出しは意味がありません。
+どんなコレクション <code>c</code> も <code>c.containsAll(c)</code> を呼び出すことは常に true であるべきです。
+そして、<code>c.retainAll(c)</code> は効果があるはずがありません。
+</p>
+     ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="PZ_DONT_REUSE_ENTRY_OBJECTS_IN_ITERATORS">
+    <ShortDescription>繰り返しでエントリオブジェクトを再利用しない</ShortDescription>
+    <LongDescription>{0} は Iterator と  Map.Entry の両方があります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、Iterator と Map.Entry で基底 Map のビューを返すことを許可された両方の entrySet メソッドがあります。
+この巧妙なアイデアは、Map 実装で使用されましたが、厄介なコーディング間違いの可能性を取り込みました。
+Map <code>m</code> が entrySet のためのそのような反復子を返すならば、<code>c.addAll(m.entrySet())</code>　はひどく間違っていくでしょう。
+OpenJDK 1.7 の すべての Map 実装はこれを回避するために書き直されました。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_ENTRY_SETS_MAY_REUSE_ENTRY_OBJECTS">
+    <ShortDescription>エントリセットの要素を加えることは、Entry オブジェクトの再利用のために失敗するかもしれない</ShortDescription>
+    <LongDescription>エントリセットの要素を加えることは、{2.simpleClass} の再利用のために失敗するかもしれません。{1} の Entry オブジェクト</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+entrySet メソッドは、一つの Entry オブジェクトを再利用し、反復中に返される基底 Map のビューを返すことが許可されています。
+Java 1.6 の時点で、IdentityHashMap と EnumMap の両方がそうしました。
+そのような Map を通して繰り返すとき、エントリ値は次の繰り返しへ進むまでが有効です。
+たとえば、addAll メソッドにそのような entrySet を渡そうとすると、物事はひどく間違っていくでしょう。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="DMI_USING_REMOVEALL_TO_CLEAR_COLLECTION">
+    <ShortDescription>コレクションを消去するために removeAll メソッドを使用しない</ShortDescription>
+    <LongDescription>コレクションを消去するために removeAll メソッドを使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+コレクション <code>c</code> からすべての要素を除去したいなら、<code>c.removeAll(c)</code> ではなく <code>c.clear</code> を使用してください。
+コレクションを消去するために <code>c.removeAll(c)</code> を呼び出すことは、それほど明確ではなく、タイプミスからの誤りに影響されやすく、効率的ではなく、いくつかのコレクションでは、<code>ConcurrentModificationException</code> をスローするかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="STCAL_STATIC_CALENDAR_INSTANCE">
+    <ShortDescription>static Calendar フィールド</ShortDescription>
+    <LongDescription>{1} は、java.util.Calendar 型の static フィールドです。それはスレッドセーフではありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+たとえ JavaDoc にそれに関する手がかりがないとしても、Calendar はマルチスレッドでの使用は本質的に安全でありません。
+正しい同期化をしないでスレッド境界の向こうで1つのインスタンスを共有することは、アプリケーションの誤動作になります。
+JDK 5.0に比べて JDK 1.4 の方が問題が表面化するように思われ、おそらく sun.util.calendar.BaseCalendar.getCalendarDateFromFixedDate() の ArrayIndexOutOfBoundsExceptions や IndexOutOfBoundsExceptions がランダムに発生します。
+直列化問題も経験するかもしれません。インスタンスフィールドを使うことを推奨します。<br>
+詳細については、<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6231579">Sun Bug #6231579</a> や <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6178997">Sun Bug #6178997</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="STCAL_INVOKE_ON_STATIC_CALENDAR_INSTANCE">
+    <ShortDescription>static Calendar の呼び出し</ShortDescription>
+    <LongDescription>static な java.util.Calendar のメソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+たとえ JavaDoc にそれに関する手がかりがないとしても、Calendar はマルチスレッドでの使用は本質的に安全ではありません。
+ディテクタは、static フィールドから得られた Calendar のインスタンスの呼び出しを発見しました。
+これは疑わしく見えます。
+詳細については、<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6231579">Sun Bug #6231579</a> や <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6178997">Sun Bug #6178997</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="STCAL_STATIC_SIMPLE_DATE_FORMAT_INSTANCE">
+    <ShortDescription>static DateFormat</ShortDescription>
+    <LongDescription>{1} は、java.text.DateFormat 型の static フィールドです。それはスレッドセーフではありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JavaDoc に書かれているように、DateFormat はマルチスレッドでの使用は本質的に安全ではありません。
+正しい同期化をしないでスレッド境界の向こうで1つのインスタンスを共有することは、アプリケーションの誤動作になります。
+JDK 5.0に比べて JDK 1.4 の方が問題が表面化するように思われ、おそらく sun.util.calendar.BaseCalendar.getCalendarDateFromFixedDate() の ArrayIndexOutOfBoundsExceptions や IndexOutOfBoundsExceptions がランダムに発生します。
+直列化問題も経験するかもしれません。インスタンスフィールドを使うことを推奨します。<br>
+詳細については、<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6231579">Sun Bug #6231579</a> や <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6178997">Sun Bug #6178997</a> を参照してください。
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="STCAL_INVOKE_ON_STATIC_DATE_FORMAT_INSTANCE">
+    <ShortDescription>static DateFormat の呼び出し</ShortDescription>
+    <LongDescription>static な java.text.DateFormat のメソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JavaDoc に書かれているように、DateFormat はマルチスレッドでの使用は本質的に安全ではありません。
+ディテクタは、static フィールドから得られた DateFormat のインスタンスの呼び出しを発見しました。
+これは疑わしく見えます。
+詳細については、<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6231579">Sun Bug #6231579</a> や <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6178997">Sun Bug #6178997</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_COMPARING_VALUES_WITH_INCOMPATIBLE_TYPE_QUALIFIERS">
+    <ShortDescription>互換性のない型修飾子による比較値</ShortDescription>
+    <LongDescription>型修飾子 {2.simpleName} でアノテートされた値がその修飾子がない値と等価性のために比較されています。</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+型修飾子アノテーションを指定した値がその修飾子のない値と比較しています。
+</p>
+<p>
+より正確に、when=ALWAYS を指定した型修飾子でアノテートされた値が同じ型修飾子で when=NEVER を指定する値と比較しています。
+</p>
+<p>
+たとえば、@NonNegative が型修飾子アノテーション @Negative(when=When.NEVER) の略称だとします。
+以下のコードは、return 文が @NonNegative 値を要求するが、@Negative としてマークされている値を受け取るのでこの警告を生成します。
+</p>
+<blockquote><pre>
+public boolean example(@Negative Integer value1, @NonNegative Integer value2) {
+    return value1.equals(value2);
+}
+</pre></blockquote>
+      ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_ALWAYS_VALUE_USED_WHERE_NEVER_REQUIRED">
+    <ShortDescription>型修飾子でアノテーションされた値がその修飾子を付けてはならない値を必要とする場所で使われている</ShortDescription>
+    <LongDescription>型修飾子 {2} でアノテートされた値がその修飾子を付けてはならない値を必要とする場所で使われています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+型修飾子アノテーションを指定した値がその修飾子を付けてはならない値を必要とする場所で使われています。
+</p>
+<p>
+より正確に、when=ALWAYS を指定した型修飾子でアノテートされた値が到達することが保証されているか同じ型修飾子で when=NEVER を指定する場所で使用しています。
+</p>
+<p>
+たとえば、@NonNegative が型修飾子アノテーション @Negative(when=When.NEVER) の略称だとします。
+以下のコードは、return 文が ＠NonNegative 値を要求するが ＠Negative としてマークされている値を受け取るのでこの警告を生成します。
+</p>
+<blockquote><pre>
+public @NonNegative Integer example(@Negative Integer value) {
+    return value;
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_NEVER_VALUE_USED_WHERE_ALWAYS_REQUIRED">
+    <ShortDescription>型修飾子でアノテーションされていない値がその修飾子が付けられた値を必要とする場所で使われている</ShortDescription>
+    <LongDescription>型修飾子 {2.simpleName} でアノテートされていない値がその修飾子が付けられた値を必要とする場所で使われています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+型修飾子アノテーションを指定していない値がその修飾子が付けられた値を必要とする場所で使われています。
+</p>
+<p>
+より正確に、when=NEVER を指定した型修飾子でアノテートされた値が同じ型修飾子で when=ALWAYS を指定する場所で使用しています。
+</p>        
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_MAYBE_SOURCE_VALUE_REACHES_ALWAYS_SINK">
+    <ShortDescription>型修飾子を付けていないかもしれない値がその型修飾子を必要とする方法で常に使われている</ShortDescription>
+    <LongDescription>{2.simpleName} アノテーションを付けていないかもしれない値がその型修飾子を必要とする方法で常に使われています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+型修飾子によって示された値のインスタンスではない可能性としてアノテートされた値です。
+値はその型修飾子によって示された値を必要とする方法で使われることが保証されています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_MAYBE_SOURCE_VALUE_REACHES_NEVER_SINK">
+    <ShortDescription>型修飾子を付けているかもしれない値がその型修飾子を禁止する方法で常に使われている</ShortDescription>
+    <LongDescription>{2.simpleName} アノテーションを付けているかもしれない値がその型修飾子を禁止する方法で常に使われています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+型修飾子によって示された値のインスタンスである可能性としてアノテートされた値です。
+値はその型修飾子によって示された値を禁止する方法で使われることが保証されています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_EXPLICIT_UNKNOWN_SOURCE_VALUE_REACHES_NEVER_SINK">
+    <ShortDescription>値は型修飾子を必要としないが、不明としてマークされている</ShortDescription>
+    <LongDescription>値は、{2.simpleName} を必要としませんが、明示的に {2.simpleName} に関して不明としてアノテーションされています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+値は、型修飾子によって示された値でないことを必要とする方法で使われています。
+しかし、値はどこでその型修飾子がいるのか禁止されていのるかわからないと述べている明示的なアノテーションがあります。
+使い方かアノテーションのどちらかが間違っています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TQ_EXPLICIT_UNKNOWN_SOURCE_VALUE_REACHES_ALWAYS_SINK">
+    <ShortDescription>値は型修飾子を必要としているが、不明としてマークされている</ShortDescription>
+    <LongDescription>値は、常に {2.simpleName} を必要としていますが、明示的に {2.simpleName} に関して不明としてアノテーションされています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+値は、常に型修飾子によって示された値であることを必要とする方法で使われています。
+しかし、値はどこでその型修飾子が必要なのかわからないと述べている明示的なアノテーションがあります。
+使い方かアノテーションのどちらかが間違っています。
+      </p>
+      ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IO_APPENDING_TO_OBJECT_OUTPUT_STREAM">
+    <ShortDescription>オブジェクト出力ストリームへの追加は失敗に終わる</ShortDescription>
+    <LongDescription>オブジェクト出力ストリームへの追加は失敗に終わります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、ファイルを追加モードで開いて、オブジェクト出力ストリームの中で結果をラップしています。
+これは、ファイルに格納された既存のオブジェクト出力ストリームに追加できないでしょう。
+オブジェクト出力ストリームに追加したいなら、オブジェクト出力ストリームを開いておく必要があります。
+</p>
+<p>
+追加モードでファイルを開き、オブジェクト出力ストリームで書き込むことができる唯一の状況は、
+ファイルを読み出すときにランダムアクセスモードで開き、追加を開始するところまでバイトオフセットをシークすると計画した場合です。
+</p> 
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="WL_USING_GETCLASS_RATHER_THAN_CLASS_LITERAL">
+    <ShortDescription>クラスリテラルではなく getClass で同期化している</ShortDescription>
+    <LongDescription>クラスリテラルではなく getClass で同期化しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このインスタンスメソッドは、<code>this.getClass()</code> で同期化しています。
+このクラスがサブクラス化されるなら、サブクラスはおそらく意図したことではないサブクラスのためにクラスオブジェクトで同期化します。
+たとえば、java.awt.Label の以下のコードを検討してください。
+</p>
+<blockquote><pre>
+private static final String base = "label";
+private static int nameCounter = 0;
+
+String constructComponentName() {
+    synchronized (getClass()) {
+        return base + nameCounter++;
+    }
+}
+</pre></blockquote>
+<p>
+<code>Label</code> のサブクラスは同じサブクラスで同期化しません。データレースを生じさせます。
+その代わりに、このコードは、<code>Label.class</code> で同期化するべきです。
+</p>
+<blockquote><pre>
+private static final String base = "label";
+private static int nameCounter = 0;
+
+String constructComponentName() {
+    synchronized (Label.class) {
+        return base + nameCounter++;
+    }
+}
+</pre></blockquote>
+<p>
+Jason Mehrens によって寄贈されたバグパターン
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="OBL_UNSATISFIED_OBLIGATION">
+    <ShortDescription>ストリームやリソースのクリーンアップに失敗するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、{2} のクリーンアップに失敗するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ストリーム、データベースオブジェクト、または明示的にクリーンアップ操作を必要としている他のリソースのクリーンアップ (クローズする、片付ける) に失敗するかもしれません。
+</p>   
+<p>
+通常、メソッドがストリープや他のリソースを開いたなら、メソッドはストリームやリソースがメソッドが戻る前にクリーンアップされることを確認するために、try/finally ブロックを使用するべきです。
+</p>
+<p>
+このバグパターンは、OS_OPEN_STREAM と ODR_OPEN_DATABASE_RESOURCE と基本的に同じですが異なる (そして、うまくいけばより良い) 静的解析技術に基づいています。
+私たちは、このバグパターンの有用性についてのフィードバックを得ることに関心があります。
+どちらかの方法でフィードバックを送ってください。
+</p>
+<ul>
+<li>send email to findbugs@cs.umd.edu</li>
+<li>file a bug report: <a href="http://findbugs.sourceforge.net/reportingBugs.html">http://findbugs.sourceforge.net/reportingBugs.html</a></li>
+</ul>
+<p>
+特に、このバグパターンの誤検出抑制探索法は詳細にわたって調整されていないので、誤検出についてのレポートは我々の助けになります。 
+</p>
+<p>
+解析技術の説明は、Weimer と Necula による <i>Finding and Preventing Run-Time Error Handling Mistakes</i> を参照してください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE">
+    <ShortDescription>チェック例外でストリームやリソースのクリーンアップに失敗するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、チェック例外で {2} のクリーンアップに失敗するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ストリーム、データベースオブジェクト、または明示的にクリーンアップ操作を必要としている他のリソースのクリーンアップ (クローズする、片付ける) に失敗するかもしれません。
+</p>   
+<p>
+通常、メソッドがストリープや他のリソースを開いたなら、メソッドはストリームやリソースがメソッドが戻る前にクリーンアップされることを確認するために、try/finally ブロックを使用するべきです。
+</p>
+<p>
+このバグパターンは、OS_OPEN_STREAM と ODR_OPEN_DATABASE_RESOURCE と基本的に同じですが異なる (そして、うまくいけばより良い) 静的解析技術に基づいています。
+私たちは、このバグパターンの有用性についてのフィードバックを得ることに関心があります。
+どちらかの方法でフィードバックを送ってください。
+</p>
+<ul>
+<li>send email to findbugs@cs.umd.edu</li>
+<li>file a bug report: <a href="http://findbugs.sourceforge.net/reportingBugs.html">http://findbugs.sourceforge.net/reportingBugs.html</a></li>
+</ul>
+<p>
+特に、このバグパターンの誤検出抑制探索法は詳細にわたって調整されていないので、誤検出についてのレポートは我々の助けになります。 
+</p>
+<p>
+解析技術の説明は、Weimer と Necula による <i>Finding and Preventing Run-Time Error Handling Mistakes</i> を参照してください。 
+</p>
+]]>
+      </Details>
+  </BugPattern>
+  
+  <BugPattern type="FB_UNEXPECTED_WARNING">
+    <ShortDescription>FindBugs からの予期しない/望ましくない警告</ShortDescription>
+    <LongDescription>予期しない/望ましくない {2} FindBugs 警告。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+FindBugs は、@NoWarning でアノテートされたことにより、予期しない/望ましくない警告を生成しました。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FB_MISSING_EXPECTED_WARNING">
+    <ShortDescription>失われた FindBugs からの予期した/望ましい警告</ShortDescription>
+    <LongDescription>失われた予期した/望ましい {2} FindBugs 警告。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+FindBugs は、@ExpectedWarning でアノテートされたことにより、予期した/望ましい警告が生成されませんでした。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED">
+    <ShortDescription>putIfAbsent の戻り値は無視されて putIfAbsent に渡した値は再利用された</ShortDescription>
+    <LongDescription>putIfAbsent の戻り値は無視されたが、{4} は再利用されました。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>putIfAbsent</code> メソッドは、通常1つの値が与えられたキー (非存在が成功するかどうかの第一の値) と関連することを確認するために使われます。
+戻り値を無視して中で渡される値への参照を保持するなら、マップのキーと関連する1つではない値を保持する危険性を冒します。
+どれを使用するかが重要であり、マップに格納できないものを使用すると、プログラムは誤った振る舞いをします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="LG_LOST_LOGGER_DUE_TO_WEAK_REFERENCE">
+    <ShortDescription>ロガーの変更は OpenJDK の弱参照が原因で潜在的に失われる</ShortDescription>
+    <LongDescription>ロガーの変更は失われる可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+OpenJDK は、潜在的非互換性を取り入れました。特に、java.util.logging.Logger は振る舞いが変更されています。
+強参照を使用する代わりに、現在、内部的に弱参照を使用しています。
+それは理にかなった変更ですが、残念ながらいくつかのコードは古い振る舞いに依存しています。
+ロガーの構成を変更するとき、ロガーへの参照を捨てます。
+つまり、ガベージコレクタはそのメモリを回収できます。それは、ロガーの構成が失われることを意味します。
+たとえば、以下を検討してください。
+</p>
+<blockquote><pre>
+public static void initLogging() throws Exception {
+    Logger logger = Logger.getLogger("edu.umd.cs");
+    logger.addHandler(new FileHandler()); // ロガーの構成の変更
+    logger.setUseParentHandlers(false); // 別のロガーの構成の変更
+}
+</pre></blockquote>
+<p>
+ロガーの参照は、メソッドの終わり (メソッドは脱出しません) で失われるので、
+<code>initLogging</code> の呼び出しの後でガベージコレクションの循環があるなら、ロガー構成は失われます (なぜなら Logger は弱参照を保持するだけなので)。
+.</p>
+<blockquote><pre>
+public static void main(String[] args) throws Exception {
+    initLogging(); // ファイルハンドラーをロガーに追加する
+    System.gc(); // ロガーの構成が失われる
+    Logger.getLogger("edu.umd.cs").info("Some message"); // 期待したようにファイルに記録されません
+}
+</pre></blockquote>
+<p>
+Ulf Ochsenfahrt と Eric Fellheimer
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="AT_OPERATION_SEQUENCE_ON_CONCURRENT_ABSTRACTION">
+    <ShortDescription>並行抽象の呼び出しシーケンスはアトミックではないかもしれない</ShortDescription>
+    <LongDescription>{2} の呼び出しシーケンスは、アトミックではないかもしれません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードには並行抽象化 （たとえば、並行ハッシュマップ） の呼び出しシーケンスがあります。

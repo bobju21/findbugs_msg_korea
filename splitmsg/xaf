@@ -1,0 +1,500 @@
+識別子は、Java の後のバージョンのキーワードとして予約されている単語です。
+コードは、Java の後のバージョンでコンパイルするために変更する必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NM_FUTURE_KEYWORD_USED_AS_MEMBER_IDENTIFIER">
+    <ShortDescription>Java の後のバージョンのキーワードである識別子を使用している</ShortDescription>
+    <LongDescription>{1} は、Java のより最近のバージョンのキーワードと衝突します。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この識別子は、Java の後のバージョンのキーワードとして使われます。
+このコードと API を参照するどんなコードも、Java の後のバージョンでコンパイルするために変更する必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DE_MIGHT_DROP">
+    <ShortDescription>例外を捨てているかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、{2} を捨てているかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、例外を捨てているかもしれません。
+通常、キャッチした例外は何らかの方法で処理、または報告するべきです、あるいはメソッドからスローするべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DE_MIGHT_IGNORE">
+    <ShortDescription>例外を無視しているかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、{2} を無視しているかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは例外を無視しているかもしれません。
+通常、例外は何らかの方法で処理、または報告するべきです、あるいはメソッドからスローするべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DP_DO_INSIDE_DO_PRIVILEGED">
+    <ShortDescription>doPrivileged ブロック内で呼び出すべきメソッド</ShortDescription>
+    <LongDescription>{2} の呼び出しは doPrivileged ブロックの中から呼び出すべきです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、セキュリティ許可チェックが必要なメソッドを呼び出しています。
+このコードにセキュリティ許可が与えられるとしても、セキュリティ許可がないコードによって呼び出されるなら doPrivileged ブロック内で行う必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DP_DO_INSIDE_DO_PRIVILEDGED"> <!-- misspelled for backward compatibility -->
+    <ShortDescription>Method invoked that should be only be invoked inside a doPrivileged block</ShortDescription>
+    <LongDescription>invocation of {2}, which should be invoked from within a doPrivileged block, in {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p> This code invokes a method that requires a security permission check.
+  If this code will be granted security permissions, but might be invoked by code that does not
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED">
+    <ShortDescription>doPrivileged ブロック内で作成されるべきクラスローダ</ShortDescription>
+    <LongDescription>{1} は、doPrivileged ブロックの中でクラスローダ {2} を作成するべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードはクラスローダを作成していますが、セキュリティマネージャがインストールされているなら権限が必要です。
+このコードがセキュリティ権限がないコードによって呼び出されるなら、クラスローダの作成は doPrivileged ブロック内で行う必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="JCIP_FIELD_ISNT_FINAL_IN_IMMUTABLE_CLASS">
+    <ShortDescription>不変クラスのフィールドは final にすべき</ShortDescription>
+    <LongDescription>{0} は不変とマークされているので、{1.givenClass} は final にすべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+クラスにはnet.jcip.annotations.Immutable でアノテートされています。
+Immutable アノテーションのルールは、すべてのフィールドを final にすることを義務づけます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_THREAD_PASSED_WHERE_RUNNABLE_EXPECTED">
+    <ShortDescription>Thread オブジェクトが Runnable が期待されているところに渡されている</ShortDescription>
+    <LongDescription>Thread オブジェクトが Runnable が期待されているところに渡されています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Threadオブジェクトが Runnable が期待されているメソッドへのパラメータとして渡されています。
+これはかなり異常で、論理エラーを示すか、予想外の振る舞いの原因になるかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_COLLECTION_OF_URLS">
+    <ShortDescription>URL の Map や Set はひどい性能になる可能性がある</ShortDescription>
+    <LongDescription>{1} は、URL の Map か Set を使用しているので、ひどい性能になる可能性があります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドまたはフィールドは、URL の <code>Map</code> か <code>Set</code> を使用しています。
+URL の <code>equals</code> と <code>hashCode</code> は、ドメイン名の解決を行うので、ひどい性能になる可能性があります。<br>
+詳細は、<a href="http://michaelscharf.blogspot.com/2006/11/javaneturlequals-and-hashcode-make.html">http://michaelscharf.blogspot.com/2006/11/javaneturlequals-and-hashcode-make.html</a> を参照してください。<br>
+その代わりに <code>java.net.URI</code> を使うことをを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_BLOCKING_METHODS_ON_URL">
+    <ShortDescription>URL の equals メソッドと hashCode メソッドはブロックする</ShortDescription>
+    <LongDescription>{2} の呼び出しはドメイン名解決のためにブロックします。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+URL の <code>equals</code> メソッドと <code>hashCode</code> メソッドは、ドメイン名の解決を行うので、ひどい性能になる可能性があります。<br>
+詳細は、<a href="http://michaelscharf.blogspot.com/2006/11/javaneturlequals-and-hashcode-make.html">http://michaelscharf.blogspot.com/2006/11/javaneturlequals-and-hashcode-make.html</a> を参照してください。<br>
+その代わりに <code>java.net.URI</code> を使うことを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_ANNOTATION_IS_NOT_VISIBLE_TO_REFLECTION">
+    <ShortDescription>ランタイムリテンションなしで、アノテーションの存在を調べるためにリフレクションを使用することはできない</ShortDescription>
+    <LongDescription>ランタイムリテンションを持たないアノテーション {3} の存在を調べるためにリフレクションを使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+アノテーションは、<code>@Retention(RetentionPolicy.RUNTIME)</code> でアノテートされなければ、リフレクション (たとえば、<code>isAnnotationPresent(...)</code> メソッド) を使用して観測することができません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_EXIT">
+    <ShortDescription>System.exit(...) を呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、System.exit(...) を呼び出しています。これは Java 仮想マシン全体をシャットダウンさせてしまいます。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>System.exit(...)</code> を呼び出すことは、Java 仮想マシン全体をシャットダウンさせてしまいます。
+それが適切な場合にだけ使用するべきです。
+<code>System.exit(...)</code> の呼び出しはコードが他のコードによって呼び出されることを困難か不可能にします。
+その代わりに RuntimeException をスローすることを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_RUN_FINALIZERS_ON_EXIT">
+    <ShortDescription>危険なメソッド runFinalizersOnExit を呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、危険なメソッド runFinalizersOnExit を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+どんな理由があるにせよ決して <code>System.runFinalizersOnExit</code> と <code>Runtime.runFinalizersOnExit</code> を呼び出さないでください。
+Java ライブラリで最も危険なメソッドの1つです。 -- Joshua Bloch
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_STRING_CTOR">
+    <ShortDescription>効率が悪い new String(String) コンストラクタを呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、効率が悪い new String(String) コンストラクタを呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>java.lang.String(String)</code> コンストラクタの使用はメモリを浪費します。
+そのようにして構築されたオブジェクトと パラメータとして渡された <code>String</code> は機能的に区別がつかないからです。
+引数の <code>String</code> をそのまま使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_STRING_VOID_CTOR">
+    <ShortDescription>効率が悪い new String() コンストラクタを呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、効率が悪い new String() コンストラクタを呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+引数がないコンストラクタを使用して、新しい <code>java.lang.String()</code> オブジェクトを作成するとメモリを浪費します。
+そのようにして作成されたオブジェクトと空の文字列定数 <code>""</code> は機能的に区別がつかないからです。
+Javaは、同一の文字列定数が同じ <code>String</code> オブジェクトによって表されることを保証します。
+したがって、直接空の文字列定数を使用するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_STRING_TOSTRING">
+    <ShortDescription>String の toString メソッドを呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、String の toString メソッドを呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>String.toString()</code> を呼び出すのは冗長です。<code>String</code> を使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_GC">
+    <ShortDescription>明示的なガベージコレクション</ShortDescription>
+    <LongDescription>{1} は、ガベージコレクションを強制しています。ベンチマークコードを除いて非常に疑わしいです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、明示的にガベージコレクションを呼び出しています。ベンチマークの特定の用途を除いて非常に疑わしいです。
+</p>
+<p>
+過去に、<code>close</code> メソッドや <code>finalize</code> メソッドでガベージコレクタを明示的に呼び出していた状況は、巨大なパフォーマンスブラックホールの原因となりました。
+ガベージコレクションは、高くつく可能性があります。何百、何千ものガベージコレクションを強制する状況は、システムの停滞をもたらすでしょう。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_BOOLEAN_CTOR">
+    <ShortDescription>効率が悪い Boolean コンストラクタを呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、効率が悪い Boolean コンストラクタを呼び出しています。その代わりに Boolean.valueOf(...) を使用してください。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>java.lang.Boolean</code> の新しいインスタンスを作成するとメモリを浪費します。
+<code>Boolean</code> オブジェクトは不変で、2つの有用な値 (<code>Boolean.TRUE</code> と <code>Boolean.FALSE</code>) があります。
+その代わりに <code>Boolean</code> オブジェクトを作成するために、<code>Boolean.valueOf</code> メソッド (または J2SE 5.0 のオートボクシング) を使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_NUMBER_CTOR">
+    <ShortDescription>効率が悪い Number コンストラクタを呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、効率が悪い {2} コンストラクタを呼び出しています。その代わりに {3} を使用してください。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>new Integer(int)</code> の使用は、常に新しいブジェクトになることが保証されています。
+これに対して、<code>Integer.valueOf(int)</code> は、コンパイラ、クラスライブラリ、Java 仮想マシンで値がキャッシュされます。
+キャッシュに格納された値を使うことはインスタンスの作成を回避し、コードはより高速になります。
+</p>
+<p>
+-128から127までの値は、対応するキャッシュされたインスタンスを持つことが保証されています。
+そして、<code>valueOf</code> メソッドの使用は、コンストラクタを使用するより約3.5倍高速です。
+定数範囲外の値は、両方のスタイルの性能は同じです。
+</p>
+<p>
+クラスが J2SE 5.0より前の Java 仮想マシンとの互換性が不要なら、<code>Long</code>、<code>Integer</code>、<code>Short</code>、<code>Character</code>、<code>Byte</code> のインスタンスを作成するときは、オートボクシングか <code>valueOf</code> メソッドを使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="DM_FP_NUMBER_CTOR">
+    <ShortDescription>効率が悪い浮動小数点 Number コンストラクタを呼び出しているメソッド</ShortDescription>
+    <LongDescription>{1} は、効率が悪い {2} コンストラクタを呼び出しています。その代わりに {3} を使用してください。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>new Double(double)</code> の使用は、常に新しいブジェクトになることが保証されています。
+これに対して、<code>Double.valueOf(double)</code> は、コンパイラ、クラスライブラリ、Java 仮想マシンで値がキャッシュされます。
+キャッシュに格納された値を使うことはインスタンス生成を回避し、コードはより高速になります。
+</p>
+<p>
+クラスが J2SE 5.0より前の Java 仮想マシンとの互換性が不要なら、オートボクシングか <code>Double</code>、<code>Float</code> の <code>valueOf</code> メソッドを使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_CONVERT_CASE">
+    <ShortDescription>呼び出したメソッドの Locale パラメータの使用を検討する</ShortDescription>
+    <LongDescription>ローカライズされていない String.toUpperCase() または String.toLowerCase() を使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+文字列がプラットホームのデフォルトエンコーディングを使用して大文字、小文字に変換されています。
+国際文字で使われると不適切な変換になるかもしれません。
+</p>
+</p>
+  <ul>
+    <li>String.toUpperCase(Locale l)</li>
+    <li>String.toLowerCase(Locale l)</li>
+  </ul>
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BX_UNBOXED_AND_COERCED_FOR_TERNARY_OPERATOR">
+    <ShortDescription>プリミティブ値が3項演算子のためにアンボクシングされて、型変換される</ShortDescription>
+    <LongDescription>プリミティブ型の値が3項演算子のためにアンボクシングされて、型変換されます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ラップされたプリミティブ値は、3項演算子 (<code> b ? e1 : e2</code>) の評価の一部として、別のプリミティブ型にアンボクシングされて、変換されます。
+Java 言語仕様では、<code>e1</code> と <code>e2</code> がラップされた数値なら値はアンボクシングされ、共通の型へと変換/型変換されます
+(たとえば、<code>e1</code> が <code>Integer</code> で、<code>e2</code> が <code>Float</code> なら <code>e1</code> はアンボクシング (<code>int</code> に変換) され、<code>float</code> に変換され、ボクシング (<code>Float</code> に変換) されます)。
+JLS セクション15.25を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BX_BOXING_IMMEDIATELY_UNBOXED">
+    <ShortDescription>プリミティブ値がボクシングされて、すぐにアンボクシングされる</ShortDescription>
+    <LongDescription>プリミティブ値がボクシングされて、すぐにアンボクシングされます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+プリミティブ値がボクシングされて、すぐにアンボクシングされます。
+おそらく、アンボクシングされた値が必要な場所で、手動でボクシングをしているためです。
+その結果、コンパイラにボクシングの機能を取り消すことを強制しています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BX_UNBOXING_IMMEDIATELY_REBOXED">
+    <ShortDescription>ボクシングされた値がアンボクシングされて、すぐに再ボクシングされる</ShortDescription>
+    <LongDescription>ボクシングされた値がアンボクシングされて、すぐに再ボクシングされます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ボクシングされた値がアンボクシングされて、すぐに再ボクシングされます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BX_BOXING_IMMEDIATELY_UNBOXED_TO_PERFORM_COERCION">
+    <ShortDescription>プリミティブ値がプリミティブ型の型変換をするためにボクシングされて、アンボクシングされる</ShortDescription>
+    <LongDescription>プリミティブ値がプリミティブ型の型変換をするためにボクシングされて、アンボクシングされます。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+プリミティブ値がコンストラクタでボクシングされて、すぐに異なるプリミティブ型に変換されます (たとえば、<code>new Double(d).intValue()</code>)。
+直接プリミティブ型の型変換を実行してください (たとえば、<code>(int) d</code>)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="DM_BOXED_PRIMITIVE_TOSTRING">
+    <ShortDescription>toString メソッドを呼び出すためにプリミティブ型のラッパクラスのインスタンスを作成している</ShortDescription>
+    <LongDescription>toString メソッドを呼び出すためにプリミティブ型のラッパクラスのインスタンスを作成しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>toString</code> メソッドを呼び出すために、プリミティブ型のラッパクラスのインスタンスを作成しています。
+それよりもプリミティブ値を引数にとる static な <code>toString</code> メソッドを使用した方が効率的です。
+</p>
+  <table>
+     <tr><th>置換前</th><th>置換後</th></tr>
+     <tr><td>new Integer(1).toString()</td><td>Integer.toString(1)</td></tr>
+     <tr><td>new Long(1).toString()</td><td>Long.toString(1)</td></tr>
+     <tr><td>new Float(1.0).toString()</td><td>Float.toString(1.0)</td></tr>
+     <tr><td>new Double(1.0).toString()</td><td>Double.toString(1.0)</td></tr>
+     <tr><td>new Byte(1).toString()</td><td>Byte.toString(1)</td></tr>
+     <tr><td>new Short(1).toString()</td><td>Short.toString(1)</td></tr>
+     <tr><td>new Boolean(true).toString()</td><td>Boolean.toString(true)</td></tr>
+  </table>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_NEW_FOR_GETCLASS">
+    <ShortDescription>クラスオブジェクトを得るためだけにインスタンスを作成しているメソッド</ShortDescription>
+    <LongDescription>{1} は、クラスオブジェクトを得るためだけにインスタンスを作成しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+メソッドは、クラスオブジェクトを得るために、インスタンスを生成して <code>getClass</code> メソッドを呼び出しています。
+クラスリテラル (<code>Foo.class</code>) を使う方が簡単です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_MONITOR_WAIT_ON_CONDITION">
+    <ShortDescription>Condition で wait メソッドを呼び出している</ShortDescription>
+    <LongDescription>Condition で wait メソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<code>java.util.concurrent.locks.Condition</code> オブジェクトで <code>wait</code> メソッドを呼び出しています。
+<code>Condition</code> オブジェクトを待機させるためには <code>Condition</code> インタフェースで定義された <code>await</code> メソッドを使用するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_01_TO_INT">
+    <ShortDescription>0から1の乱数値は整数値0に丸められる</ShortDescription>
+    <LongDescription>{1} は、0から1の乱数値を生成していますが、整数値0に丸められます。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+0から1の乱数値は整数値0に丸められます。
+おそらく整数に丸められる前に何か他のことによって乱数値を倍数にしたかったか、または <code>Random.nextInt(n)</code> メソッドを使いたかったのでしょう。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_NEXTINT_VIA_NEXTDOUBLE">
+    <ShortDescription>整数の乱数を生成するためには nextDouble メソッド ではなく nextInt メソッドを使用する</ShortDescription>
+    <LongDescription>{1} は、整数の乱数を生成するために nextDouble メソッドを使用しています。nextInt メソッドを使用した方が効率的です。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>java.util.Random</code> のインスタンス <code>r</code> で、<code>0</code> から <code>n-1</code> の乱数を生成したいのであれば、<code>(int)(r.nextDouble() * n)</code> ではなく <code>r.nextInt(n)</code> を使用します。
+</p>
+<p>
+<code>nextInt</code> メソッドへの引数は整数でなければなりません。
+たとえば、-99から0までの乱数を生成したいなら、<code>-r.nextInt(100)</code> を使用してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE">
+    <ShortDescription>SQL の Statement の  execute メソッドに定数でない文字列を渡している</ShortDescription>
+    <LongDescription>{1} は、SQL の Statement の execute メソッドに定数でない文字列を渡しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、動的に生成されるように思われる文字列で、 SQL の <code>Statement</code> の <code>execute</code> メソッドを呼び出しています。
+その代わりに <code>PreparedStatement</code> を使うことを検討してください。
+効率的で、SQL インジェクション攻撃に強いです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING">
+    <ShortDescription>PreparedStatement が定数でない文字列から生成されている</ShortDescription>
+    <LongDescription>PreparedStatement が定数でない文字列から生成されています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、定数でない文字列から SQL の <code>PreparedStatement</code> を作成しています。
+ユーザからのチェックされていない、汚染されたデータがこの文字列を作る際に使われるなら、PreparedStatement で予想外で望ましくない何かをするために SQL インジェクションが使われる可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_USELESS_THREAD">
+    <ShortDescription>デフォルトの空の run メソッドを使用して作成されたスレッド</ShortDescription>
+    <LongDescription>{1} は、デフォルトの空の run メソッドを使用してスレッドを作成しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、スレッドを作成しているのに <code>Thread</code> クラスから派生した <code>run</code> メソッドも指定していないし、<code>Runnable</code> オブジェクトも渡していません。
+このスレッドは、時間の無駄です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DC_DOUBLECHECK">
+    <ShortDescription>フィールドのダブルチェックの可能性</ShortDescription>
+    <LongDescription>フィールド {2} のダブルチェックをしている可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはダブルチェックロッキングのインスタンスがあるかもしれません。
+このイディオムは、Java のメモリモデルでは正しくありません。<br>
+詳細は、<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html" >http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_FINALIZER_NULLS_FIELDS">
+    <ShortDescription>ファイナライザはフィールドを null にする</ShortDescription>
+    <LongDescription>{3} は、finalize メソッドの中で null を設定しています。{1.class}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このファイナライザは、フィールドを null にしています。
+これは通常誤りでガベージコレクタを助けません。オブジェクトはいずれにしろガベージされます。

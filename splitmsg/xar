@@ -1,0 +1,156 @@
+これらの呼び出しは原子的に実行されません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DM_DEFAULT_ENCODING">
+    <ShortDescription>デフォルトエンコーディングへの依存</ShortDescription>
+    <LongDescription>デフォルトエンコーディングへの依存を発見しました。{1}: {2}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+バイトから String (またはStringからバイト) への変換で、デフォルトプラットホームエンコーディングが適切であると仮定するメソッドの呼び出しを発見しました。
+これは、アプリケーションの振る舞いがプラットホーム間で異なる原因となります。代替 API を使用して、明示的に文字セット名または Charset オブジェクトを指定して下さい。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <!--
+  **********************************************************************
+  BugCodes
+  **********************************************************************
+  -->
+  <BugCode abbrev="FS">書式文字列の問題</BugCode>
+  <BugCode abbrev="SKIPPED">スキップした解析</BugCode>
+  <BugCode abbrev="IL">無限ループ</BugCode>
+  <BugCode abbrev="VO">volatile の使用</BugCode>
+  <BugCode abbrev="UI">安全ではない継承</BugCode>
+  <BugCode abbrev="FL">浮動小数点精度の使用</BugCode>
+  <BugCode abbrev="TEST">プロトタイプと未完成のバグパターンのテスト</BugCode>
+  <BugCode abbrev="IMSE">疑わしい IllegalMonitorStateException のキャッチ</BugCode>
+  <BugCode abbrev="CN">クローン可能イディオムの間違った実装</BugCode>
+  <BugCode abbrev="AT">原子性違反の可能性</BugCode>
+  <BugCode abbrev="FI">ファイナライザの間違った使用</BugCode>
+  <BugCode abbrev="ES">== や != を使用している文字列の等価性チェック</BugCode>
+  <BugCode abbrev="ML">更新されるフィールドで同期化 (可変ロック)</BugCode>
+  <BugCode abbrev="UG">同期化していない get メソッド、同期化している set メソッド</BugCode>
+  <BugCode abbrev="IO">入出力の問題</BugCode>
+  <BugCode abbrev="IC">初期化の循環</BugCode>
+  <BugCode abbrev="SI">疑わしいスタティックイニシャライザ−</BugCode>
+  <BugCode abbrev="MSF">可変サーブレットフィールド</BugCode>
+  <BugCode abbrev="IS">一貫性のない同期化</BugCode>
+  <BugCode abbrev="Eq">equals() の実装に関する問題</BugCode>
+  <BugCode abbrev="Co">compareTo() の実装に関する問題</BugCode>
+  <BugCode abbrev="HE">等価なオブジェクトは、等価なハッシュコードを持たなければならない</BugCode>
+  <BugCode abbrev="AM">APIの誤用</BugCode>
+  <BugCode abbrev="Dm">疑わしいメソッドの使用</BugCode>
+  <BugCode abbrev="Bx">疑わしいプリミティブ値のボクシング</BugCode>
+  <BugCode abbrev="UR">コンストラクタで未初期化フィールドの読み出し</BugCode>
+  <BugCode abbrev="RR">InputStream.read() の戻り値の無視</BugCode>
+  <BugCode abbrev="NN">裸の notify()</BugCode>
+  <BugCode abbrev="UW">無条件の wait()</BugCode>
+  <BugCode abbrev="SP">スピンロック</BugCode>
+  <BugCode abbrev="DC">フィールドのダブルチェックの可能性</BugCode>
+  <BugCode abbrev="Wa">ループの中にない wait()</BugCode>
+  <BugCode abbrev="No">notifyAll() ではなく notify() を使用している</BugCode>
+  <BugCode abbrev="DE">捨てられたか無視された例外</BugCode>
+  <BugCode abbrev="Ru">run() の呼び出し</BugCode>
+  <BugCode abbrev="It">イテレータの間違った定義</BugCode>
+  <BugCode abbrev="SnVI">Version ID のない直列化可能クラス</BugCode>
+  <BugCode abbrev="Se">直列化可能クラスの間違った定義</BugCode>
+  <BugCode abbrev="WS">writeObject() は同期化しているが、その他のメソッドは同期化していない</BugCode>
+  <BugCode abbrev="RS">readObject() を同期化している</BugCode>
+  <BugCode abbrev="SC">Thread.start() を呼び出すコンストラクタ</BugCode>
+  <BugCode abbrev="MS">可変 static フィールド</BugCode>
+  <BugCode abbrev="EI">内部表現を暴露するかもしれない配列を返すメソッド</BugCode>
+  <BugCode abbrev="Nm">紛らわしいメソッド名</BugCode>
+  <BugCode abbrev="SS">読み出されないフィールドは static にすべき</BugCode>
+  <BugCode abbrev="UuF">未使用フィールド</BugCode>
+  <BugCode abbrev="UrF">読み出されないフィールド</BugCode>
+  <BugCode abbrev="UwF">書き込まれないフィールド</BugCode>
+  <BugCode abbrev="SIC">static にできる内部クラス</BugCode>
+  <BugCode abbrev="TLW">2つのロックを保持する wait()</BugCode>
+  <BugCode abbrev="RV">メソッドからの戻り値の間違った使用</BugCode>
+  <BugCode abbrev="LG">Logger の問題</BugCode>
+  <BugCode abbrev="IA">あいまいな呼び出し</BugCode>
+  <BugCode abbrev="HSC">巨大な文字列定数</BugCode>
+  <BugCode abbrev="HRS">HRS 脆弱性</BugCode>
+  <BugCode abbrev="PT">パストラバーサル</BugCode>
+  <BugCode abbrev="XSS">XSS 脆弱性</BugCode>
+  <BugCode abbrev="NP">null値 の利用</BugCode>
+  <BugCode abbrev="NOISE">偽のランダム警告</BugCode>
+  <BugCode abbrev="RpC">条件テストの繰り返し</BugCode>
+  <BugCode abbrev="OS">すべての経路でクローズされないストリーム</BugCode>
+  <BugCode abbrev="PZLA">結果がないことを示すために null より長さ0の配列を選ぶ</BugCode>
+  <BugCode abbrev="UCF">役に立たない制御フロー</BugCode>
+  <BugCode abbrev="RCN">null への冗長な比較</BugCode>
+  <BugCode abbrev="UL">すべての経路で解除されないロック</BugCode>
+  <BugCode abbrev="RC">疑わしい参照等価性の使用</BugCode>
+  <BugCode abbrev="EC">互換性のない型による等価性比較</BugCode>
+  <BugCode abbrev="MWN">ミスマッチの wait() か notify()</BugCode>
+  <BugCode abbrev="SA">役に立たない自己演算</BugCode>
+  <BugCode abbrev="INT">疑わしい整数式</BugCode>
+  <BugCode abbrev="BIT">疑わしいビット演算式</BugCode>
+  <BugCode abbrev="LI">非同期化な遅延初期化</BugCode>
+  <BugCode abbrev="JLM">java.util.concurrent オブジェクトの同期化</BugCode>
+  <BugCode abbrev="UPM">決して呼び出されない private メソッド</BugCode>
+  <BugCode abbrev="UMAC">無名クラスの呼び出しできないメソッド</BugCode>
+  <BugCode abbrev="EI2">可変オブジェクトへの参照の格納</BugCode>
+  <BugCode abbrev="NS">疑わしい非短絡論理演算子の使用</BugCode>
+  <BugCode abbrev="ODR">すべての経路でクローズされないデータベースリソース</BugCode>
+  <BugCode abbrev="SBSC">ループの中で + 演算子を使用した文字列連結</BugCode>
+  <BugCode abbrev="ITA">効率が悪い collection.toArray(new Foo[0]) の使用</BugCode>
+  <BugCode abbrev="SW">Swing コーディング規約</BugCode>
+  <BugCode abbrev="IJU">誤って実装された JUnit TestCase</BugCode>
+  <BugCode abbrev="BOA">間違ってオーバーライドされた Adapter</BugCode>
+  <BugCode abbrev="SF">switch 文のフォールスルー</BugCode>
+  <BugCode abbrev="SIO">不必要な instanceof</BugCode>
+  <BugCode abbrev="BAC">間違ったアプレットのコンストラクタ</BugCode>
+  <BugCode abbrev="UOE">Object.equals() を使用する</BugCode>
+  <BugCode abbrev="STI">疑わしい Thread.interrupted()</BugCode>
+  <BugCode abbrev="DLS">ローカル変数への無効な代入</BugCode>
+  <BugCode abbrev="IP">無視されたパラメータ</BugCode>
+  <BugCode abbrev="MF">隠されたフィールド</BugCode>
+  <BugCode abbrev="WMI">効率が悪い Map イテレータ</BugCode>
+  <BugCode abbrev="ISC">インスタンス化された static クラス</BugCode>
+  <BugCode abbrev="REC">RuntimeException の捕捉</BugCode>
+  <BugCode abbrev="FE">浮動小数点の等価性テスト</BugCode>
+  <BugCode abbrev="UM">定数に関する不必要な Math</BugCode>
+  <BugCode abbrev="CD">循環依存関係</BugCode>
+  <BugCode abbrev="RI">冗長なインタフェース</BugCode>
+  <BugCode abbrev="MTIA">マルチスレッドでのインスタンスアクセス</BugCode>
+  <BugCode abbrev="PS">公開セマフォ</BugCode>
+  <BugCode abbrev="BSHIFT">間違ったシフト</BugCode>
+  <BugCode abbrev="ICAST">整数値からのキャスト</BugCode>
+  <BugCode abbrev="RE">正規表現</BugCode>
+  <BugCode abbrev="SQL">潜在的 SQL 問題</BugCode>
+  <BugCode abbrev="WL">間違ったオブジェクトでロックしている可能性がある</BugCode>
+  <BugCode abbrev="ESync">空の synchronized ブロック</BugCode>
+  <BugCode abbrev="QF">疑わしい for ループ</BugCode>
+  <BugCode abbrev="VA">可変長引数の問題</BugCode>
+  <BugCode abbrev="BC">オブジェクト参照の間違ったキャスト</BugCode>
+  <BugCode abbrev="IM">疑わしい整数計算</BugCode>
+  <BugCode abbrev="ST">static フィールドの誤用</BugCode>
+  <BugCode abbrev="JCIP">net.jcip アノテーションの違反</BugCode>
+  <BugCode abbrev="USELESS_STRING">役に立たない/無益な文字列生成</BugCode>
+  <BugCode abbrev="DMI">疑わしいメソッド呼び出し</BugCode>
+  <BugCode abbrev="PZ">Joshua Bloch と Neal Gafter による『Java Puzzlers』に影響を受けた警告</BugCode>
+  <BugCode abbrev="SWL">ロックを保持する sleep</BugCode>
+  <BugCode abbrev="J2EE">Java EE のエラー</BugCode>
+  <BugCode abbrev="DB">複製された分岐</BugCode>
+  <BugCode abbrev="IMA">効率が悪いメンバーアクセス</BugCode>
+  <BugCode abbrev="XFB">XML ファクトリの迂回</BugCode>
+  <BugCode abbrev="USM">役に立たないサブクラスメソッド</BugCode>
+  <BugCode abbrev="CI">紛らわしい継承</BugCode>
+  <BugCode abbrev="QBA">疑わしい Boolean 代入</BugCode>
+  <BugCode abbrev="VR">バージョン互換性の問題</BugCode>
+  <BugCode abbrev="DP">doPrivileged の使用</BugCode>
+  <BugCode abbrev="GC">疑わしい総称型コレクションメソッドの呼び出し</BugCode>
+  <BugCode abbrev="STCAL">Calendar、DateFormat の static 使用</BugCode>
+  <BugCode abbrev="TQ">型修飾子アノテーションの一貫性のない使用</BugCode>
+  <BugCode abbrev="OBL">ストリームまたはリソースをクリーンアップする責務が満たされていない</BugCode>
+  <BugCode abbrev="FB">FindBugs はメソッドで期待された警告を出しませんでした</BugCode>
+  <BugCode abbrev="DL">共有オブジェクトを意図的でなくロックすることによる潜在的デッドロック</BugCode>
+</MessageCollection>

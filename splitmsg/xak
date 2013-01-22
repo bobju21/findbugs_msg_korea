@@ -1,0 +1,500 @@
+    <ShortDescription>書き込まれていないフィールドの読み出し</ShortDescription>
+    <LongDescription>書き込まれていないフィールド {2.name} を読み出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+プログラムは、決して null でない値を書き込むとは思われないフィールドの値を利用しています。
+この値を利用すると NullPointerException が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">
+    <ShortDescription>書き込まれていない public または protected フィールドの読み出し</ShortDescription>
+    <LongDescription>書き込まれていない public または protected フィールド  {2.name} を読み出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+プログラムは、決して null 値でない値を書き込むと思われない public または protected フィールドの null 値を利用しています。
+フィールドが解析によって見られない機構を通して初期化されない限り、この値を利用すると NullPointerException が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SIC_THREADLOCAL_DEADLY_EMBRACE">
+    <ShortDescription>非 static 内部クラスとスレッドローカルのデッドロック</ShortDescription>
+    <LongDescription>{0} は、{1} とのデッドロックを回避するために static にする必要があります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは内部クラスですが、おそらく static 内部クラスにすべきです。
+実際には内部クラスと外部クラスのスレッドローカルとの間にデッドロックの深刻な危険性があります。
+内部クラスが static でないので、外部クラスへの参照を保持します。
+スレッドローカルに内部クラスのインスタンスの参照があるなら、内部と外部のインスタンスの両方が到達可能になり、ガベージされません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SIC_INNER_SHOULD_BE_STATIC">
+    <ShortDescription>static 内部クラスにすべき</ShortDescription>
+    <LongDescription>{0} は、static 内部クラスにすべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは内部クラスなのにそれを作成したオブジェクトへの埋め込まれた参照を使用していません。
+この参照はより大きなクラスのインスタンスを作成して、必要以上に長い間作成オブジェクトへの参照を存続しておくかもしれません。
+できれば、クラスは static にすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR">
+    <ShortDescription>コンストラクタで初期化されていないフィールドを null チェックなしで null 値を利用している</ShortDescription>
+    <LongDescription>{1.givenClass} は、コンストラクタで初期化されません。{2} で null 値を利用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは、どんなコンストラクタの中でも決して初期化されません。したがって、オブジェクトが構築された後、null である可能性があります。
+どこかほかで、値がロードされて、null チェックなしで null 値が利用されます。
+フィールドが初期化される前に利用されると NullPointerException が発生するので、誤りか疑わしい設計かもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SIC_INNER_SHOULD_BE_STATIC_ANON">
+    <ShortDescription>名前付き static 内部クラスにリファクタリングできるかもしれない</ShortDescription>
+    <LongDescription>クラス {0} は、名前付き static 内部クラスにリファクタリングできるかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは内部クラスなのにそれを作成したオブジェクトへの埋め込まれた参照を使用していません。
+この参照はより大きなクラスのインスタンスを作成して、必要以上に長く作成オブジェクトへの参照を存続しておくかもしれません。
+できれば、クラスは static 内部クラスにすべきです。
+無名内部クラスは static にできないので、名前付き内部クラスにリファクタリングする必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS">
+    <ShortDescription>static 内部クラスにリファクタリングできるかもしれない</ShortDescription>
+    <LongDescription>クラス {0} は、static 内部クラスにリファクタリングできるかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは内部クラスなのにそれを作成したオブジェクトへの埋め込まれた参照を使用していません。
+この参照はより大きなクラスのインスタンスを作成して、必要以上に長く作成オブジェクトへの参照を存続しておくかもしれません。
+できれば、クラスは static 内部クラスにすべきです。
+外部オブジェクトへの参照が内部クラスのインスタンスを構築する間必要なので内部クラスのコンストラクタに外部インスタンスへの参照を渡すようにリファクタリングする必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="WA_NOT_IN_LOOP">
+    <ShortDescription>wait メソッドがループの中にない</ShortDescription>
+    <LongDescription>wait メソッドがループの中にありません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ループの中にない <code>java.lang.Object.wait()</code> を呼び出しています。
+モニタが複数の条件のために使われるなら、呼び出し元が待機するつもりだった条件は実際には発生しないかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="WA_AWAIT_NOT_IN_LOOP">
+    <ShortDescription>Condition.await() がループの中にない</ShortDescription>
+    <LongDescription>Condition.await() がループの中にありません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ループの中にない <code>java.util.concurrent.await()</code> (またはそのバリエーション) を呼び出しています。
+オブジェクトが複数の条件のために使われるなら、呼び出し元が待機するつもりだった条件は実際には発生しないかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NO_NOTIFY_NOT_NOTIFYALL">
+    <ShortDescription>notifyAll メソッドではなく notify メソッドを使用している</ShortDescription>
+    <LongDescription>notifyAll メソッドではなく notify メソッドを使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<code>notifyAll</code> メソッドではなく <code>notify</code> メソッドを呼び出しています。
+モニタが複数の条件のために多くの場合使われます。
+<code>notify</code> メソッドの呼び出しは1つのスレッドを起こすだけで、起こされたスレッドは呼び出し元が満たした待機条件の1つではないかもしれないことを意味しています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_CHECK_FOR_POSITIVE_INDEXOF">
+    <ShortDescription>String.indexOf の結果が正かどうか確かめている</ShortDescription>
+    <LongDescription>String.indexOf の結果が正かどうか確かめています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは <code>String.indexOf</code> を呼び出して結果が正かどうか確かめています。
+結果が負かどうか確かめる方がずっと典型的です。チェックされる部分文字列が先頭以外の場所で出現するときだけ正になります。
+
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_DONT_JUST_NULL_CHECK_READLINE">
+    <ShortDescription>readLine メソッドの結果を null でないのか確かめた後で捨てている</ShortDescription>
+    <LongDescription>{1} は、readLine メソッドの結果を null でないのか確かめた後で捨てています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>readLine</code> メソッドの戻り値を null でないのか確かめた後で捨てています。
+ほとんどすべての状況で、結果が null でないなら戻り値を使用したいでしょう。
+再び <code>readLine</code> メソッドを呼び出すと異なる行が得られます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_RETURN_VALUE_IGNORED_INFERRED">
+    <ShortDescription>メソッドは戻り値を無視しています、これは間違いではないですか?</ShortDescription>
+    <LongDescription>{2.givenClass} の戻り値を無視しています、これは間違いではないですか? {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、メソッドを呼び出して、戻り値を無視しています。
+戻り値は、メソッドが呼び出される型と同じ型です。そして、我々の解析から戻り値が重要であるかもしれないように見えます （たとえば、<code>String.toLowerCase()</code>　の戻り値を無視するような）。 
+</p>
+<p>
+我々は、戻り値を無視することがメソッド本体の単純な解析から悪い考えかもしれないと推測しています。
+このメソッドの戻り値を無視することが重要であるか許容できるかどうかに関して、FindBugs に指示する @CheckReturnValue アノテーションが使えます。
+</p>
+<p>
+戻り値を無視することが間違いではないか決めるために、厳密に調査してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_RETURN_VALUE_IGNORED">
+    <ShortDescription>戻り値を無視しているメソッド</ShortDescription>
+    <LongDescription>{2.givenClass} の戻り値を無視しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドの戻り値はチェックするべきです。
+この警告の共通の原因は、オブジェクトが更新されると思って不変オブジェクトのメソッドを呼び出すことです。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+String dateString = getHeaderField(name);
+dateString.trim();
+</pre></blockquote>
+<p>
+プログラマは、<code>trim</code> メソッドが <code>dateString</code> によって参照される String オブジェクトが更新されると思っています。
+しかし、String オブジェクトは不変で、<code>trim</code> メソッドが新しい String オブジェクトを返すのに無視しています。
+このコードは、以下のように修正するべきです。
+</p>
+<blockquote><pre>
+String dateString = getHeaderField(name);
+dateString = dateString.trim();
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">
+    <ShortDescription>例外的戻り値を無視しているメソッド</ShortDescription>
+    <LongDescription>{2} の例外的戻り値を無視しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、チェックされていない値を返しています。
+戻り値は異常か予想外の実行結果を示す可能性があるのでチェックするべきです。
+たとえば、<code>File.delete()</code> はファイルをうまく削除できなかったなら、例外をスローするのではなく false を返します。
+結果をチェックしないなら例外的戻り値を返すメソッドの呼び出しで予想外の振る舞いの合図に気づきません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_CHECK_COMPARETO_FOR_SPECIFIC_RETURN_VALUE">
+    <ShortDescription>compareTo によって返された特定の値のコードチェック</ShortDescription>
+    <LongDescription>{2.givenClass} の戻り値が {3} と等しいか確かめてください。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、compareTo または compare メソッドを呼び出して、戻り値が特定の値（たとえば1または-1） なのか確かめています。
+これらのメソッドを呼び出すときは特定のゼロ以外の値ではなく、結果の符号だけをチェックするべきです。
+多数または大部分の compareTo と比較メソッドは-1、0または1を返しますが、いくつかは他の値を返します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="RV_EXCEPTION_NOT_THROWN">
+    <ShortDescription>作成した例外をスローするのではなく捨てている</ShortDescription>
+    <LongDescription>{2.givenClass} をスローしていません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、例外 (またはエラー) オブジェクトを作成しているのに何もしていません。<br>
+たとえば、以下のようなコードです。
+</p>
+<blockquote><pre>
+if (x &lt; 0) {
+    new IllegalArgumentException("x must be nonnegative");
+}
+</pre></blockquote>
+<p>
+おそらくプログラマの意図は、作成した例外をスローすることでした。 
+</p>
+<blockquote><pre>
+if (x &lt; 0) {
+    throw new IllegalArgumentException("x must be nonnegative");
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  
+
+  <BugPattern type="NP_ALWAYS_NULL">
+    <ShortDescription>null 値を利用している</ShortDescription>
+    <LongDescription>{2.givenClass} の null 値を利用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ここで null 値を利用しようとしています。
+コードが実行されると NullPointerException が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_CLOSING_NULL">
+    <ShortDescription>常に null 値のオブジェクトで close メソッドを呼び出している</ShortDescription>
+    <LongDescription>常に null なので {2.givenClass} をクローズできません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>close</code> メソッドは、常に null 値のオブジェクトで呼び出されています。
+この文が実行されるなら NullPointerException が発生します。
+ここでクローズするべき何かを決してクローズしないという大きな危険性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_STORE_INTO_NONNULL_FIELD">
+    <ShortDescription>@NonNull でアノテートされたフィールドに null を格納している</ShortDescription>
+    <LongDescription>@NonNull でアノテートされたフィールド {2.givenClass} に null を格納しています。{1}</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+@NonNull でアノテートされたフィールドに null かもしれない値を格納しています。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_ALWAYS_NULL_EXCEPTION">
+    <ShortDescription>null 値を例外経路で利用している</ShortDescription>
+    <LongDescription>{2.givenClass} の null 値を例外経路で利用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+例外経路上のここで null 値を利用しています。
+コードが実行されると NullPointerException が発生します。
+現在の FindBugs は実行不可能な例外経路を取り除いていないので、誤検出かもしれないことに注意してください。
+</p>
+<p>
+switch 文の default が多くの場合実行不可能なので FindBugs が例外経路である default を検討することに注意して下さい。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE">
+    <ShortDescription>パラメータは  非 null でなければならないが null 可能としてアノテートされている</ShortDescription>
+    <LongDescription>{2} は、非 null でなければならないが、null 可能としてアノテートされています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このパラメータは、常に 非 null にすることを要求する方法で使われますが、パラメータには明示的に null 可能としてアノテートされています。
+パラメータかアノテーションのどちらかの使い方が間違っています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="NP_NULL_ON_SOME_PATH">
+    <ShortDescription>null 値を利用している可能性がある</ShortDescription>
+    <LongDescription>{2.givenClass} の null 値を利用している可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+そこで分岐または文が実行されるなら null 値が利用されて NullPointerException が発生します。
+もちろん、問題は分岐または文が実行不可能で、NullPointerException が決して発生する可能性がないということかもしれません。
+それを決めるのは FindBugs の能力を超えています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_ON_SOME_PATH_MIGHT_BE_INFEASIBLE">
+    <ShortDescription>null 値を実行不可能かもしれない分岐で利用している可能性がある</ShortDescription>
+    <LongDescription>{2.givenClass} の null 値を実行不可能かもしれない分岐で利用している可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+分岐または文が実行されるなら、null 値が利用されて NullPointerException が発生します。
+もちろん、問題は分岐または文が実行不可能で、NullPointerException が決して発生する可能性がないということかもしれません。
+それを決めるのは FindBugs の能力を超えています。
+この値がすでに null であることを検査したという事実からこれは確かな可能性です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_ON_SOME_PATH_EXCEPTION">
+    <ShortDescription>null 値を例外経路で利用している可能性がある</ShortDescription>
+    <LongDescription>{2.givenClass} の null 値を例外経路で利用している可能性があります。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+例外経路上のここで null 値が利用されています。
+コードが実行されると NullPointerException が発生するかもしれません。
+現在の FindBugs は実行不可能な例外経路を取り除かないので、誤検出かもしれないことに注意してください。
+</p>
+<p>
+switch 文の default が多くの場合実行不可能なので FindBugs が例外経路である default を検討することに注意して下さい。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE">
+    <ShortDescription>null になっている可能性があるメソッドの戻り値を利用している</ShortDescription>
+    <LongDescription>null になっている可能性があるメソッドの戻り値を利用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+メソッドからの戻り値を null チェックしないで利用しています。メソッドの戻り値は null なのかチェックするべきです。
+コードが実行されると NullPointerException が発生するかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_PARAM_DEREF_NONVIRTUAL">
+    <ShortDescription>非 null パラメータに null を渡している非仮想メソッドの呼び出し</ShortDescription>
+    <LongDescription>非仮想メソッド {2.givenClass} の 非 null パラメータに null を渡して呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+null の可能性がある値が、非 null メソッドパラメータに渡されています。
+パラメータは、常に非 null とすべきパラメータとしてアノテートされていたか、または解析が常に null 値を利用すると示していました。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS">
+    <ShortDescription>メソッド呼び出しは非 null パラメータに対して null を渡している</ShortDescription>
+    <LongDescription>{2.givenClass} の 非 null パラメータに対して null を渡しています。{1}</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+おそらく、すべての知られているターゲットメソッドが非 null であることを要求する呼び出し場所で null 値を渡しています。
+パラメータは、常に非 null とすべきパラメータとしてアノテートされていたか、または解析が常に null 値を利用すると示していました。
+</p>
+      ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NULL_PARAM_DEREF">
+    <ShortDescription>メソッド呼び出しは非 null パラメータに対して null を渡している</ShortDescription>
+    <LongDescription>{2.givenClass} の 非 null パラメータに対して null を渡しています。{1}</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+このメソッド呼び出しは非 null メソッドパラメータに対して null 値を渡しています。
+パラメータは、常に非 null とすべきパラメータとしてアノテートされていたか、または解析が常に null 値を利用すると示していました。
+</p>
+      ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NONNULL_PARAM_VIOLATION">
+    <ShortDescription>メソッド呼び出しは非 null パラメータに対して null を渡している</ShortDescription>
+    <LongDescription>{2.givenClass} の 非 null パラメータに対して null を渡しています。{1}</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+このメソッドは、非 null でなければならないメソッドのパラメータとして、null 値を渡しています。
+このパラメータは、@Nonnull として明示的にアノテートされていたか、または解析が常に null 値を利用すると示していました。
+</p>
+      ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_NONNULL_RETURN_VIOLATION">
+    <ShortDescription>null を返すかもしれないメソッドが @NonNull 宣言されている</ShortDescription>
+    <LongDescription>{1} は、null を返すかもしれないのに @NonNull 宣言されています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、null 値を返すかもしれないのにメソッド (またはスーパークラスのメソッド) の戻り値に @NonNull が宣言されています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_CLONE_COULD_RETURN_NULL">
+    <ShortDescription>null を返すかもしれない clone メソッド</ShortDescription>
+    <LongDescription>{1} は、null を返すかもしれません。</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+この <code>clone</code> メソッドはいくつかの条件で null を返すと思われます。
+しかし、<code>clone</code> メソッドは決して null を返すのは許されません。
+この経路が到達できないことを確信しているなら、その代わりに <code>AssertionError</code> をスローしてください。
+</p>
+      ]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="NP_TOSTRING_COULD_RETURN_NULL">
+    <ShortDescription>null を返すかもしれない toString メソッド</ShortDescription>
+    <LongDescription>{1} は、null を返すかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この <code>toString</code> メソッドはいくつかの条件で null を返すと思われます。
+仕様を寛大に読むとこれが許されると解釈できるかもしれませんが、それはおそらく間違った考えで、他のコードが壊れる原因になる可能性があります。
+null ではなく空の文字列またはいくつかの他の適切な文字列を返してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_GUARANTEED_DEREF">
+    <ShortDescription>null 値を利用することが保証されている</ShortDescription>
+    <LongDescription>{2.givenClass} は、null 値を利用することが保証されています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+文または分岐が実行されるなら、この時点で値は null であり、null 値を利用する (フォワードパスで実行時例外を伴うこと以外は) ことが保証されています。
+</p>
+<p>
+なお、<code>if (x == null) throw new NullPointerException();</code> は <code>x</code> の参照解除として扱われることに注意して下さい。
+</p>

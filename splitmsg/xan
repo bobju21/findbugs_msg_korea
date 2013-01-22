@@ -1,0 +1,500 @@
+<![CDATA[
+<p>
+このメソッドは、データベースリソース (たとえば、データベースコネクションや行セット) を作成しているのにどんなフィールドにも代入していないし、他のメソッドにも渡していないし、戻り値にもしていません。
+そして、メソッドからのすべての経路でオブジェクトをクローズするように見えません。
+メソッドからのすべての経路でデータベースリソースのクローズ失敗は良くない性能になるかもしれません。
+データベースとの通信で問題があるアプリケーションの原因になる可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ODR_OPEN_DATABASE_RESOURCE_EXCEPTION_PATH">
+    <ShortDescription>例外経路でデータベースリソースのクローズに失敗するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、例外経路でデータベースリソースのクローズに失敗するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、データベースリソース (たとえば、データベースコネクションや行セット) を作成しているのにどんなフィールドにも代入していないし、他のメソッドにも渡していないし、戻り値にもしていません。
+そして、メソッドからのすべての例外経路でオブジェクトをクローズするように見えません。
+メソッドからのすべての経路でデータベースリソースのクローズ失敗は良くない性能になるかもしれません。
+データベースとの通信で問題があるアプリケーションの原因になる可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SBSC_USE_STRINGBUFFER_CONCATENATION">
+    <ShortDescription>ループの中で + を使用して文字列を連結しているメソッド</ShortDescription>
+    <LongDescription>{1} は、ループの中で + を使用して文字列を連結しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ループの中で + を使用して <code>String</code> を構築していると思われます。
+各々の繰り返しにおいて、<code>String</code> は <code>StringBuffer</code>/<code>StringBuilder</code> に変換、追加され、<code>String</code> へ変換されます。
+各々の繰り返しで文字列が再コピーされ増大すると、繰り返しの数で二次コストの原因になる可能性があります。
+</p>
+<p>
+明示的に、<code>StringBuffer</code> (または J2SE 5.0の <code>StringBuilder</code>) を使うことで、より良い性能を得られるかもしれません。
+</p>
+<p>
+たとえば、
+</p>
+<blockquote><pre>
+// This is bad
+String s = "";
+for (int i = 0; i &lt; field.length; ++i) {
+    s = s + field[i];
+}
+
+// This is better
+StringBuffer buf = new StringBuffer();
+for (int i = 0; i &lt; field.length; ++i) {
+    buf.append(field[i]);
+}
+String s = buf.toString();
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ITA_INEFFICIENT_TO_ARRAY">
+    <ShortDescription>長さが0の配列の引数で toArray メソッドを使用しているメソッド</ShortDescription>
+    <LongDescription>{1} は、長さが0の配列の引数で Collection.toArray() を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、Collection 派生クラスの </code>toArray</code> メソッドを使用して長さが0の配列の引数を渡しています。
+<code>myCollection.toArray(new Foo[myCollection.size()])</code> を使用する方がより効率的です。
+渡される配列がコレクションの要素のすべてを格納できるくらいの大きさなら、データが読み込まれて、そのまま返されます。
+これは、結果として返す2番目の配列 (リフレクションによって) を作成する必要を回避します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD">
+    <ShortDescription>run メソッドでの JUnit アサーションは JUnit によって通知されない</ShortDescription>
+    <LongDescription>{1} での JUnit アサーションは JUnit によって通知されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>run</code> メソッドで JUnit アサーションが実行されています。失敗した JUnit アサーションは例外をスローします。
+したがって、この例外がテストメソッドを実行したスレッド以外のスレッドで発生するなら、例外はスレッドを終了させますが、テストの失敗になりません。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="IJU_SETUP_NO_SUPER">
+    <ShortDescription>TestCase は super.setup() を呼び出さない setUp メソッドを実装している</ShortDescription>
+    <LongDescription>TestCase {0} は、super.setup() を呼び出さない setUp メソッドを定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JUnit の TestCase クラスで、<code>setUp</code> メソッドを実装しています。
+<code>setUp</code> メソッドは、<code>super.setUp()</code> を呼び出すべきなのにそうしていません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IJU_TEARDOWN_NO_SUPER">
+    <ShortDescription>TestCase は super.tearDown() を呼び出さない tearDown メソッドを実装している </ShortDescription>
+    <LongDescription>TestCase {0} は、super.tearDown() を呼び出さない tearDown メソッドを実装しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JUnit の TestCase クラスで、<code>tearDown</code> メソッドを実装しています。
+<code>tearDown</code> メソッドは、<code>super.tearDown()</code> を呼び出すべきなのにそうしていません。
+ </p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IJU_SUITE_NOT_STATIC">
+    <ShortDescription>TestCase は 非 static な suite メソッドを実装している</ShortDescription>
+    <LongDescription>TestCase {0} は、非 static な suite メソッドを実装しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JUnit の TestCase クラスで、<code>suite</code> メソッドを実装しています。
+<code>suite</code> メソッドは static として宣言するべきなのにそうしていません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IJU_BAD_SUITE_METHOD">
+    <ShortDescription>TestCase は suite メソッドの間違った宣言をしている</ShortDescription>
+    <LongDescription>TestCase {0} は、suite メソッドの間違った宣言をしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JUnit の TestCase クラスで、<code>suite</code> メソッドを実装しています。
+しかしながら、<code>suite</code> メソッドは
+</p>
+<pre>public static junit.framework.Test suite()</pre>
+<p>か</p>
+<pre>public static junit.framework.TestSuite suite()</pre>
+<p>
+のどちらかを宣言する必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IJU_NO_TESTS">
+    <ShortDescription>TestCase はテストがない </ShortDescription>
+    <LongDescription>TestCase {0} は、テストがありません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+JUnit の TestCase クラスで、どんなテストメソッドも実装していません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="BOA_BADLY_OVERRIDDEN_ADAPTER">
+    <ShortDescription>スーパークラスの Adapter で実装されるメソッドを誤ってオーバーライドしているクラス</ShortDescription>
+    <LongDescription>クラス {0} は、スーパークラス の Adapter で実装されるメソッド {1} を誤ってオーバーライドしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、スーパークラスで実装されているメソッドをオーバーライドしています。
+スーパークラスは、java.awt.event や javax.swing.event パッケージで定義されているリスナを実装する Adapter です。
+その結果、イベントが発生するときこのメソッドは呼び出されません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BRSA_BAD_RESULTSET_ACCESS" deprecated="true">  <!-- deprecated in favor of SQL_BAD_RESULTSET_ACCESS -->
+    <ShortDescription>Method attempts to access a result set field with index 0</ShortDescription>
+    <LongDescription>{1} attempts to access a result set field with index 0</LongDescription>
+    <Details>
+<![CDATA[
+<p> A call to getXXX or updateXXX methods of a result set was made where the
+field index is 0. As ResultSet fields start at index 1, this is always a mistake.</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SQL_BAD_RESULTSET_ACCESS">
+    <ShortDescription>インデックスが0で ResultSet にアクセスしようとしているメソッド</ShortDescription>
+    <LongDescription>{1} は、インデックスが0で ResultSet にアクセスしようとしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+インデックスが0で、<code>ResultSet</code> の getXXX、updateXXX メソッドを呼び出しています。
+<code>ResultSet</code> のインデックスは1から開始するので、これは常に間違いです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SQL_BAD_PREPARED_STATEMENT_ACCESS">
+    <ShortDescription>インデックスが0で PreparedStatement にアクセスしようとしているメソッド</ShortDescription>
+    <LongDescription>{1} は、インデックスが0で PreparedStatement にアクセスしようとしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+インデックスが0で、<code>PreparedStatement</code> の setXXX メソッドを呼び出しています。
+インデックスは1から開始するので、これは常に間違いです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SIO_SUPERFLUOUS_INSTANCEOF">
+    <ShortDescription>instanceof 演算子を使用した不必要な型チェック</ShortDescription>
+    <LongDescription>{1} は、静的に確定している可能性があるのに instanceof 演算子を使用して不必要な型チェックをしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+オブジェクトが要求する型であるかどうかにかかわらず、静的に確定している可能性があるのに instanceof 演算子を使用して型チェックをしています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BAC_BAD_APPLET_CONSTRUCTOR">
+    <ShortDescription>初期化されていない AppletStub に依存する間違ったアプレットコンストラクタ</ShortDescription>
+    <LongDescription>間違ったアプレットコンストラクタは、初期化されていない AppletStub に依存しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコンストラクタは、AppletStub に依存する親アプレットでメソッドを呼び出しています。
+このアプレットの <code>init</code> メソッドが呼び出されるまで AppletStub は初期化されないので、これらのメソッドは正しく機能しません。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_ARRAY_AND_NONARRAY">
+    <ShortDescription>equals メソッドを使用して配列と非配列を比較している</ShortDescription>
+    <LongDescription>{3.simpleClass}.equals({2.simpleClass}) を呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、配列と配列であると思われない参照を比較するために <code>.equals(Object o)</code> を呼び出しています。
+比較されているものが違う型なら、等しくないことが保証されているので、比較はほぼ間違いなく誤りです。
+たとえそれらが両方とも配列であるとしても、配列の <code>equals</code> メソッドは2つの配列が同じオブジェクトであると決定するだけです。
+配列のコンテンツを比較するためには <code>java.util.Arrays.equals(Object[], Object[])</code> を使用してください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EC_BAD_ARRAY_COMPARE">
+    <ShortDescription>配列の equals メソッド呼び出しは == と等価である</ShortDescription>
+    <LongDescription>{2.simpleClass} を比較するために .equals を使用していますが、== と等価です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、配列で <code>.equals(Object o)</code> を呼び出しています。
+配列は、<code>Object</code> の <code>equals</code> メソッドをオーバーライドしないので、配列で <code>equals</code> メソッドを呼び出すことはアドレスを比較することと同じです。
+配列のコンテンツを比較するためには <code>java.util.Arrays.equals(Object[], Object[])</code> を使用してください。
+配列のアドレスを比較するために、明示的に、<code>==</code> を使用して参照等価性をチェックすることは、それほど紛らわしくないでしょう。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EC_INCOMPATIBLE_ARRAY_COMPARE">
+    <ShortDescription>equals(...) メソッドを使用して互換性のない配列を比較している</ShortDescription>
+    <LongDescription>{2.simpleClass} と {3.simpleClass} を比較するために equals メソッドを使用しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、互換性のない型の配列を比較するために <code>.equals(Object o)</code> を呼び出しています (たとえば、<code>String[]</code> と <code>StringBuffer[]</code>、<code>String[]</code> と <code>int[]</code>) 。
+それらは、決して等価ではありません。
+さらに、<code>equals(...)</code> が配列を比較するのに使用されるとき、それらが同じ配列であるかどうか確かめるだけで、配列のコンテンツは無視します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="STI_INTERRUPTED_ON_CURRENTTHREAD">
+    <ShortDescription>interrupted メソッドを呼び出すために不要な currentThread メソッドを呼び出している</ShortDescription>
+    <LongDescription>{1} は、interrupted メソッドを呼び出すために不要な currentThread メソッドを呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<code>interrupted</code> メソッドを呼び出すために <code>Thread.currentThread()</code> を呼び出しています。
+<code>interrupted</code> メソッドは、static メソッドです。<code>Thread.interrupted()</code> を使用する方が単純明解です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="STI_INTERRUPTED_ON_UNKNOWNTHREAD">
+    <ShortDescription>スレッドインスタンスで static Thread.interrupted() を呼び出している</ShortDescription>
+    <LongDescription>{1}は、スレッドインスタンスで static Thread.interrupted() を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、カレントスレッドでない Thread オブジェクトであるように見える Thread オブジェクトで <code>Thread.interrupted()</code> を呼び出しています。
+<code>interrupted</code> メソッドは static で、作成者が意図したこととは異なるオブジェクトで呼び出されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IP_PARAMETER_IS_DEAD_BUT_OVERWRITTEN">
+    <ShortDescription>メソッドで読み取られずに上書きされているパラメータ</ShortDescription>
+    <LongDescription>{1} へのパラメータ {2} は、読み取られずに上書きされています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このパラメータの初期値は無視され、ここで上書きされています。
+これは多くの場合、パラメータへの書き込みが呼び出し元に戻されるという誤った考えを示しています。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DLS_DEAD_LOCAL_STORE_SHADOWS_FIELD">
+    <ShortDescription>フィールドを遮るローカル変数への無効な代入</ShortDescription>
+    <LongDescription>同じ名前のフィールではなく、{2} への無効な代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この命令は、ローカル変数に値を代入しているのに値は読み出されないか以降の命令でも使われません。
+多くの場合、計算された値が決して使われないので、これは誤りを示します。
+フィールドがローカル変数と同じ名前です。そうではなく、フィールドに代入するつもりでしたか？
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DLS_DEAD_LOCAL_STORE">
+    <ShortDescription>ローカル変数への無効な代入</ShortDescription>
+    <LongDescription>{2} への無効な代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この命令はローカル変数に値を代入しているのに値は読み出されないか以降の命令でも使われません。
+多くの場合、計算された値が決して使われないので、これは誤りを示します。
+</p>
+<p>
+Sun のjavac コンパイラが final なローカル変数のためにしばしば無効な格納を生成することに注意してください。
+FindBugs は、バイトコードベースのツールなので誤検出をなくす簡単な方法がありません。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DLS_DEAD_LOCAL_STORE_IN_RETURN">
+    <ShortDescription>return 文に役に立たない代入がある</ShortDescription>
+    <LongDescription>{1} からの return 文に役に立たない代入があります。</LongDescription>
+    <Details>
+      <![CDATA[
+<p>
+この文は、return 文でローカル変数に代入をしています。この代入は効果がありません。
+この文が正しいことを確かめてください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DLS_DEAD_STORE_OF_CLASS_LITERAL">
+    <ShortDescription>クラスリテラルの無効な代入</ShortDescription>
+    <LongDescription>{3}.class の無効な代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この命令は変数にクラスリテラルを代入しているのに決して使われません。<br>
+<a href="//java.sun.com/j2se/1.5.0/compatibility.html#literal">The behavior of this differs in Java 1.4 and in Java 5</a><br>
+J2SE 1.4 およびそれ以前のバージョンでは、<code>Foo.class</code> への参照は <code>Foo</code> のためのスタティックイニシャライザがすでに実行されていないなら実行することを強制します。
+J2SE 5.0ではそうしません。
+</p>
+<p>
+より多くの詳細と例と J2SE 5.0のクラスの強制的な初期化の方法の提案は Sun の<a href="//java.sun.com/j2se/1.5.0/compatibility.html#literal">article on Java SE compatibility</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DLS_DEAD_LOCAL_STORE_OF_NULL">
+    <ShortDescription>ローカル変数への無効な null 代入</ShortDescription>
+    <LongDescription>{2} への無効な null 代入です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードはローカル変数に null を代入しているのに代入された値は読み出されていません。
+この代入はガベージコレクタを手伝うために導入されたのかもしれませんが、Java SE 6ではもはや必要とされないか有用ではありません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MF_METHOD_MASKS_FIELD">
+    <ShortDescription>フィールドを隠す変数を定義しているメソッド</ShortDescription>
+    <LongDescription>{1} は、フィールド {2.givenClass} を隠す変数を定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、このクラスまたはスーパークラスのフィールドと同じ名前でローカル変数を定義しています。
+これはフィールドから初期化されていない値を読み出したり、初期化されていないフィールドをそのままにしておくメソッドの原因になるかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MF_CLASS_MASKS_FIELD">
+    <ShortDescription>スーパークラスのフィールドを隠すフィールドを定義しているクラス</ShortDescription>
+    <LongDescription>フィールド {1.givenClass} は、スーパークラス {2.class} のフィールドを隠しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、スーパークラスの可視インスタンスフィールドと同じ名前でフィールドを定義しています。
+これは紛らわしくて、メソッドがフィールドを更新するかアクセスするなら、間違いを指摘するかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="WMI_WRONG_MAP_ITERATOR">
+    <ShortDescription>entrySet イテレータではなく効率が悪い keySet イテレータを使用している</ShortDescription>
+    <LongDescription>{1} は、entrySet イテレータではなく効率が悪い keySet イテレータを使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、keySet イテレータから取り出されたキーを使用して、マップエントリの値にアクセスしています。
+Map の entrySet イテレータを使用した方が <code>Map.get(key)</code> ルックアップを回避するのでより効率的です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ISC_INSTANTIATE_STATIC_CLASS">
+    <ShortDescription>static メソッドだけを提供するクラスの不必要なインスタンス化</ShortDescription>
+    <LongDescription>{1} は、static メソッドだけを提供するクラスを不必要にインスタンス化しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、static メソッドだけを提供するクラスのオブジェクトを作成しています。
+このオブジェクトは作成する必要はありません。修飾子として直接クラス名を使用する static メソッドにアクセスしてください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="REC_CATCH_EXCEPTION">
+    <ShortDescription>例外がスローされないのに例外をキャッチしている</ShortDescription>
+    <LongDescription>例外がスローされないのに例外をキャッチしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、例外オブジェクトをキャッチする try-catch ブロックを使用しているのに例外は try ブロックの中でスローされません。また、実行時例外は明示的にキャッチされません。
+それぞれの catch ブロックが同一である多くの例外型をキャッチすることの短縮形として <code>try { ... } catch (Exception e) { something }</code> を使用することが共通のバグパターンです。
+しかし、この構文は誤って実行時例外も同様にキャッチするので、潜在的なバグを隠します。
+</p>
+<p>
+より良いアプローチは、明示的にキャッチするよりもスローされる特定の例外をスローします。
+あるいは、以下に示すように明示的に RuntimeException をキャッチ、再スローして、非実行時例外をキャッチします。
+</p>
+<blockquote><pre>
+try {
+    ...
+} catch (RuntimeException e) {
+    throw e;
+} catch (Exception e) {
+    ... deal with all non-runtime exceptions ...
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FE_TEST_IF_EQUAL_TO_NOT_A_NUMBER">
+    <ShortDescription>NaN への等価性のための絶望的なテスト</ShortDescription>
+    <LongDescription>NaN への等価性のための絶望的なテストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、浮動小数点が特別な非数値と等価であるか確かめています (たとえば、<code>if (x == Double.NaN)</code>)。
+しかしながら、<code>NaN</code> の特別な意味のため、値は <code>NaN</code> と等価ではありません。
+したがって、<code>x == Double.NaN</code> は常に false と評価します。
+<code>x</code> という値が特別な非数値であるかどうか確かめるためには <code>Double.isNaN(x)</code> を使用します (あるいは、<code>x</code> が浮動小数点精度であるなら <code>Float.isNaN(x)</code>)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FE_FLOATING_POINT_EQUALITY">
+    <ShortDescription>浮動小数点の等価性のためのテスト</ShortDescription>
+    <LongDescription>浮動小数点の等価性のためのテストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この演算は、等価性のために2つの浮動小数点値を比較しています。
+浮動小数点の計算は丸めを伴うかもしれないので、計算された float と double の値は正確ではないかもしれません。
+通貨のような正確でなければならない値のために、<code>BigDecimal</code> のような固定精度型を使うことを検討してください。
+正確である必要がない値のために、いくつかの範囲の中で等価性のために比較することを検討してください。
+たとえば、<code>if (Math.abs(x - y) &lt; .0000001)</code>。<br>
+詳細は Java 言語仕様4.2.4を参照してください。
+</p>
+]]>
+    </Details>

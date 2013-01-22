@@ -1,0 +1,500 @@
+<![CDATA[
+<p>
+このクラスは、抽象スーパークラスから <code>equals(Object)</code> メソッドを継承して、<code>java.lang.Object</code> から <code>hashCode</code> メソッドを継承しています (同一性ハッシュコード (Java 仮想マシンによってオブジェクトに代入された任意の値) を返します)。
+したがって、「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に違反するかもしれません。
+</p>
+<p>
+<code>hashCode</code> メソッドを定義したくない、またはオブジェクトが HashMap/Hashtable に決して格納されないだろうと思っているなら <code>UnsupportedOperationException</code> をスローする <code>hashCode()</code> メソッドを定義してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="HE_EQUALS_NO_HASHCODE">
+    <ShortDescription>equals メソッドは定義しているのに hashCode メソッドは定義していないクラス</ShortDescription>
+    <LongDescription>{0} は、equals メソッドを定義しているのに hashCode メソッドは定義していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equals(Object)</code> メソッドをオーバーライドしているのに <code>hashCode</code> メソッドはオーバーライドしていません。
+したがって、「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に違反するかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EQ_ABSTRACT_SELF">
+    <ShortDescription>抽象クラスは共変な equals メソッドを宣言している</ShortDescription>
+    <LongDescription>抽象クラス {0} は、共変な equals({0.givenClass}) メソッドを定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、共変な <code>equals</code> メソッドを定義しています。
+<code>java.lang.Object</code> の <code>equals</code> メソッドを正しくオーバーライドするためには <code>equals</code> メソッドのパラメータの型は、<code>java.lang.Object</code> でなければなりません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ES_COMPARING_STRINGS_WITH_EQ">
+    <ShortDescription>String オブジェクトを == や != を使用して比較している</ShortDescription>
+    <LongDescription>String オブジェクトを == や != を使用して比較しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、参照等価性のために == や != を使用して <code>java.lang.String</code> オブジェクトを比較しています。
+両方の文字列がソースファイルの定数か、<code>String.intern()</code> を使用して正準化されていない限り、同じ文字列は2つの異なる String オブジェクトによって表されるかもしれません。
+その代わりに <code>equals(Object)</code> メソッドを使うことを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ES_COMPARING_PARAMETER_STRING_WITH_EQ">
+    <ShortDescription>String パラメータを == や != を使用して比較している</ShortDescription>
+    <LongDescription>String パラメータを == や != を使用して比較しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、参照等価性のために == や != を使用して <code>java.lang.String</code> パラメータを比較しています。
+文字列定数または正準化された文字列だけをメソッドに渡すことを呼び出し元に要求することは必要以上に脆弱で、測定可能な性能の向上をもたらしません。
+その代わりに <code>equals(Object)</code> メソッドを使うことを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CO_ABSTRACT_SELF">
+    <ShortDescription>抽象クラスは共変な compareTo メソッドを定義している</ShortDescription>
+    <LongDescription>抽象クラス {0} は、compareTo({0.givenClass}) メソッドを定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、共変な <code>compareTo</code> メソッドを定義しています。
+<code>Comparable</code> インタフェースの <code>compareTo</code> メソッドを正しく実装するためには <code>compareTo</code> メソッドのパラメータの型は、<code>java.lang.Object</code> でなければなりません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="IS_FIELD_NOT_GUARDED">
+    <ShortDescription>並行アクセスに対してガードされていないフィールド</ShortDescription>
+    <LongDescription>{1.givenClass} は、並行アクセスに対してガードされていません。{2}% の時間をロック</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このフィールドは、<code>net.jcip.annotations.GuardedBy</code> でアノテートされているが、アノテーションに違反すると思われる方法でアクセスされる可能性があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MSF_MUTABLE_SERVLET_FIELD">
+    <ShortDescription>可変サーブレットフィールド</ShortDescription>
+    <LongDescription>{1} は、可変サーブレットフィールドです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Web サーバは、通常サーブレットや JSP クラスのインスタンスを1つだけ作成します (すなわち、シングルトンとして扱います)。
+複数のスレッドが複数同時に発生するリクエストを処理するためにインスタンスのメソッドを呼び出します。
+したがって、可変インスタンスフィールドは通常競合状態を作成します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IS2_INCONSISTENT_SYNC">
+    <ShortDescription>一貫性のない同期化</ShortDescription>
+    <LongDescription>{1} の一貫性のない同期化です。{2}% の時間をロック</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスのフィールドは、同期化に関して一貫性なくアクセスされるように見えます。
+このバグレポートは、バグパターンディテクタが以下のように判断したことを示します。
+</p>
+<ul>
+  <li>クラスにはロックされたアクセスとアンロックされたアクセスが混在していて、</li>
+  <li>少なくとも1つのロックされたアクセスがクラス自身のメソッドの1つによって実行され、</li>
+  <li>読み出しの2倍の重み付けをした書き込みで、非同期フィールドのアクセス (読み出しと書き込み) 数がすべてのアクセスのわずか1/3</li>
+</ul>
+<p>
+このバグパターンに合致する典型的なバグは、スレッドセーフを意図したクラスでメソッドを同期化するのを忘れていることです。
+</p>
+<p>
+ディテクタがどこでフィールドが同期化なしでアクセスされると信じていたかを示すコードの場所に「非同期アクセス」というラベルを付けられます。
+</p>
+<p>
+不正確ないろいろな原因がこのディテクタにあることに注意してください。
+たとえば、ディテクタはロックを保持されるすべての状況を静的に検出できるという訳ではありません。
+また、ディテクタがロックされたアクセスとアンロックされたアクセスの区別が正確なときでも、問題のコードは依然として正しいかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NN_NAKED_NOTIFY">
+    <ShortDescription>裸の notify メソッド</ShortDescription>
+    <LongDescription>{1} の中に裸の notify メソッドがあります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>notify</code> メソッドまたは <code>notifyAll</code> メソッドへの呼び出しは可変オブジェクト状態にどんな (明らかな) 付随的な変更ももたらされませんでした。
+通常、別のスレッドが期待しているいくつかの条件が真になったので、モニタで <code>notify</code> メソッドが呼び出されます。
+しかしながら、意味がある条件のために、両方のスレッドに見えるヒープオブジェクトを含まなければなりません。
+</p>
+<p>
+可変オブジェクトの状態変更が通知があるメソッドを呼び出したメソッドで起こったかもしれないので、このバグが必ずしもエラーを示すというわけではありません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MS_EXPOSE_REP">
+    <ShortDescription>配列を返すことによって内部表現を暴露するかもしれない public static メソッド</ShortDescription>
+    <LongDescription>{1} は、 {2.givenClass} を返すことによって、内部表現を暴露するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+public static メソッドは、クラスの 静的な状態の一部である配列の参照を返します。
+このメソッドを呼び出すどんなコードも、基底配列を自由に変更できます。
+解決策は、配列のコピーを返すことです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EI_EXPOSE_REP">
+    <ShortDescription>可変オブジェクトへの参照を返すことによって内部表現を暴露するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、{2.givenClass} を返すことによって内部表現を暴露するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+オブジェクトのフィールドのうちの1つに格納された可変オブジェクトの参照を返すと、オブジェクトの内部表現を暴露します。
+インスタンスが信頼できないコードによってアクセスされるなら、可変オブジェクトのチェックされていない変更がセキュリティや他の重要なプロパティを危うくするでしょう。
+何か違うことをする必要があります。オブジェクトの新しいコピーを返すことは、多くの状況でより良いアプローチです。
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EI_EXPOSE_REP2">
+    <ShortDescription>可変オブジェクトへの参照を取り込むことによって内部表現を暴露するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、{2.givenClass} の中に外部の可変オブジェクトを格納することによって内部表現を暴露するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、オブジェクトの内部表現に外部の可変オブジェクトの参照を格納しています。
+インスタンスが信頼できないコードによってアクセスされるなら、可変オブジェクトのチェックされていない変更がセキュリティや他の重要なプロパティを危うくするでしょう。
+何か違うことをする必要があります。オブジェクトの新しいコピーを返すことは、多くの状況でより良いアプローチです。
+  </p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EI_EXPOSE_STATIC_REP2">
+    <ShortDescription>static フィールドに可変オブジェクトを格納することによって、内部の静的状態を暴露するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、staticフィールド {2} に可変オブジェクトを格納することによって、内部の静的状態を暴露するかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、static フィールドに外部の可変オブジェクトを格納しています。
+可変オブジェクトのチェックされていない変更がセキュリティや他の重要なプロパティを危うくするでしょう。
+何か違うことをする必要があります。オブジェクトのコピーを保存することは、多くの状況でより良いアプローチです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RU_INVOKE_RUN">
+    <ShortDescription>スレッドで run メソッドを呼び出している</ShortDescription>
+    <LongDescription>{1} は、スレッドで明示的に run メソッドを呼び出しています (start メソッドを意味していましたか？)。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、スレッドで 明示的に <code>run</code> メソッドを呼び出しています。
+通常、クラスは新しいスレッドで自己の <code>run</code> メソッドを呼び出してもらうために <code>Runnable</code> インタフェースを実装します。
+その場合は、<code>Thread.start()</code> を呼び出すのが正しいです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="SP_SPIN_ON_FIELD">
+    <ShortDescription>スピンロックをしているメソッド</ShortDescription>
+    <LongDescription>フィールド {2.givenClass} を使用してスピンロックをしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、フィールドを読み出すループで回り続けます。
+コンパイラがフィールドの読み出しをループの外に出すかもしれません。コードを無限ループに変えます。
+正しい同期化 (wait/notify を呼び出すように含む) を使うようにクラスを変更するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NS_DANGEROUS_NON_SHORT_CIRCUIT">
+    <ShortDescription>潜在的な非短絡論理の危険な使用</ShortDescription>
+    <LongDescription>潜在的な非短絡論理の危険な使用。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、短絡論理 (&amp;&amp; や ||) ではなく非短絡論理 (&amp; や |) を使用していると思われます。
+さらに、左辺値によって右辺を評価したくない (例外のスローや演算が高くつく副作用があるため) と思っているのかもしれません。
+非短絡論理は、左辺の結果がわかっていて推論できるときでも、両側の式が評価されます。
+左辺が右辺の評価でエラーを発生させるケースをガードするなら効率が悪く、エラーになる可能性があります。
+</p>
+<p>
+詳細については、<a href="http://java.sun.com/docs/books/jls/third_edition/html/expressions.html#15.22.2">the Java Language Specification</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="NS_NON_SHORT_CIRCUIT">
+    <ShortDescription>非短絡論理の疑わしい使用</ShortDescription>
+    <LongDescription>非短絡論理の疑わしい使用。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、短絡論理 (&amp;&amp; や ||) ではなく非短絡論理 (&amp; や |) を使用していると思われます。
+非短絡論理は、左辺の結果がわかっていて推論できるときでも、両側の式が評価されます。
+左辺が右辺の評価でエラーになるケースをガードするなら効率が悪くエラーになる可能性があります。
+</p>
+詳細については、<a href="http://java.sun.com/docs/books/jls/third_edition/html/expressions.html#15.22.2">the Java Language Specification</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TLW_TWO_LOCK_WAIT">
+    <ShortDescription>2つ以上のロックを保持して wait メソッドを呼び出している</ShortDescription>
+    <LongDescription>2つ以上のロックを保持して wait メソッドを呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+2つ以上のロックを保持して、モニタで待機させるとデッドロックの原因になる場合があります。
+<code>wait</code> メソッドを呼び出すと、待機しているオブジェクトのロックを解除するだけで、その他のロックは解除しません。
+これは必ずしもバグではありませんが厳密に調べる価値があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="TLW_TWO_LOCK_NOTIFY" deprecated="true"> <!-- never generated -->
+    <ShortDescription>Notify with two locks held</ShortDescription>
+    <LongDescription>notify() or notifyAll*() with two locks held in {1}</LongDescription>
+    <Details>
+<![CDATA[
+  <p> The code calls notify() or notifyAll() while two locks
+  are held. If this notification is intended to wake up a wait()
+  that is holding the same locks, it may deadlock, since the wait
+  will only give up one lock and the notify will be unable to get both locks,
+  and thus the notify will not succeed.
+   &nbsp; If there is also a warning about a two lock wait, the
+   probably of a bug is quite high.
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UW_UNCOND_WAIT">
+    <ShortDescription>wait メソッドの無条件呼び出し</ShortDescription>
+    <LongDescription>wait メソッドを無条件で呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには条件制御フローによってガードされない <code>java.lang.Object.wait()</code> の呼び出しがあります。
+このコードは、<code>wait</code> メソッドを呼び出す前に、待機するつもりだった条件がすでに満たされていないことを確かめるべきです。
+どんな前の通知も無視されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="UR_UNINIT_READ">
+    <ShortDescription>コンストラクタで初期化されていないフィールドを読み出している</ShortDescription>
+    <LongDescription>初期化されていないフィールド {2.name} を読み出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコンストラクタは、まだ値が代入されていないフィールドを読み出しています。
+多くの場合、プログラマがコンストラクタのパラメータの代わりに誤ってフィールドを使用するときに起きます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UR_UNINIT_READ_CALLED_FROM_SUPER_CONSTRUCTOR">
+    <ShortDescription>スーパークラスのコンストラクタから呼び出されるメソッドで初期化されていないフィールドを読み出している</ShortDescription>
+    <LongDescription>スーパークラスのコンストラクタから呼び出されるとき、{2.name} は {1} で初期化されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、スーパークラスのコンストラクタで呼びされています。この時点では、クラスのフィールドはまだ初期化されていません。
+</p>
+<p>
+これはたくさんの具象クラスを作るためです。以下のクラスを検討してください。
+</p>
+<blockquote><pre>
+abstract class A {
+    int hashCode;
+    abstract Object getValue();
+    
+    A() {
+        hashCode = getValue().hashCode();
+    }
+}
+
+class B extends A {
+    Object value;
+
+    B(Object v) {
+        this.value = v;
+    }
+
+    Object getValue() {
+        return value;
+    }
+}
+</pre></blockquote>
+<p>
+<code>B</code> が構築されるとき、<code>B</code> のコンストラクタが <code>value</code> に値を設定する前に、<code>A</code> クラスのコンストラクタが呼び出されます。
+したがって、<code>A</code> のコンストラクタが <code>getValue</code> を呼び出すとき、<code>value</code> の初期化されていない値が読み出されます。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UG_SYNC_SET_UNSYNC_GET">
+    <ShortDescription>同期化していない get メソッド、同期化している set メソッド</ShortDescription>
+    <LongDescription>{1} は同期化していません、{2} は同期化しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスには類似した名前の get メソッドと set メソッドがあり、set メソッドは同期化していて、get メソッドは同期化していません。
+get メソッドの呼び出し元がオブジェクトのための一貫した状態を必ずしも見るというわけではないので、実行時に間違った振る舞いになるかもしれません。
+get メソッドは同期化するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IC_INIT_CIRCULARITY">
+    <ShortDescription>初期化が循環している</ShortDescription>
+    <LongDescription>{0} と {1} の間で初期化が循環しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+循環がバグインスタンスによって参照される2つのクラスのスタティックイニシャライザで検出されました。
+多くの種類の予想外の振る舞いはそのような循環に起因するかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IC_SUPERCLASS_USES_SUBCLASS_DURING_INITIALIZATION">
+    <ShortDescription>スーパークラスは初期化中にサブクラスを使用している</ShortDescription>
+    <LongDescription>{0} の初期化は、まだ初期化されていないクラス {2} にアクセスしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+クラスは、初期化中にサブクラスを積極的に使用しています。サブクラスはこの時点では、まだ初期化されていません。<br>
+たとえば、以下のコードにおいて、<code>foo</code> は null です。
+</p>
+<blockquote><pre>
+public class CircularClassInitialization {
+    static class InnerClassSingleton extends CircularClassInitialization {
+        static InnerClassSingleton singleton = new InnerClassSingleton();
+    }
+    
+    static CircularClassInitialization foo = InnerClassSingleton.singleton;
+}
+</pre></blockquote>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="IT_NO_SUCH_ELEMENT">
+    <ShortDescription>Iterator.next() が NoSuchElementException をスローできない</ShortDescription>
+    <LongDescription>{1} は、NoSuchElementException をスローできません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>java.util.Iterator</code> を実装しています。
+しかしながら、<code>next</code> メソッドは <code>java.util.NoSuchElementException</code> をスローできません。
+<code>next</code> メソッドは、それ以上要素を返すことができないときは <code>NoSuchElementException</code> をスローするように変更するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DL_SYNCHRONIZATION_ON_SHARED_CONSTANT">
+    <ShortDescription>正準化した文字列の同期化</ShortDescription>
+    <LongDescription>正準化した文字列を同期化しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、正準化した文字列で同期化しています。
+</p>
+<blockquote><pre>
+private static String LOCK = "LOCK";
+
+synchronized(LOCK) {
+    ...
+}
+</pre></blockquote>
+<p>
+文字列定数は正準化され、Java 仮想マシンによってロードされたすべてのクラス全体で共有されます。
+したがって、これは他のコードがロックしているかもしれない何かをロックしている可能性があります。
+これはブロッキングとデッドロックの振る舞いの診断を難しくして、とても奇妙な結果になる可能性があります。 <br>
+詳細は、<a href="http://www.javalobby.org/java/forums/t96352.html">http://www.javalobby.org/java/forums/t96352.html</a> と <a href="http://jira.codehaus.org/browse/JETTY-352">http://jira.codehaus.org/browse/JETTY-352</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DL_SYNCHRONIZATION_ON_BOOLEAN">
+    <ShortDescription>Boolean の同期化</ShortDescription>
+    <LongDescription>Boolean を同期化しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>Boolean</code> のようなボクシングされたプリミティブ型の定数で同期化しています。
+</p>
+<blockquote><pre>
+private static Boolean inited = Boolean.FALSE;
+
+synchronized(inited) { 
+    if (!inited) {
+        init();
+        inited = Boolean.TRUE;
+    }
+}
+</pre></blockquote>
+<p>
+通常は2つの <code>Boolean</code> オブジェクトだけが存在しています。
+このコードは他の無関係なコードと同じオブジェクトで同期化している可能性があるので、無応答やデッドロックの原因になります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DL_SYNCHRONIZATION_ON_UNSHARED_BOXED_PRIMITIVE">
+    <ShortDescription>ボクシングされたプリミティブ値の同期化</ShortDescription>
+    <LongDescription>{2} を同期化しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、明らかに共有されていない <code>Integer</code> のようなボクシングされたプリミティブ型で同期化しています。
+</p>
+<blockquote><pre>
+private static final Integer fileLock = new Integer(1);
+
+synchronized(fileLock) { 
+    .. do something ..
+}
+</pre></blockquote>
+<p>
+このコードは、 fileLock を以下のように宣言するとより良くなります。
+</p>
+<blockquote><pre>
+private static final Object fileLock = new Object();
+</pre></blockquote>
+<p>
+既存のコードとしては間違っていないのかもしれませんが、紛らわしいので将来リファクタリングするべきかもしれません。
+たとえば、IntelliJ の "Remove Boxing" のようなリファクタリングは Java 仮想マシンを通して共有される正準化された <code>Integer</code> オブジェクトを使用するように置き換えてしまい、非常に紛らわしい振る舞いと潜在的デッドロックの原因になります。

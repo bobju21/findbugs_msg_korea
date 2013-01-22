@@ -1,0 +1,500 @@
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="FI_FINALIZER_ONLY_NULLS_FIELDS">
+    <ShortDescription>ファイナライザはフィールドを null にするだけ</ShortDescription>
+    <LongDescription>{1} は、フィールドを null にするだけです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このファイナライザは、フィールドを null にすること以外は何もしません。
+これはまったく無意味であり、オブジェクトがガベージされ、ファイナライズされ、再びガベージされることを要求しています。
+<code>finalize</code> メソッドを削除するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_PUBLIC_SHOULD_BE_PROTECTED">
+    <ShortDescription>ファイナライザは public ではなく protected にすべき</ShortDescription>
+    <LongDescription>{1} は public です。protected にすべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスの <code>finalize</code> メソッドは public ではなく、protected にすべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_EMPTY">
+    <ShortDescription>空のファイナライザは削除するべき</ShortDescription>
+    <LongDescription>{1} は、空なので削除するべきです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+空の <code>finalize</code> メソッドは役に立たないので、削除するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_NULLIFY_SUPER">
+    <ShortDescription>ファイナライザはスーパークラスのファイナライザを無効にしている</ShortDescription>
+    <LongDescription>{1} は、{2}.finalize() を無効にしています。これは、意図したことですか？</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この空の <code>finalize</code> メソッドは、明示的にスーパークラスによって定義されたどんなファイナライザの効果も無効にします。
+スーパークラスのために定義されたどんなファイナライザアクションも実行されません。
+これが意図したことではない場合、このメソッドを削除してください。
+  </p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_USELESS">
+    <ShortDescription>ファイナライザはスーパークラスのファイナライザを呼び出しているだけ</ShortDescription>
+    <LongDescription>{1} は、super.finalize() を呼び出す以外何もしないので、削除してください。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この <code>finalize</code> メソッドは、スーパークラスの <code>finalize</code> メソッドを呼び出しているだけです。
+冗長なので削除してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_MISSING_SUPER_CALL">
+    <ShortDescription>ファイナライザはスーパークラスのファイナライザを呼び出していない</ShortDescription>
+    <LongDescription>{1} は、super.finalize() への呼び出しが見つからないので、{2}.finalize() は呼び出されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この <code>finalize</code> メソッドは、スーパークラスの <code>finalize</code> メソッドを呼び出していません。
+このため、スーパークラスのために定義されたどんなファイナライザアクションも実行されません。
+<code>super.finalize()</code> の呼び出しを追加してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="FI_EXPLICIT_INVOCATION">
+    <ShortDescription>ファイナライザの明示的な呼び出し</ShortDescription>
+    <LongDescription>{1} は、明示的に {2} を呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドには明示的にオブジェクトで <code>finalize</code> メソッドの呼び出しがあります。
+ファイナライザは Java 仮想マシンによって1度だけ実行されることになっているので、これは間違った考えです。
+</p>
+<p>
+参照によってつながった複数のオブジェクトがファイナライズ可能になると、Java 仮想マシンはすべてのオブジェクトの <code>finalize</code> メソッドを呼び出します。
+おそらく、異なるスレッドで同時にです。
+したがって、クラス <i>X</i> の <code>finalize</code> メソッドの中から <i>X</i> によって参照されているオブジェクトの <code>finalize</code> メソッドを呼び出すのは、とりわけ間違った考えです。
+なぜなら、オブジェクトがすでに別のスレッドによってファイナライズされているかもしれないからです。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS">
+    <ShortDescription>equals メソッドは互換性のないオペランドをチェックしている</ShortDescription>
+    <LongDescription>{1} は、{2.givenClass} であるオペランドをチェックしています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この <code>equals</code> メソッドは、引数が互換性のない型 (すなわち、スーパタイプでもなく、<code>equals</code> メソッドを定義しているクラスのスーパータイプでもサブタイプでもないクラス) なのか確かめています。
+たとえば、<code>Foo</code> クラスの <code>equals</code> メソッドはそのように見えるかもしれません。
+</p>
+<blockquote><pre>
+public boolean equals(Object o) {
+    if (o instanceof Foo)
+        return name.equals(((Foo)o).name);
+    else if (o instanceof String)
+        return name.equals(o);
+    else return false;
+}
+</pre></blockquote>
+<p>
+これは対称的で推移的である <code>equals</code> メソッドを実現するのはとても難しいので、間違ったプラクティスと見なされています。
+プロパティがなければまったく予想していない振る舞いが起こりえます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_DONT_DEFINE_EQUALS_FOR_ENUM">
+    <ShortDescription>列挙型は共変な equals メソッドを定義している</ShortDescription>
+    <LongDescription>列挙型 {0} は、equals({0.givenClass}) を定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは列挙を定義していて、列挙の等価性はオブジェクト同一性を使用して定義されています。
+列挙値のために共変な <code>equals</code> メソッドを定義することは、非常に間違ったプラクティスです。
+2つの異なる列挙値が通常の <code>equals</code> メソッドでは「等価ではない」と判定され、共変な <code>equals</code> メソッドでは「等価」と判定されるからです。
+共変な <code>equals</code> メソッドを定義しないでください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_SELF_USE_OBJECT">
+    <ShortDescription>共変な equals メソッドを定義して、Object.equals(Object) を継承している</ShortDescription>
+    <LongDescription>{0} は、equals({0.givenClass}) メソッドを定義して、Object.equals(Object) を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、共変な <code>equals</code> メソッドを定義していますが、 <code>equals(Object)</code> メソッドは <code>java.lang.Object</code> クラスから継承しています。
+クラスは、<code>boolean equals(Object)</code> メソッドを定義するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_OTHER_USE_OBJECT">
+    <ShortDescription>Object.equals(Object) をオーバーライドしていない equals メソッドの定義</ShortDescription>
+    <LongDescription>{0}は、{1.givenClass} メソッドを定義して、Object.equals(Object) を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equals</code> メソッドを定義していますが、<code>java.lang.Object</code> クラスの <code>equals(Object)</code> メソッドをオーバーライドしていません。
+クラスは、<code>boolean equals(Object)</code> メソッドを定義するべきです。
+  </p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EQ_OTHER_NO_OBJECT">
+    <ShortDescription>equals(Object) メソッドをオーバーライドしていない equals メソッドの定義</ShortDescription>
+    <LongDescription>{0} は、equals(Object) メソッドをオーバーライドしない {1.givenClass} を定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equals</code> メソッドを定義していますが、<code>java.lang.Object</code> クラスの <code>equals(Object)</code> メソッドをオーバーライドしていません。
+その代わりに、スーパークラスから <code>equals(Object)</code> メソッドを継承して、<code>boolean equals(Object)</code> メソッドを定義するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_DOESNT_OVERRIDE_EQUALS">
+    <ShortDescription>スーパークラスの equals メソッドをオーバーライドしていないクラス</ShortDescription>
+    <LongDescription>{0} は、{1.givenClass} をオーバーライドしていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equals</code> メソッドを定義しているクラスを拡張してフィールドを追加しているのに <code>equals</code> メソッドを定義していません。
+したがって、このクラスのインスタンスの等価性は、サブクラスと追加されたフィールドの同一性を無視します。
+これが意図したことで、しかも、<code>equals</code> メソッドをオーバーライドする必要がないことを確実にしてください。
+たとえ <code>equals</code> メソッドをオーバーライドする必要がないとしても、サブクラスのための <code>equals</code> メソッドが <code>super.equals(o)</code> を呼び出して結果を返すという事実を実証するために、いずれにしろ、<code>equals</code> メソッドをオーバーライドすることを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_SELF_NO_OBJECT">
+    <ShortDescription>共変な equals メソッドの定義</ShortDescription>
+    <LongDescription>{0} は、equals({0.givenClass}) メソッドを定義しているのに equals(Object) を定義していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、共変な <code>equals</code> メソッドを定義しています。
+<code>java.lang.Object</code> の <code>equals</code> メソッドを正しくオーバーライドするためには <code>equals</code> メソッドのパラメータの型は、<code>java.lang.Object</code> でなければなりません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_OVERRIDING_EQUALS_NOT_SYMMETRIC">
+    <ShortDescription>equals メソッドはスーパークラスの equals メソッドをオーバーライドしているが、対称的ではないかもしれない</ShortDescription>
+    <LongDescription>{1.class} は、{2.class.givenClass} で equals メソッドをオーバーラドしていますが、対称的ではないかもしれません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスはスーパークラスの <code>equals</code> メソッドをオーバーライドする <code>equals</code> メソッドを定義しています。
+両方の <code>equals</code> メソッドは、2つのオブジェクトが等しいかどうかの判定で、<code>instanceof</code> を使用しています。
+<code>equals</code> メソッドは対称的 (<code>a.equals(b) == b.equals(a)</code>) であることが重要なのでこれは危険を伴っています。
+<i>B</i> が <i>A</i> のサブタイプなら <i>A</i> の <code>equals</code> メソッドは引数が <code>instanceof A</code> なのかチェックします。
+そして、<i>B</i> の <code>equals</code> メソッドは引数が <code>instanceof B</code> なのかチェックします。
+これらのメソッドによって定義された同値関係が対称的でないということです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="EQ_GETCLASS_AND_CLASS_CONSTANT">
+    <ShortDescription>equals メソッドはサブタイプのために失敗する</ShortDescription>
+    <LongDescription>{1} は、サブタイプのために失敗します。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、サブクラスによって継承されるなら、壊れる <code>equlas</code> メソッドがあります。
+<code>equals</code> メソッドは、クラスリテラルを引数のクラスと比較しています (たとえば、<code>Foo</code> クラスで、<code>Foo.class == o.getClass()</code> のような判定を行っています)。
+それは、<code>this.getClass() == o.getClass()</code> の方がより良いです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_UNUSUAL">
+    <ShortDescription>異常な equals メソッド </ShortDescription>
+    <LongDescription>{1} は、異常な equals メソッドです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスの <code>equals</code> メソッドは、引数の型が <code>this</code> オブジェクトの型と互換性があるこをチェックするために、我々が認識しているパターンで何もしていません。
+このコードは何も間違っていないかもしれませんが、レビューする価値があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_COMPARING_CLASS_NAMES">
+    <ShortDescription>equals メソッドはクラスオブジェクトではなくクラス名を比較している</ShortDescription>
+    <LongDescription>{1} は、クラスオブジェクトではなく、クラス名を比較しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、クラス名を比較することによって、2つのオブジェクトが同じクラスなのか確かめています。
+異なるクラスローダによってロードされたクラスなら同じ名前で異なるクラスがある可能性があります。
+クラスオブジェクトが同じなのか確かめてください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_ALWAYS_TRUE">
+    <ShortDescription>equals メソッドは常に true を返す</ShortDescription>
+    <LongDescription>{1} は、常に true を返します。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、常に true を返す <code>equals</code> メソッドを定義しています。
+これは想像力に富むが、あまり良い方法とはいえません。さらに、<code>equals</code> メソッドが対称的ではないことを意味します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_ALWAYS_FALSE">
+    <ShortDescription>equals メソッドは常に false を戻す</ShortDescription>
+    <LongDescription>{1} は、常に false を返します。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスでは、常に false を返す <code>equlas</code> メソッドを定義しています。
+これは、オブジェクトがそれ自身と等価ではないことを意味していて、このクラスの有用な Map や Set を作成できません。
+より根本的に、<code>equals</code> メソッドの要件の一つである反射性を満たしていないことになります。
+</p>
+<p>
+おそらく意図されたことは、オブジェクトはそれ自身と等価であるというオブジェクト同一性です。
+これは <code>Object</code> クラスから継承される振る舞いです。
+異なるスーパークラスから継承される <code>equals</code> メソッドをオーバーライドする必要があるなら以下のようなコードが使えます。
+</p>
+<blockquote><pre>
+public boolean equals(Object o) {
+    return this == o;
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HSC_HUGE_SHARED_STRING_CONSTANT">
+    <ShortDescription>複数のクラスファイルにわたって複製されている巨大な文字列定数</ShortDescription>
+    <LongDescription>長さが {2} 文字の文字列定数 {1} が {3} つのクラスファイルに複製されています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+巨大な文字列定数が複数のクラスファイルにわたって複製されています。
+final フィールドが文字列定数で初期化され、Java言語によって他のクラスからの final フィールドへのすべての参照がクラスファイルにインライン化されるからです。
+</p>
+<p>
+JDK はこのバグを解決してサイズを1MB減らすことができました。<br>
+詳細は、<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6447475">JDK bug 6447475</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_ARGUMENT_MIGHT_BE_NULL">
+    <ShortDescription>null の引数をチェックしていないメソッド</ShortDescription>
+    <LongDescription>{1} は、null の引数をチェックしていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドへのパラメータが null かどうか確かめるために常にチェックされるべき値として特定されました。
+しかし、null チェックをしないで、null 値が利用されています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NP_EQUALS_SHOULD_HANDLE_NULL_ARGUMENT">
+    <ShortDescription>equals メソッドは null の引数をチェックしていない</ShortDescription>
+    <LongDescription>{1} は、null の引数をチェックしていません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この <code>equals(Object)</code> メソッドの実装は引数として渡されている null をチェックしていないので、<code>java.lang.Object.equals()</code> で定義された規約に違反しています。
+すべての <code>equals</code> メソッドは引数に null が渡されたなら false を返すべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_NEGATING_RESULT_OF_COMPARETO">
+    <ShortDescription>compareTo()/compare() の結果を無効にする</ShortDescription>
+    <LongDescription>{1} は、{2} の戻り値を無効にします。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、compareTo または compare メソッドの戻り値を無効にします。
+これは疑わしいか間違ったプログラミングプラクティスです、戻り値が Integer.MIN_VALUE なので、戻り値を無効にすることは結果の符号を無効にしません。
+結果を無効にするのではなくオペランドの順序を逆にすることによって、同じ意図した結果を得ることができます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CO_COMPARETO_RESULTS_MIN_VALUE">
+    <ShortDescription>compareTo()/compare() は Integer.MIN_VALUE を返す</ShortDescription>
+    <LongDescription>{1} は Integer.MIN_VALUE を返します。戻り値を無効にできません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+場合によっては、この compareTo または compare メソッドは Integer.MIN_VALUE を返します。それは、非常に間違ったプラクティスです。
+compareTo メソッドの戻り値は結果の符号だけが重要なのです。
+しかし、compareTo メソッドの戻り値を無効にすることがあります。これが結果の符号を無効にすると予想します。
+戻り値が Integer.MIN_VALUE である場合を除きそうなります。Integer.MIN_VALUE よりも-1を返しなさい。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="CO_SELF_NO_OBJECT">
+    <ShortDescription>共変な compareTo メソッドの定義</ShortDescription>
+    <LongDescription>{0} は、compareTo(Object) ではなく compareTo({0.givenClass}) メソッドを定義しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、共変な <code>compareTo</code> メソッドを定義しています。
+<code>Comparable</code> インタフェースの <code>compareTo</code> メソッドを正しく実装するためには <code>compareTo</code> メソッドのパラメータの型は、<code>java.lang.Object</code> でなければなりません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HE_SIGNATURE_DECLARES_HASHING_OF_UNHASHABLE_CLASS">
+    <ShortDescription>ハッシュ化された文脈でハッシュ化できないクラスの使用がシグネチャで宣言されている</ShortDescription>
+    <LongDescription>{2} は、hashCode メソッドを定義していないのにハッシュ化された文脈で使われています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+メソッド、フィールド、クラスは、ハッシュ可能なクラスが必要な文脈で、ハッシュ化できないクラスが使用される総称的なシグネチャを宣言しています。
+クラスは、<code>equals</code> メソッドを宣言していますが、<code>hashCode</code> メソッドは <code>java.lang.Object</code> から継承しています。
+これは「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に従っていないので、ハッシュ化できません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="HE_USE_OF_UNHASHABLE_CLASS">
+    <ShortDescription>ハッシュデータ構造で hashCode メソッドのないクラスを使用している</ShortDescription>
+    <LongDescription>{2} は、hashCode メソッドを定義していないのにハッシュデータ構造で使われています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equals(Object)</code> メソッドを定義しているのに <code>hashCode</code> メソッドを定義していません。
+これは「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に従っていません。
+このクラスのインスタンスはハッシュデータ構造で使われています。最重要問題を修正する必要があります。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HE_HASHCODE_USE_OBJECT_EQUALS">
+    <ShortDescription>hashCode メソッドを定義して Object.equals() を使用しているクラス</ShortDescription>
+    <LongDescription>{0} は、hashCode メソッドを定義して、Object.equals() を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>hashCode</code> メソッドを定義していますが、 <code>equals</code> メソッドは <code>java.lang.Object</code> から継承しています (オブジェクトの参照比較で等価性を判定します)。
+これは「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に従っているかもしれませんが、
+おそらく、<code>hashCode</code> メソッドをオーバーライドすることによって意図したことではないと思われます
+(<code>hashCode</code> メソッドをオーバーライドすることは、オブジェクトの同一性が単純な参照等価性よりも複雑な規約に基づくことを意味します)。
+</p>
+<p>
+このクラスのインスタンスが HashMap/HashTable に決して代入されるだろうと思わないなら、
+推奨される <code>hashCode</code> メソッドの実装は以下のようになります。
+</p>
+<blockquote><pre>
+public int hashCode() {
+    assert false : "hashCodeが呼び出されることは想定されていません。";
+    return 42; // 適当な値 
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="EQ_COMPARETO_USE_OBJECT_EQUALS">
+    <ShortDescription>compareTo(...) メソッドを定義して Object.equals() を使用しているクラス</ShortDescription>
+    <LongDescription>{0} は、{1.givenClass} を定義して、Object.equals() を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>compareTo(...)</code> メソッドを定義していますが、<code>equals</code> メソッドは <code>java.lang.Object</code> から継承しています。
+通常、<code>equals</code> メソッドが true を返す場合に限り、<code>compareTo</code> メソッドは0を返すべきです。
+これが違反されるなら奇妙で予測できない失敗が PriorityQueue などのクラスで発生します。
+J2SE 5.0では、<code>PriorityQueue.remove()</code> は <code>compareTo</code> メソッドを使用しますが、Java SE 6では、<code>equals</code> メソッドを使用します。
+<p>
+Comparable インタフェースの compareTo メソッドの JavaDoc を以下に引用します。
+</p>
+<blockquote><p>
+必須というわけではありませんが、<code>(x.compareTo(y)==0) == (x.equals(y))</code> であることが強く推奨されます。
+通常、<code>Comparable</code> インタフェースを実装しているクラスで、この条件に違反するクラスは明確にこの事実を示す必要があります。
+「注:このクラスは <code>equals</code> と一貫性のない自然順序付けを持ちます」などと明示することをお勧めします。
+</p></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HE_HASHCODE_NO_EQUALS">
+    <ShortDescription>hashCode メソッドを定義しているのに equals メソッドは定義していないクラス</ShortDescription>
+    <LongDescription>{0} は、hashCode メソッドを定義しているのに equals メソッドは定義していません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>hashCode</code> メソッドを定義しているのに <code>equals</code> メソッドは定義していません。
+これは「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に違反するかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HE_EQUALS_USE_HASHCODE">
+    <ShortDescription>equals メソッドを定義して Object.hashCode() を使用しているクラス</ShortDescription>
+    <LongDescription>{0} は、equals メソッドを定義して、Object.hashCode() を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、<code>equals(Object)</code> をオーバーライドしているのに <code>hashCode</code> メソッドは <code>java.lang.Object</code> から継承しています (同一性ハッシュコード (Java 仮想マシンによってオブジェクトに代入された任意の値) を返します)。
+したがって、「等価なオブジェクトは等価なハッシュコードを保持する必要がある」という <code>hashCode</code> メソッドの汎用規約に違反するかもしれません。
+</p>
+<p>
+このクラスのインスタンスが HashMap/HashTable に決して代入されるだろうと思わないなら、推奨される <code>hashCode</code> メソッドの実装は以下のようになります。
+</p>
+<blockquote><pre>
+public int hashCode() {
+    assert false : "hashCodeが呼び出されることは想定されていません。";
+    return 42; // 適当な値 
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="HE_INHERITS_EQUALS_USE_HASHCODE">
+    <ShortDescription>equals メソッドを継承して Object.hashCode() を使用しているクラス</ShortDescription>
+    <LongDescription>{0} は、equals メソッドを継承して、Object.hashCode() を使用しています。</LongDescription>
+    <Details>

@@ -1,0 +1,500 @@
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_LOCAL_SELF_COMPUTATION">
+    <ShortDescription>変数の無意味な自己演算 (たとえば、x &amp; x)</ShortDescription>
+    <LongDescription>{2} とそれ自身との無意味な自己演算です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ローカル変数と同じ変数への別の参照との無意味な計算を実行しています (たとえば、x &amp; x または x - x)。
+この計算の性質のため、演算は意味をなすとは思われないので、論理エラーかタイプミスかもしれません。
+計算をチェックしてください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_FIELD_SELF_COMPARISON">
+    <ShortDescription>フィールドとそれ自身との自己比較</ShortDescription>
+    <LongDescription>{2.givenClass} とそれ自身との自己比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、フィールドをそれ自身と比較しています。
+論理エラーかタイプミスかもしれません。正しいものを比較していることを確認してください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="SA_LOCAL_SELF_COMPARISON">
+    <ShortDescription>ローカル変数とそれ自身との自己比較</ShortDescription>
+    <LongDescription>{2.givenClass} とそれ自身との自己比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、ローカル変数をそれ自身と比較しています。
+論理エラーかタイプミスかもしれません。正しいものを比較していることを確認してください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_LONG_BITS_TO_DOUBLE_INVOKED_ON_INT">
+    <ShortDescription>int に対して Double.longBitsToDouble() を呼び出している</ShortDescription>
+    <LongDescription>int に対して Double.longBitsToDouble() を呼び出しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>Double.longBitsToDouble()</code> の呼び出しで、32ビット int 値が引数として渡されています。
+これはほぼ間違いなく意図したことではありませんし、意図した結果を与えることはほとんどありません。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_ARGUMENTS_WRONG_ORDER">
+    <ShortDescription>逆にされた引数</ShortDescription>
+    <LongDescription>{2.name} の呼び出しのための間違った順序の引数。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッド呼び出しへの引数は、順序が間違っているように見えます。
+たとえば、呼び出し <code>Preconditions.checkNotNull("message", message)</code> は、引数を予約しました。チェックされる値は、第一引数です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="DMI_RANDOM_USED_ONLY_ONCE">
+    <ShortDescription>Random オブジェクトが作成され1度しか使われない</ShortDescription>
+    <LongDescription>Random オブジェクトが生成され、1度しか使われていません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、<code>java.util.Random</code> オブジェクトを作成して1つの乱数を生成するために使用して捨てています。
+これはあまり良くない品質の乱数を作り出し、効率が悪いです。
+できれば、<code>Random</code> オブジェクトを1つだけ作成して保存されるようにコードを書き直してください。
+そして、新しい乱数が必要なたびに既存の <code>Random</code> オブジェクトでメソッドを呼び出してください。
+</p>
+<p>
+生成された乱数が推測可能でないことが重要なら、乱数ごとに新しい <code>Random</code> オブジェクトを作成してはいけません (値はあまりに簡単に推測可能です)。
+その代わりに <code>java.security.SecureRandom</code> の使用を強く検討するべきです (そして、必要とされる乱数ごとに新しい <code>SecureRandom</code> のオブジェクトを作成することを回避します)。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+
+  <BugPattern type="RV_ABSOLUTE_VALUE_OF_RANDOM_INT">
+    <ShortDescription>符号付き整数の乱数の絶対値を計算する間違った試み</ShortDescription>
+    <LongDescription>符号付き整数の乱数の絶対値を計算する間違った試みです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、符号付き整数の乱数を生成して絶対値を計算しています。
+乱数ジェネレータで返される数が <code>Integer.MIN_VALUE</code> なら結果は同様に負です (<code>Math.abs(Integer.MIN_VALUE) == Integer.MIN_VALUE</code> なので)。 
+(同じ問題は long 値でも同様に起きます)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_ABSOLUTE_VALUE_OF_HASHCODE">
+    <ShortDescription>符号付き32ビットハッシュコードの絶対値を計算する間違った試み</ShortDescription>
+    <LongDescription>符号付き32ビットハッシュコードの絶対値を計算する間違った試みです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、ハッシュコードを生成して絶対値を計算しています。
+ハッシュコードが <code>Integer.MIN_VALUE</code> なら結果は同様に負です (<code>Math.abs(Integer.MIN_VALUE) == Integer.MIN_VALUE</code> なので)。
+</p>
+<p>
+文字列の2^32個に1個は <code>Integer.MIN_VALUE</code> のハッシュコードを持っていて、「polygenelubricants」、「GydZG_」、「DESIGNING WORKHOUSES」が該当します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_REM_OF_RANDOM_INT">
+    <ShortDescription>符号付き32ビット整数の乱数の剰余</ShortDescription>
+    <LongDescription>符号付き32ビット整数の乱数の剰余を計算しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは符号付き整数の乱数を生成して別の値を法とする剰余を計算しています。
+乱数が負かもしれないので、剰余演算の結果も負かもしれません。これが意図したことであることを確実にしてください。
+その代わりに <code>Random.nextInt(int)</code> の使用を強く検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RV_REM_OF_HASHCODE">
+    <ShortDescription>ハッシュコードの剰余は負かもしれない</ShortDescription>
+    <LongDescription>ハッシュコードの剰余は負かもしれません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、ハッシュコードを計算して別の値を法とする剰余を計算しています。
+ハッシュコードが負かもしれないので、剰余演算の結果も負かもしれません。
+</p>
+<p>
+計算結果が負ではないことを確認したいなら、コードを変更する必要があるかもしれません。
+除数が2の累乗であることがわかっているなら、代わりにビット演算を使用できます (すなわち、<code>x.hashCode()%n</code> の代わりに <code>x.hashCode()&amp;(n-1)</code> を使用してください)。
+これはおそらく、剰余を計算するより高速です。
+除数が2の累乗であるということをわかっていないなら、剰余演算の結果の絶対値を取得してください (すなわち、<code>Math.abs(x.hashCode()%n)</code>)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="INT_BAD_COMPARISON_WITH_NONNEGATIVE_VALUE">
+    <ShortDescription>負でない値と負の定数との間違った比較</ShortDescription>
+    <LongDescription>負でない値 と {2} との間違った比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、負でないことが保証されている値と負の定数とを比較しています。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="INT_BAD_COMPARISON_WITH_SIGNED_BYTE">
+    <ShortDescription>符号付きバイトの間違った比較</ShortDescription>
+    <LongDescription>符号付きバイト と {2} との間違った比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+符号付バイトのとりうる値の範囲は-128～127です。その範囲外で符号付バイトを値と比較することは無意味で間違っていそうです。
+符号付きバイト <code>b</code> を範囲が0～255の符号なしバイトに変換するには <code>0xff &amp; b</code> を使用してください。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="INT_BAD_COMPARISON_WITH_INT_VALUE">
+    <ShortDescription>int 値と long 定数との間違った比較</ShortDescription>
+    <LongDescription>int 値と {2} との間違った比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、int 値と int 値として表現できる値の範囲外にある long 定数を比較しています。
+この比較は無意味で、おそらく間違っています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  
+  <BugPattern type="INT_VACUOUS_BIT_OPERATION">
+    <ShortDescription>整数値の無意味なビットマスク演算</ShortDescription>
+    <LongDescription>{3} の無意味な {2} 演算です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+これはどんな有用な働きもしない整数ビット演算 (AND、OR、XOR) です (たとえば、<code>v & 0xffffffff</code>)。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="INT_VACUOUS_COMPARISON">
+    <ShortDescription>整数値の無意味な比較</ShortDescription>
+    <LongDescription>整数値の無意味な比較です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+常に同じ値を返す整数の比較があります (たとえば、<code>x &lt;= Integer.MAX_VALUE</code>)。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="INT_BAD_REM_BY_1">
+    <ShortDescription>1を法とする整数の剰余</ShortDescription>
+    <LongDescription>1を法とする整数の剰余を計算しています。{1} </LongDescription>
+    <Details>
+<![CDATA[
+<p>
+どんな式 <code>(exp % 1)</code> も常に0を返すことが保証されています。
+そうではなく、<code>(exp &amp; 1)</code> または <code>(exp &amp; 2)</code> を意味していましたか？
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_IOR_OF_SIGNED_BYTE">
+    <ShortDescription>符号付きバイト値のビット論理和</ShortDescription>
+    <LongDescription>符号付きバイト値のビット論理和を計算しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+ロードしたバイト値 (たとえば、バイト配列からロードされた値や戻り値がバイト型のメソッドから返された値) とビット論理和を実行しています。
+ビット演算を実行する前にバイト値は32ビットまで符号拡張されます。
+したがって、<code>b[0]</code> の値が <code>0xff</code> で、<code>x</code> の初期値が <code>0</code> だとすると、
+<code>((x &lt;&lt; 8) | b[0])</code> は、<code>0xff</code> が符号拡張で <code>0xffffffff</code> になるので、結果として <code>0xffffffff</code> が得られます。 
+</p>
+<p>
+特に、バイト配列 int にパックする以下のようなコードはひどく間違っています。
+</p>
+<blockquote><pre>
+int result = 0;
+for(int i = 0; i &lt; 4; i++) {
+    result = ((result &lt;&lt; 8) | b[i]);
+}
+</pre></blockquote>
+<p>
+その代わりに、以下のようなイディオムは動作します。
+</p>
+<blockquote><pre>
+int result = 0;
+for(int i = 0; i &lt; 4; i++) {
+    result = ((result &lt;&lt; 8) | (b[i] &amp; 0xff));
+}
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_ADD_OF_SIGNED_BYTE">
+    <ShortDescription>符号付きバイト値のビット加算</ShortDescription>
+    <LongDescription>符号付きバイト値のビット加算を計算をしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+バイト値と明らかに下位8ビットがあるとわかっている値を加算しています。
+ビット演算を実行する前にバイト配列からロードされた値は32ビットまで符号拡張されます。
+したがって、<code>b[0]</code> の値が <code>0xff</code> で、<code>x</code> の初期値が <code>0</code> だとすると、
+<code>((x &lt;&lt; 8) + b[0])</code> は、<code>0xff</code> が符号拡張で <code>0xffffffff</code> になるので、結果として <code>0xffffffff</code> が得られます。 
+</p>
+<p>
+特に、バイト配列 int にパックする以下のようなコードはひどく間違っています。
+</p>
+<blockquote><pre>
+int result = 0;
+for(int i = 0; i &lt; 4; i++) 
+  result = ((result &lt;&lt; 8) + b[i]);
+</pre></blockquote>
+<p>
+その代わりに、以下のようなイディオムは動作します。
+</p>
+<blockquote><pre>
+int result = 0;
+for(int i = 0; i &lt; 4; i++) 
+  result = ((result &lt;&lt; 8) + (b[i] &amp; 0xff));
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_AND">
+    <ShortDescription>互換性のないビットマスク</ShortDescription>
+    <LongDescription>(e &amp; {2} == {3}) の互換性のないビットマスクは、一定の結果をもたらします。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<i>(e &amp; C)</i> 形式の式を <i>D</i> と比較しています。
+定数 <i>C</i> と <i>D</i> の特定の値と常に等しくないことを比較します。論理エラーかタイプミスかもしれません。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_SIGNED_CHECK">
+    <ShortDescription>ビット演算の符号をチェックする</ShortDescription>
+    <LongDescription>ビット演算の符号をチェックしてください。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<code>((event.detail &amp; SWT.SELECTED) &gt; 0)</code> のような式を比較しています。
+ビット演算をより大きい演算子で比較することは、予想外の結果 (もちろん、<code>SWT.SELECTED</code> の値による) の原因になる可能性があります。
+<code>SWT.SELECTED</code> が負数であるなら、これはバグの候補です。
+<code>SWT.SELECTED</code> が負ではないとしても、'&gt; 0' の代わりに '!= 0' を使うことは良いプラクティスと思われます。
+</p>
+<p>
+Boris Bokowski
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_SIGNED_CHECK_HIGH_BIT">
+    <ShortDescription>ビット演算の符号をチェックする</ShortDescription>
+    <LongDescription>ビット演算の符号をチェックしてください。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<code>((event.detail &amp; SWT.SELECTED) &gt; 0)</code> のような式を比較しています。
+ビット演算をより大きい演算子で比較することは、予想外の結果 (もちろん、<code>SWT.SELECTED</code> の値による) の原因になる可能性があります。
+<code>SWT.SELECTED</code> が負数であるなら、これはバグの候補です。
+<code>SWT.SELECTED</code> が負ではないとしても、'&gt; 0' の代わりに '!= 0' を使うことは良いプラクティスと思われます。
+</p>
+<p>
+Boris Bokowski
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_AND_ZZ">
+    <ShortDescription>((...) &amp; 0) == 0 なのか確かめている</ShortDescription>
+    <LongDescription>((...) &amp; 0) == 0 なのか確かめています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<i>(e &amp; 0)</i> 形式の式を0と比較しています。それは、常に等価であることを比較します。論理エラーかタイプミスかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BIT_IOR">
+    <ShortDescription>互換性のないビットマスク</ShortDescription>
+    <LongDescription>(e | {2} == {3}) の互換性のないビットマスクは、一定の結果をもたらします。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、<code>(e | C)</code> 形式の式を <code>D</code> と比較しています。
+定数 <i>C</i> と <i>D</i> の特定の値と常に等しくないことを比較します。論理エラーかタイプミスかもしれません。
+</p>
+<p>
+典型的に、このバグは、ビットセットで帰属関係のテストを実行したいコードで発生します。
+しかし、ビット論理積演算子 ("&amp;") の代わりにビット論理和演算子 ("|") を使用しています。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="LI_LAZY_INIT_INSTANCE" deprecated="true">  <!-- never generated? -->
+    <ShortDescription>Incorrect lazy initialization of instance field</ShortDescription>
+    <LongDescription>Incorrect lazy initialization of instance field {2} in {1}</LongDescription>
+    <Details>
+<![CDATA[
+<p> This method contains an unsynchronized lazy initialization of a non-volatile field.
+Because the compiler or processor may reorder instructions,
+threads are not guaranteed to see a completely initialized object,
+<em>if the method can be called by multiple threads</em>.
+You can make the field volatile to correct the problem.
+For more information, see the
+<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/">Java Memory Model web site</a>.
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="LI_LAZY_INIT_STATIC">
+    <ShortDescription>static フィールドの間違った遅延初期化</ShortDescription>
+    <LongDescription>static フィールド {2} の間違った遅延初期化。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはvolatile でない static フィールドの非同期な遅延初期化があります。
+コンパイラやプロセッサが命令を並べ替えるかもしれないので、メソッドが複数のスレッドによって呼び出されるかもしれないなら、
+スレッドは完全に初期化されたオブジェクトを見るとは保証されていません。
+フィールドにアクセスした際に、中途半端に初期化されたインスタンスが見えてしまう危険があります。
+この問題を修正するために、フィールドを volatile にできます。<br>
+詳細は、<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/">Java Memory Model web site</a> を参照してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="LI_LAZY_INIT_UPDATE_STATIC">
+    <ShortDescription>更新される static フィールドの間違った遅延初期化</ShortDescription>
+    <LongDescription>更新される static フィールド {2} の間違った遅延初期化。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドにはstatic フィールドの非同期な遅延初期化があります。
+フィールドが設定されたあと、その場所に格納されるオブジェクトはさらに更新されるかアクセスされます。
+それが設定されるとすぐに、そのフィールドの設定は他のスレッドに見えます。
+フィールドを設定するさらなるアクセスがオブジェクトを初期化するのに役に立つなら、
+それが完全に初期化されるまでどんな他のスレッドも格納されたオブジェクトにアクセスするのを防がない限り、非常に深刻なマルチスレッドバグがあります。
+</p>
+<p>
+たとえメソッドが複数のスレッドによって決して呼び出されないと確信していても、
+それは、フィールドに設定している値が完全にデータを読み込まれるか初期化されるまで、 static フィールドを設定しない方が良いかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="JLM_JSR166_LOCK_MONITORENTER">
+    <ShortDescription>Lock で同期化している</ShortDescription>
+    <LongDescription>{2} で同期化しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、java.util.concurrent.locks.Lock を実装したオブジェクトで同期化しています。
+そのようなオブジェクトは <code>synchronized (...)</code> 構文よりも <code>acquire()</code>/<code>release()</code> を使用してロックとロックの解除をします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="JML_JSR166_CALLING_WAIT_RATHER_THAN_AWAIT">
+    <ShortDescription>util.concurrent 抽象でモニタスタイルの wait メソッドを使用している</ShortDescription>
+    <LongDescription>{3.name} ではなく {2.name} を呼び出しています。{1}</LongDescription>
+<Details>
+<![CDATA[
+<p>
+このメソッドは、<code>await()</code> メソッド、<code>signal</code> メソッド、<code>signalAll</code> メソッドを提供するオブジェクト
+(たとえば、util.concurrent の Condition オブジェクト) で、<code>wait</code> メソッド、<code>notify</code> メソッド、<code>notifyAll</code> メソッドを呼び出しています。
+これはおそらくあなたが望むことではありません。たとえそれを望むとしても、他の開発者が非常に紛らわしいことを理解して、設計を変更することを検討するべきです。
+</p>
+]]>
+</Details>
+  </BugPattern>
+
+  <BugPattern type="JLM_JSR166_UTILCONCURRENT_MONITORENTER">
+    <ShortDescription>java.util.concurrent のインスタンスで同期化している</ShortDescription>
+    <LongDescription>{2} で同期化しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、java.util.concurrent パッケージのクラス (またはサブクラス) のインスタンスで同期化しています。
+これらのクラスのインスタンスは、<code>synchronized</code> の使用とは違う互換性のないそれら自身の並行制御メカニズムを持っています。
+たとえば、<code>AtomicBoolean</code> で同期しても、他のスレッドが <code>AtomicBoolean</code> を変更するのを防ぎません。
+</p>
+<p>
+そのようなコードは正しいかもしれないが、後日コードを維持しなければならない人々を混乱させるかもしれないので慎重にレビューし文書化するべきです、
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UPM_UNCALLED_PRIVATE_METHOD">
+    <ShortDescription>private メソッドは決して呼び出されない</ShortDescription>
+    <LongDescription>{1} は、決して呼び出されません。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この private メソッドは、決して呼び出されません。
+メソッドがリフレクションによって呼び出されるかもしれないが、決して使われないなら除去するべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS">
+    <ShortDescription>呼び出し不可能なメソッドが無名クラスで定義されている</ShortDescription>
+    <LongDescription>呼び出し不可能なメソッド {1} が無名クラスで定義されています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この無名クラスは、直接呼び出されない、スーパークラスのメソッドをオーバーライドしていないメソッドを定義しています。
+他のクラスのメソッドが無名クラスで宣言されたメソッドを直接呼び出せないので、このメソッドは呼び出し不可能であると思われます。
+メソッドは単にデッドコードであるかもしれません。しかし、メソッドがスーパークラスで宣言されるメソッドをオーバーライドすることを意図した可能性もあります。
+そして、タイプミスまたは他の誤りのために、メソッドは、実際、それが意図されるメソッドをオーバーライドしません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ODR_OPEN_DATABASE_RESOURCE">
+    <ShortDescription>データベースリソースのクローズに失敗するかもしれないメソッド</ShortDescription>
+    <LongDescription>{1} は、{2.excludingPackage} のクローズに失敗するかもしれません。</LongDescription>
+    <Details>

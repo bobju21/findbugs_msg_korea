@@ -1,0 +1,500 @@
+  </BugPattern>
+
+  <BugPattern type="UM_UNNECESSARY_MATH">
+    <ShortDescription>定数値で Math クラスの static メソッドを呼び出しているメソッド</ShortDescription>
+    <LongDescription>メソッドは、定数値で Math クラスの static メソッドを呼び出しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このメソッドは、定数値で java.lang.Math の static メソッドを呼び出しています。
+このメソッドの結果は、静的に確定している可能性があり、より高速で、ときには定数を使用する方がより正確です。<br>
+検出されるメソッドは、以下の通りです。 
+</p>
+<table>
+<tr>
+   <th>メソッド</th> <th>パラメータ</th>
+</tr>
+<tr>
+   <td>abs</td> <td>-any-</td>
+</tr>
+<tr>
+   <td>acos</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>asin</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>atan</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>atan2</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>cbrt</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>ceil</td> <td>-any-</td>
+</tr>
+<tr>
+   <td>cos</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>cosh</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>exp</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>expm1</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>floor</td> <td>-any-</td>
+</tr>
+<tr>
+   <td>log</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>log10</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>rint</td> <td>-any-</td>
+</tr>
+<tr>
+   <td>round</td> <td>-any-</td>
+</tr>
+<tr>
+   <td>sin</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>sinh</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>sqrt</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>tan</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>tanh</td> <td>0.0</td>
+</tr>
+<tr>
+   <td>toDegrees</td> <td>0.0 or 1.0</td>
+</tr>
+<tr>
+   <td>toRadians</td> <td>0.0</td>
+</tr>
+</table>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="CD_CIRCULAR_DEPENDENCY">
+    <ShortDescription>クラス間の循環依存関係のテスト</ShortDescription>
+    <LongDescription>クラス {0} は、他のクラスと循環依存関係があります。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、他のクラスと循環依存関係があります。
+それぞれが他のクラスの正確な構築に依存していて、クラスの構築を難しくしています。
+難しい依存関係を断つために、インタフェースの使用を検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RI_REDUNDANT_INTERFACES">
+    <ShortDescription>スーパークラスと同じインタフェースを実装しているクラス</ShortDescription>
+    <LongDescription>クラス {0} は、スーパークラスと同じインタフェースを実装しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、スーパークラスによっても実装されるインタフェースを実装することを宣言しています。
+スーパークラスがインタフェースを実装するので、これは冗長です。デフォルトですべてのサブクラスもこのインタフェースを実装します。
+このクラスが作成されてから継承階層が変わったことを指摘するかもしれません。インタフェースの実装の所有権を考慮するべきです。
+</p>
+    ]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MTIA_SUSPECT_STRUTS_INSTANCE_FIELD">
+    <ShortDescription>Struts Action を拡張したクラスでのインスタンス変数の使用</ShortDescription>
+    <LongDescription>Struts Action クラスを拡張したクラス {0} で、インスタンス変数を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Struts Action クラスを拡張したクラスで、インスタンス変数を使用しています。
+Struts Action クラスの1つのインスタンスだけが Struts フレームワークによって作成され、マルチスレッドによって使われるので、このパラダイムは極めて問題があり推奨できません。
+ローカル変数を使うことだけを検討してください。
+モニタを除いて書き込まれるインスタンスフィールドだけが報告されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="MTIA_SUSPECT_SERVLET_INSTANCE_FIELD">
+    <ShortDescription>Servlet クラスを拡張したクラスでのインスタンス変数の使用</ShortDescription>
+    <LongDescription>Servlet クラスを拡張したクラス {0} で、インスタンス変数を使用しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Servletクラスを拡張したクラスで、インスタンス変数を使用しています。
+Servlet クラスの1つのインスタンスだけが Java EE フレームワークによって作成され、マルチスレッドによって使われるので、このパラダイムは極めて問題があり推奨できません。
+ローカル変数を使うことだけを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="PS_PUBLIC_SEMAPHORES">
+    <ShortDescription>公開インタフェースで同期化とセマフォを暴露するクラス</ShortDescription>
+    <LongDescription>クラス {0} は、公開インタフェースで同期化とセマフォを暴露しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは、それ自身 (this 参照) で、 <code>wait</code> メソッド、<code>notify</code> メソッド、<code>notifyAll</code> メソッド とともに同期化しています。
+このクラスを使用するクライアントクラスは、同期化のためのオブジェクトとしてこのクラスのインスタンスをさらに使用するかもしれません。
+2つのクラスが同期化のために同じオブジェクトを使用するので、マルチスレッドの正確性は疑わしいです。
+同期化するべきでもないし、公開参照でセマフォメソッドも呼び出すべきではありません。
+同期化の制御には内部の公開されないメンバ変数を使うことを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ICAST_INTEGER_MULTIPLY_CAST_TO_LONG">
+    <ShortDescription>整数乗算の結果を long にキャストしている</ShortDescription>
+    <LongDescription>整数乗算の結果を long にキャストしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、以下のように整数の乗算を実行してから結果を long に変換しています。
+</p>
+<blockquote><pre>
+long convertDaysToMilliseconds(int days) { return 1000*3600*24*days; } 
+</pre></blockquote>
+<p>
+long を使用して乗算をすれば、結果がオーバーフローするという可能性を回避できます。<br>
+たとえば、以下のように修正できます。
+</p>
+<blockquote><pre>
+long convertDaysToMilliseconds(int days) { return 1000L*3600*24*days; } 
+</pre></blockquote>
+<p>
+または
+</p>
+<blockquote><pre>
+static final long MILLISECONDS_PER_DAY = 24L*3600*1000;
+long convertDaysToMilliseconds(int days) { return days * MILLISECONDS_PER_DAY; } 
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ICAST_INT_2_LONG_AS_INSTANT">
+    <ShortDescription>int 値を long に変換して絶対時間として使用している</ShortDescription>
+    <LongDescription>int 値 を long に変換して、{2} への絶対時間として渡しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、32ビット int 値を64ビット long 値に変換して、絶対時間値を必要とするメソッドパラメータに渡しています。
+絶対時間値は、「エポック」（すなわち、1970年1月1日、00:00:00 GMT）としてわかっている標準的な基準時間からのミリ秒数です。<br>
+たとえば、次のメソッド（Date にエポックから秒を変換することを意図した）は、ひどく壊れています。
+</p>
+<blockquote><pre>
+Date getDate(int seconds) { return new Date(seconds * 1000); }
+</pre></blockquote>
+<p>
+乗算は32ビット演算を使用して、64ビット値に変換されます。
+32ビット値は、64ビットに変換されて、絶対時間値を表すために使用されるとき、1969年12月と1970年1月の日付しか表せません。
+</p>
+<p>
+上記のメソッドのための正しい実装は、以下の通りです。
+</p>
+<blockquote><pre>
+// 失敗、2037年後の日付
+Date getDate(int seconds) { return new Date(seconds * 1000L); }
+
+// より良い, すべての日付で動作する
+Date getDate(long seconds) { return new Date(seconds * 1000); }
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ICAST_INT_CAST_TO_FLOAT_PASSED_TO_ROUND">
+    <ShortDescription>整数値を float にキャストして Math.round() に渡している</ShortDescription>
+    <LongDescription>整数値を float にキャストして、Math.round() に渡しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、整数値を float 精度浮動小数点に変換してからその結果を <code>Math.round()</code> に渡して引数に最も近い int/long を返します。
+整数を float に変換すると小数部がない数値が得られるので、この演算は常にノーオペレーションになります。
+<code>Math.round()</code>に渡される値を生成した演算が浮動小数点演算を使用して実行することを意図した可能性が高いです。
+</p>
+
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ICAST_INT_CAST_TO_DOUBLE_PASSED_TO_CEIL">
+    <ShortDescription>整数値を double にキャストして Math.ceil() に渡している</ShortDescription>
+    <LongDescription>整数値を double にキャストして、Math.ceil() に渡しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、整数値 (たとえば、int や long) を倍精度浮動小数点に変換してからその結果を <code>Math.ceil()</code> に渡しています。
+整数を double に変換すると小数部がない数値が得られるので、この演算は常にノーオペレーションになります。
+<code>Math.ceil()</code>に渡される値を生成した演算が倍精度浮動小数点演算を使用して実行することを意図した可能性が高いです。
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="ICAST_IDIV_CAST_TO_DOUBLE">
+    <ShortDescription>整数の除算の結果を double または float にキャストしている</ShortDescription>
+    <LongDescription>整数の除算の結果を double または float にキャストしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは 整数の除算の結果を double または float にキャストしています。
+整数で除算をすることは、ゼロに最も近い整数値まで結果を切り捨てます。
+結果が double にキャストされたという事実は、この精度が維持されるべきだったことを示唆しています。
+おそらく意味されたことは、除算を実行する前にオペランドの1つまたは両方を double にキャストすることでした。<br>
+以下に例を示します。 
+</p>
+<blockquote><pre>
+int x = 2;
+int y = 5;
+// Wrong: yields result 0.0
+double value1 =  x / y;
+
+// Right: yields result 0.4
+double value2 =  x / (double) y;
+</pre></blockquote>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="J2EE_STORE_OF_NON_SERIALIZABLE_OBJECT_INTO_SESSION">
+    <ShortDescription>HttpSession への非直列化可能オブジェクトの格納</ShortDescription>
+    <LongDescription>非直列化可能オブジェクト {2} を HttpSession に格納しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、HttpSession に非直列化可能オブジェクトを格納していると思われます。
+このセッションが不活性化されるか移行したなら、エラーを招きます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_NONSERIALIZABLE_OBJECT_WRITTEN">
+    <ShortDescription>ObjectOutput に書き込まれる非直列化可能オブジェクト</ShortDescription>
+    <LongDescription>非直列化可能オブジェクト {2} が ObjectOutput に書き込まれています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、<code>ObjectOutput.writeObject</code> に非直列化可能オブジェクトを渡していると思われます。
+このオブジェクトが本当に非直列化可能なら、エラーを招きます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_NO_PREVIOUS_ARGUMENT">
+    <ShortDescription>書式文字列ための前の引数がない</ShortDescription>
+    <LongDescription>書式文字列の引数 {2} の前の引数がありません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この書式文字列は、前の書式指示子の引数が再利用されるようにするために「相対インデックス ("&lt;")」を指定しています。
+しかしながら、前の引数がありません。
+たとえば、<code>formatter.format("%&lt;s %s", "a", "b")</code> が実行されると MissingFormatArgumentException をスローします。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_USES_NEWLINE">
+    <ShortDescription>書式文字列は \n よりも %n を使用するべき</ShortDescription>
+    <LongDescription>書式文字列は、\n よりも %n を使用するべきです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この書式文字列には改行文字 (\n) が含まれています。
+一般に書式文字列には %n を使用することがより望ましいです。%n は、プラットホーム特有の行セパレータを作り出します。
+</p>
+]]>
+  </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_BAD_CONVERSION">
+    <ShortDescription>与えられた引数の型は書式指示子に合致しません</ShortDescription>
+    <LongDescription>引数の型 {3} は、書式指示子 {4} によって扱えません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+引数の1つは、対応する書式指示子と互換性がありません。その結果、実行されるときに実行時例外を生成します。
+たとえば、<code>String.format("%d", "1")</code> は、文字列 "1" が書式指示子 "%d" と互換性がないので例外を生成します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_BAD_CONVERSION_TO_BOOLEAN">
+    <ShortDescription>Boolean 型でない引数を ％b 書式指示子を使用してフォーマットしている</ShortDescription>
+    <LongDescription>Boolean 型でない引数を ％b 書式指示子を使用してフォーマットしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Boolean 型でない引数を %b 書式指示子でフォーマットしています。これは例外をスローしません。
+その代わりに、非  null 値では true 、null では false を出力します。
+書式文字列のこの機能は奇妙で意図したことではないかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_BAD_CONVERSION_FROM_ARRAY">
+    <ShortDescription>書式文字列を使用して役に立たない方法で配列をフォーマットしている</ShortDescription>
+    <LongDescription>役に立たない方法で引数の型 {3} をフォーマットしています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+書式文字列でフォーマットされている引数の1つは配列です。
+これは [I@304282 のようなかなり役に立たない書式を使用してフォーマットされます。それは配列のコンテンツを表示しません。
+フォーマットで扱う前に <code>Arrays.asList(...)</code> を使用して配列をラップすることを検討してください。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_ARG_MISMATCH">
+    <ShortDescription>書式文字列への引数の数と書式指示子の数が一致していない</ShortDescription>
+    <LongDescription>書式文字列は "{3}" によって呼び出されている書式文字列メソッド {2} は、書式指示子の数が {4} なのに 引数の数は {5} です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+可変長引数による書式文字列メソッドが呼び出されていますが渡された引数の数と書式文字列の中の % 書式指示子の数が一致していません。
+これはおそらく作成者の意図したことではありません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_EXPECTED_MESSAGE_FORMAT_SUPPLIED">
+    <ShortDescription>printf スタイルの書式が期待されているところで MessageFormat が与えられている</ShortDescription>
+    <LongDescription>{2} は、prntf スタイルの書式を必要としていますが MessageFormat によって呼び出されています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+Java の printf 書式文字列と引数のリストを期待するメソッドが呼び出されています。
+しかしながら、書式文字列にはどんな書式指示子 (たとえば、%s) もなくて、メッセージフォーマットの要素 (たとえば、{0}) があります。
+printf スタイルの書式文字列が必要なときに、MessageFormat の文字列を与えている可能性が高いです。
+実行時に、すべての引数は無視され、書式文字列は正確にフォーマットされずに返されます。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_EXTRA_ARGUMENTS_PASSED">
+    <ShortDescription>書式文字列で実際に使われるより、多くの引数が渡されている</ShortDescription>
+    <LongDescription>書式文字列 {3} によって呼び出されている書式文字列メソッド {2} は、書式指示子の数が {4} なのに 引数の数は {5} です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+可変長引数による書式文字列メソッドが呼び出されていますが書式文字列で実際に使われるより多くの引数が渡されています。
+これは実行時例外の原因とはなりませんが、コードはフォーマットされた文字列に含まれることを意図した情報を黙って省略しているかもしれません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_ILLEGAL">
+    <ShortDescription>無効な書式文字列</ShortDescription>
+    <LongDescription>無効な書式文字列 "{3}" です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+書式文字列は構文的に無効です。この文が実行されると実行時例外が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_MISSING_ARGUMENT">
+    <ShortDescription>書式文字列は足りない引数を参照している</ShortDescription>
+    <LongDescription>書式文字列 "{3}" は 引数が {5} 必要なのに {6} だけしか与えられていません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+書式文字列で書式指示子を満たすために十分な引数が渡されていません。この文が実行されると実行時例外が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_FORMAT_STRING_BAD_ARGUMENT">
+    <ShortDescription>書式指示子へ渡している引数に互換性がない</ShortDescription>
+    <LongDescription>書式指示子 {4} は、対応する引数と互換性がありません。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+書式指示子は、対応する引数と互換性がありません。
+たとえば、<code>System.out.println("%d\n", "hello");</code> の %d 書式指示子は数値の引数を必要としますが数値ではなく文字列が渡されています。
+この文が実行されると実行時例外が発生します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="VA_PRIMITIVE_ARRAY_PASSED_TO_OBJECT_VARARG">
+    <ShortDescription>可変長引数を期待しているメソッドにプリミティブ型の配列を渡している</ShortDescription>
+    <LongDescription>可変長引数のメソッド {3} に {2} を渡しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは可変長引数をとるメソッドにプリミティブ型の配列を渡しています。
+これは、プリミティブ型の配列を保持するために長さが1の配列を作成してメソッドに渡します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+  <BugPattern type="BC_EQUALS_METHOD_SHOULD_WORK_FOR_ALL_OBJECTS">
+    <ShortDescription>equals メソッドは引数の型を仮定するべきではない</ShortDescription>
+    <LongDescription>{0} のための equals メソッドは、引数の型が {0.givenClass} であると仮定しています。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+<code>equals(Object o)</code> メソッドは、<code>o</code> の型についてどんな仮定もするべきではありません。
+<code>o</code> が <code>this</code> と同じ型でないなら単に false を返すべきです。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_BAD_CAST_TO_ABSTRACT_COLLECTION">
+    <ShortDescription>抽象コレクションへの疑わしいキャスト</ShortDescription>
+    <LongDescription>Collection から抽象クラス {3} への疑わしいキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、Collection を抽象コレクションにキャストしています (たとえば、<code>List</code>、<code>Set</code>、<code>Map</code>)。
+オブジェクトがキャストする型であると保証されることを確認してください。
+必要とするコレクションの反復処理ができるなら Set または List にキャストする必要はありません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="BC_IMPOSSIBLE_CAST_PRIMITIVE_ARRAY">
+    <ShortDescription>プリミティブ型の配列を含んでいる不可能なキャスト</ShortDescription>
+    <LongDescription>プリミティブ型の配列を含んでいる不可能なキャストです。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このキャストは、常にClassCastException をスローします。 
+</p>
+]]>
+    </Details>
+  </BugPattern>
+

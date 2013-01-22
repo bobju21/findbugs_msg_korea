@@ -1,0 +1,500 @@
+  <Detector class="edu.umd.cs.findbugs.detect.RedundantInterfaces">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、スーパークラスと同じインタフェースを実装すると宣言しているサブクラスを探します。
+スーパークラスでインタフェースを実装するので、サブクラスで同じことをするのは冗長です。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.MultithreadedInstanceAccess">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Struts フレームワークを実装する際の潜在的な問題を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.PublicSemaphores">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、同期化して <em>this</em> に対して <code>wait</code> メソッド、<code>notify</code> メソッド、<code>notifyAll</code> メソッドを使用する public クラスを探します。
+これは public クラスの同期化実装を暴露することになります。public クラスの利用者は、利用者のクラスで public クラスのインスタンスを同期化オブジェクトとして使うかもしれません。
+これはベース実装に大惨事をもたらします。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.MethodReturnCheck">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、戻り値が疑わしげに無視されるメソッドの呼び出しを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.IDivResultCastToDouble">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、整数除算の結果が double にキャストされる場所を探します。
+多くの場合、意味されたことは、整数オペランドを double にキャストしてから除算を実行することでした。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindBadCast2">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、データフロー解析を使用してオブジェクト参照の間違ったキャストを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindNonSerializableStoreIntoSession">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、HTTP セッションへの非直列化オブジェクトの格納を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  
+  <Detector class="edu.umd.cs.findbugs.detect.FindUseOfNonSerializableValue">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、それらが直列化可能であることを要求するコンテキストで、非Serializableなオブジェクトの使用方法を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  
+  <Detector class="edu.umd.cs.findbugs.detect.FindNonSerializableValuePassedToWriteObject">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>ObjectOutput</code> の <code>writeObject</code> メソッドに渡された非直列化オブジェクトを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.BadSyntaxForRegularExpression">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、無効な構文がある正規表現を探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.FindPuzzlers">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、Joshua Bloch と Neal Gafter が『Java Puzzlers』で言及した多方面にわたるささいな誤りを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindSleepWithLockHeld">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ロックを保持している状態での <code>Thread.sleep()</code> の呼び出しを探します。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DuplicateBranches">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、2つの分岐に同じコードがあるために分岐が無効になっている if/else または switch 文を探します。
+これは2つの分岐に同じコードをコピー &amp; ペーストしていることが片方の分岐の間違ったロジックの原因になります。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.InefficientMemberAccess">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、所有クラスの private フィールドに書き込んでいる内部クラスを探します。
+この場合、コンパイラは必ずこのフィールドへ書き込むことに使われるアクセッサーメソッドを生成します。
+可視性を protected に緩和することは、直接書き込むことを可能にします。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.XMLFactoryBypass">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、XML インタフェースを実装したクラスのインスタンスを作成しているコードを探します。
+これらのオブジェクトを作成するために提供されたファクトリパターンを使用するのではなく、特定の実装にコードを結びつけます。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.UselessSubclassMethod">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、スーパークラスで定義されたメソッドを実装して、スーパークラスのメソッドにパラメータをそのまま渡しているだけのサブクラスを探します。
+これらのメソッドは削除できます。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.ConfusedInheritance">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、protected メンバを宣言する final クラスを探します。
+このクラスは派生させることができないので、protected メンバの使用は正しくありません。
+アクセス権は、メンバの正しい意図を表すために、public か private に変更するべきです。
+</p>
+<p>
+おそらく、新しいパラダイムにクラスのすべてを完全に変更することではなく、クラスの使用中の変化が原因となりました。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.QuestionableBooleanAssignment">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、条件式で変数にリテラルブール値の単純な代入を探します。
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TrainNullReturnValues">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、どのメソッドが null を返すのかを決定してファイルに保存します。
+結果ファイルは、null 参照解除ディテクタの精度を向上させるために後続のパスで使われるかもしれません。
+これはトレーニングパスなので警告は報告されません。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TrainUnconditionalDerefParams">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、どのメソッドが null 値のパラメータを無条件で利用するのかを決定してファイルに保存します。
+結果ファイルは、 null 参照解除ディテクタの精度を向上させるために後続のパスで使われるかもしれません。
+これはトレーニングパスなので警告は報告されません。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TrainFieldStoreTypes">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、フィールドに格納される型を解析してデータベースに保存します。
+データベースは、型解析をより正確にするために後続のパスで使われるかもしれません。
+</p>
+<p>
+低速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TrainNonNullAnnotations">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、@NonNull と @PossiblyNull アノテーションを集めて、データベースに保存します。
+</p>
+<p>
+高速ディテクタです。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.CheckCalls">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、FindBugs でメソッド呼び出しの解決をデバッグするためにあります。
+</p>
+<p>
+有効にしないでください。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindBugsSummaryStats">
+    <Details>
+<![CDATA[
+<p>
+  このディテクタは、解析過程のサマリー統計情報を収集します。
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TestASM">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ASM バイトコード解析フレームワークを使用した FindBugs ディテクタを書く方法を示しているコード例です。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.FindUnrelatedTypesInGenericContainer">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、引数の型がコレクションのパラメータに関連しているかどうか確かめるために、<code>java.lang.Object</code> を受け取る総称型コレクションメソッドへの呼び出しの引数を見ます。
+無関係なクラス型による引数は決してコレクションの中に格納されることはありません。
+たとえば、<code>foo</code> が <code>List&lt;String&gt;</code> で、<code>bar</code> が <code>StringBuffer</code> なら <code>foo.contains(bar)</code> の呼び出しは常に false を返すことになります。
+</p>
+高速ディテクタです。
+</p>
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.StaticCalendarDetector">
+    <Details>
+<![CDATA[
+<p>
+<code>Calendar</code> は、マルチスレッドでの使用は本質的に安全ではないので、このディテクタは、<code>java.util.Calendar</code> や <code>java.text.DateFormat</code> (サブクラスも) の static フィールドについて警告します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.TestDataflowAnalysis">
+    <Details>
+<![CDATA[
+<p>
+これはデータフロー解析をテストするためにだけ使われる内部のディテクタです。
+</p>
+<p>
+デフォルトでは有効にされません。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.CheckTypeQualifiers">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、JSR-305 の型修飾子アノテーションで特定されたプロパティの違反をチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.AppendingToAnObjectOutputStream">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、オブジェクト出力ストリームに追加しようとする試みを探します。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.CheckExpectedWarnings">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、@ExpectedWarning と @NoWarning アノテーションをチェックします。
+このディテクタは、FindBugs をテストするためだけに使われます。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DontIgnoreResultOfPutIfAbsent">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、<code>ConcurrentMap</code> の <code>putIfAbsent</code> メソッドの結果が無視されるなら、2番目の引数として渡された値が再利用されていないことをチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+  <Detector class="edu.umd.cs.findbugs.detect.ReadOfInstanceFieldInMethodInvokedByConstructorInSuperclass">
+    <Details>
+<![CDATA[
+<p>
+  このディテクタは、スーパークラスのためにコンストラクタから呼び出されるメソッドをチェックします。
+</p>
+]]>
+    </Details>
+  </Detector>
+
+  <Detector class="edu.umd.cs.findbugs.detect.DefaultEncodingDetector">
+    <Details>
+<![CDATA[
+<p>
+このディテクタは、ユーザのデフォルトプラットホームエンコーディングを使用して、バイトから String (またはString からバイト) に変換するメソッドの呼び出しをチェックします。
+これは、アプリケーションの振る舞いがプラットホーム間で異なる原因となります。
+ </p>
+]]>
+    </Details>
+  </Detector>
+  
+  <!--
+  **********************************************************************
+  BugPatterns
+  **********************************************************************
+  -->
+
+  <BugPattern type="SKIPPED_CLASS_TOO_BIG">
+    <ShortDescription>解析するにはあまりにも大きいクラス</ShortDescription>
+    <LongDescription>{0} は、解析するにはあまりにも大きいです。</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このクラスは有効に処理することができないほど大きいです。また、エラーのために完全に解析されませんでした。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NOISE_NULL_DEREFERENCE">
+    <ShortDescription>null 値の利用に関する偽の警告</ShortDescription>
+    <LongDescription>null 値の利用に関する偽の警告です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+偽の警告です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NOISE_METHOD_CALL">
+    <ShortDescription>メソッド呼び出しに関する偽の警告</ShortDescription>
+    <LongDescription>メソッド呼び出し {2} に関する偽の警告です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+偽の警告です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NOISE_FIELD_REFERENCE">
+    <ShortDescription>フィールド参照に関する偽の警告</ShortDescription>
+    <LongDescription>フィールド参照 {2} に関する偽の警告です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+偽の警告です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="NOISE_OPERATION">
+    <ShortDescription>演算に関する偽の警告</ShortDescription>
+    <LongDescription>演算 {2} に関する偽の警告です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+偽の警告です。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_BIGDECIMAL_CONSTRUCTED_FROM_DOUBLE">
+    <ShortDescription>正確に表されない double から構築された BigDecimal</ShortDescription>
+    <LongDescription>{4} から BigDecimal が構築されています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+このコードは、10進数の数にうまく変換されない double 値から BigDecimal を作成しています。
+たとえば、Java で new BigDecimal(0.1) と書くと0.1と正確に等しい BigDecimal (スケールが1で、スケールなしの値が1) が作成されると思うかもしれませんが
+実際には0.1000000000000000055511151231257827021181583404541015625と等しくなります。
+</p>
+<p>
+おそらくBigDecimal.valueOf(double d) メソッドの使用が望ましいです。BigDecimal(たとえば、BigDecimal.valueOf(0.1) は0.1を与えます) を作成するためには double の文字列表現を使用します。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_DOH">
+    <ShortDescription>D'oh! 無意味なメソッド呼び出し</ShortDescription>
+    <LongDescription>D'oh! {2.nameAndSignature} の無意味なメソッド呼び出し。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この実用的なメソッド呼び出しは、検査から明らかな理由で意味がないです。
+</p>
+]]>
+    </Details> 
+  </BugPattern>
+
+  <BugPattern type="DMI_VACUOUS_CALL_TO_EASYMOCK_METHOD">
+    <ShortDescription>EasyMock メソッドへの役に立たない/無意味な呼び出し</ShortDescription>
+    <LongDescription>EasyMock メソッド {2} の呼び出しは役に立たない/無意味です。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+この呼び出しはどんなオブジェクトも EasyMock メソッドに渡さないので何もしません。
+</p>
+]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="DMI_SCHEDULED_THREAD_POOL_EXECUTOR_WITH_ZERO_CORE_THREADS">
+    <ShortDescription>コアプールサイズが0の ScheduledThreadPoolExecutor の作成</ShortDescription>
+    <LongDescription>コアプールサイズが0の ScheduledThreadPoolExecutor を作成しています。{1}</LongDescription>
+    <Details>
+<![CDATA[
+<p>
+コアプールサイズが0の <code>ScheduledThreadPoolExecutor</code> は決して何も実行しません。
+最大プールサイズへの変更は無視されます。<br>
+(<a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#ScheduledThreadPoolExecutor(int)">Javadoc</a>)
+</p>
+]]>
